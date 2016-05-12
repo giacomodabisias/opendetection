@@ -3,12 +3,15 @@ set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "The core module of OpenDetection having the pipeline logic")
 set(SUBSYS_DEPS ${OpenCV_LIBS} ${PCL_LIBRARIES})
 
+message("place is " ${OpenCV_INCLUDE_DIRS})
+
 if(WITH_GPU)
   set(SUBSYS_DEPS ${SUBSYS_DEPS} siftgpu)
 endif()
 
-set(build TRUE)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
+set(build TRUE)
 
 if(build)
 

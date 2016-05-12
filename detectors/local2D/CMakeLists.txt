@@ -2,8 +2,10 @@ set(SUBSYS_NAME local_image_detector)
 set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "The local feature matching based detector")
 
-set(SUBSYS_DEPS od_common ${PCL_LIBRARIES} ${VTK_LIBRARIES} ${OpenCV_LIBS} pugixml)
+set(SUBSYS_DEPS od_common ${PCL_LIBRARIES} ${VTK_LIBRARIES} ${OpenCV_LIBS})
 
+include_directories(${CMAKE_SOURCE_DIR}/3rdparty/pugixml/src/)
+link_directories(${CMAKE_SOURCE_DIR}/3rdparty/pugixml/build/)
 
 set(build TRUE)
 #PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
@@ -39,7 +41,7 @@ if(build)
     install(FILES ${incs} DESTINATION ${OD_INSTALL_INCLUDE_DIR}/${SUBSYS_NAME} COMPONENT ${LIB_NAME})
 
     if(SUBSYS_DEPS)
-      target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS})
+      target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS} pugixml)
     endif(SUBSYS_DEPS)
 
     #PCL_MAKE_PKGCONFIG("${LIB_NAME}" "${SUBSYS_NAME}" "${SUBSYS_DESC}" "${SUBSYS_DEPS}" "" "" "" "")

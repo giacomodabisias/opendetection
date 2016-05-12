@@ -217,5 +217,5 @@ namespace od
   };
 
 }
-//
+
 #endif //OPENDETECTION_ODFRAMEGENERATOR_H

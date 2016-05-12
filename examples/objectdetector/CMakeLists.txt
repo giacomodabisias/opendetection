@@ -4,10 +4,7 @@ OD_ADD_EXAMPLE(od_image_camera FILES od_image_cadrecog_camera.cpp
 OD_ADD_EXAMPLE(od_example_files FILES od_image_cadrecog_files.cpp
                 LINK_WITH od_common od_local_image_detector)
 
-
-
-
-
+if(WITH_SVMLIGHT)
 
 OD_ADD_EXAMPLE(od_hog_train FILES od_hog_train.cpp
                 LINK_WITH od_common od_global_image_detector)
@@ -17,6 +14,15 @@ OD_ADD_EXAMPLE(od_image_hog_files FILES od_image_hog_files.cpp
 
 OD_ADD_EXAMPLE(od_image_customhog FILES od_image_customhog.cpp
                 LINK_WITH od_common od_global_image_detector)
+
+
+OD_ADD_EXAMPLE(od_multialgo_files FILES od_multialgo_files.cpp
+                LINK_WITH od_miscellaneous_detector)
+
+OD_ADD_EXAMPLE(od_multialgo_pc FILES od_multialgo_pc.cpp
+                LINK_WITH od_miscellaneous_detector)
+
+endif()
 
 OD_ADD_EXAMPLE(od_cascade_cam FILES od_cascade_cam.cpp
                 LINK_WITH od_common od_global_image_detector)
@@ -44,9 +50,5 @@ OD_ADD_EXAMPLE(od_example_framegenerator FILES od_example_framegenerator.cpp
 
 
 
-OD_ADD_EXAMPLE(od_multialgo_files FILES od_multialgo_files.cpp
-                LINK_WITH od_miscellaneous_detector)
 
-OD_ADD_EXAMPLE(od_multialgo_pc FILES od_multialgo_pc.cpp
-                LINK_WITH od_miscellaneous_detector)
 

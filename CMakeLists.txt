@@ -3,47 +3,34 @@ project(OpenDetection)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
-# init variables for convinience
+# Initialize variables
 set(OD_SOURCE_DIR ${OpenDetection_SOURCE_DIR})
 set(OD_BINARY_DIR ${OpenDetection_BINARY_DIR})
+set(OD_CMAKE_DIR "${OpenDetection_SOURCE_DIR}/cmake" )
+set(CMAKE_MODULE_PATH ${OD_CMAKE_DIR}/modules)
 
-# init directories before doing all the searches and includes
-set(OD_CMAKE_DIR "${OpenDetection_SOURCE_DIR}/cmake" "${OpenDetection_SOURCE_DIR}/cmake/modules")
-set(CMAKE_MODULE_PATH ${OD_CMAKE_DIR} ${CMAKE_MODULE_PATH})
-
-# include bunch of stuffs and set the appropriate variables
-
-include_directories("/home/giacomo/libraries/opencv3.1/prefix/include")
-
-# 1. Version
-include(od_version)
+# Initialize versioning
+include(${OD_CMAKE_DIR}/od_version.cmake)
 set(OD_VERSION "${OD_MAJOR_VERSION}.${OD_MINOR_VERSION}")
 set(OD_VERSION_DETAILED "${OD_MAJOR_VERSION}.${OD_MINOR_VERSION}.${OD_BUILD_VERSION}")
-# generate config files
-configure_file (
-  "${OD_SOURCE_DIR}/ODConfig.h.in"
-  "${OD_BINARY_DIR}/generated/ODConfig.h"
-  )
+configure_file ("${OD_CMAKE_DIR}/od_config.h.in" "${OD_BINARY_DIR}/generated/od_config.h" )
 
-# 3. set up different macros and configurations
-include(od_targets)
-include(od_mandatory_dependency)
+# Set up macros and configurations
+include(${OD_CMAKE_DIR}/od_targets.cmake)
+include(${OD_CMAKE_DIR}/od_dependency.cmake)
+include(${OD_CMAKE_DIR}/od_macros.cmake)
 
-# 2. collect config options and set appropriate variables which will be used in the next hierarchy
+# Optional parameters
 option(WITH_DOCUMENTATION "Build the OD documentation" ON)
 option(WITH_GPU "Build GPU components of the project" ON)
 option(WITH_SVMLIGHT "Build SVM Light" OFF)
 
-# 3. add all the modules
+# Set modules
 set(OD_MODULES_NAMES 3rdparty common doc detectors examples )
 set(OD_MODULES_DIRS ${OD_MODULES_NAMES})
 
+# Add modules
 foreach(subdir ${OD_MODULES_DIRS})
   add_subdirectory("${OD_SOURCE_DIR}/${subdir}")
 endforeach(subdir)
 
-#include folders
-include_directories("${OD_BINARY_DIR}/generated")
-
-set(SOURCE_FILES opendetection.cpp)
-add_executable(opendetection ${SOURCE_FILES})

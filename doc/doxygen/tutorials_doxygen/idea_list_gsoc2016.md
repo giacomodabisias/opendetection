@@ -70,7 +70,7 @@ This is one of the important project and have a very strong influence to the fut
 
 **Key tasks**:
 * This is an open idea. We always would like to integrate **state-of-the-art** algorithms in our framework. It would be easy to port an available C++ code in this framework instead of implementing an idea/paper from scratch. So, we expect you to *do some literature review and report different algorithms* with their availability and the ones you would like to add. Please note that, just because the implementation of some algorithm is available online does not mean that it is the state-of-the-art or one of the popular algorithms. 
-* Implement/port the identified detection algorithms under od::ODDetector2D/od::ODDetector3D and the respective *Trainer* s. 
+* Implement/port the identified detection algorithms under od::ODDetector2D / od::ODDetector3D and the respective *Trainer* s. 
  
 **Prerequisites**: Expertise in Computer Vision and C++. 
 

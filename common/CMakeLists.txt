@@ -11,45 +11,35 @@ set(build TRUE)
 
 if(build)
 
-    set(submodules
-          pipeline
-    )
-
-    set(incs
-        "pipeline/ObjectDetector.h"
-        "pipeline/ODAlgorithmBase.h"
-
-        "pipeline/ODScene.h"
-        "pipeline/ODDetection.h"
-
-        "pipeline/ODTrainer.h"
-        "pipeline/ODDetector.h"
-
-        "utils/ODFrameGenerator.h"
-        "utils/utils.h"
-        "utils/ODFeatureDetector2D.h"
-
-        "bindings/svmlight.h"
+    set(INCLUDES
+            "include/common/pipeline/ObjectDetector.h"
+            "include/common/pipeline/ODAlgorithmBase.h"
+            "include/common/pipeline/ODScene.h"
+            "include/common/pipeline/ODDetection.h"
+            "include/common/pipeline/ODTrainer.h"
+            "include/common/pipeline/ODDetector.h"
+            "include/common/utils/ODFrameGenerator.h"
+            "include/common/utils/utils.h"
+            "include/common/utils/ODFeatureDetector2D.h"
+            "include/common/bindings/svmlight.h"
         )
 
-    set(impl_incs
+    set(IMPL_INCLUDES "")
+
+    set(SOURCES
+            "src/pipeline/ObjectDetector.cpp"
+            "src/pipeline/ODScene.cpp"
+            "src/utils/utils.cpp"
+            "src/utils/ODFeatureDetector2D.cpp"
         )
 
-    set(srcs
-        "pipeline/ObjectDetector.cpp"
-        "pipeline/ODScene.cpp"
-        "utils/utils.cpp"
-        "utils/ODFeatureDetector2D.cpp"
-        )
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${srcs} INCS ${incs} ${impl_incs})
-    install(FILES ${incs} DESTINATION ${OD_INSTALL_INCLUDE_DIR}/${SUBSYS_NAME} COMPONENT ${LIB_NAME})
+    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES} INCS ${INCLUDES} ${IMPL_INCLUDES})
+    install(FILES ${INCLUDES} DESTINATION ${OD_INSTALL_INCLUDE_DIR}/${SUBSYS_NAME} COMPONENT ${LIB_NAME})
 
     if(SUBSYS_DEPS)
       target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS})
     endif(SUBSYS_DEPS)
-
-    #PCL_MAKE_PKGCONFIG("${LIB_NAME}" "${SUBSYS_NAME}" "${SUBSYS_DESC}" "${SUBSYS_DEPS}" "" "" "" "")
-
 
 endif(build)

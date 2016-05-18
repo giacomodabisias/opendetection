@@ -32,15 +32,15 @@ Make `<path_to_data>/trained_data` as your trained_data location in all the exam
 
 ##Run your first examples {#getting_started3}
 
-Go to the build directory of OD (<path_to_source>/build). Run a face detector from your webcam using: 
+Go to the build directory of OD (\<path_to_source\>/build). Run a face detector from your webcam using: 
 
 @code{.bash}
-./examples/objectdetector/od_cascade_cam <path_to_data>/trained_data/
+./examples/objectdetector/od_cascade_cam \<path_to_data\>/trained_data/
 @endcode 
 
-Or get some images containing people (suppose in <path_to_images>/*.JPG) and run the people detector using: 
+Or get some images containing people (suppose in \<path_to_images\>/\*.JPG) and run the people detector using: 
 @code{.bash}
-./examples/objectdetector/od_image_hog_files <path_to_data>/trained_data/ "<path_to_images>/*.JPG"
+./examples/objectdetector/od_image_hog_files \<path_to_data\>/trained_data/ "\<path_to_images\>/\*.JPG"
 @endcode 
 
 Depending on the image, you will see something like the following.

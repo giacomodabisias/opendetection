@@ -131,3 +131,7 @@ ENDMACRO()
 MACRO(SUBDIRS list)
     FILE(GLOB list RELATIVE ${curdir} ${curdir}/*)
 ENDMACRO()
+
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB result RELATIVE ${curdir} ${curdir}/*)
+ENDMACRO()

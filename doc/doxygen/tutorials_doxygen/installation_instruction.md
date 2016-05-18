@@ -23,7 +23,7 @@ OpenCV 3.0 is to be compiled with the modules xfeatures2d (for features like SIF
         
         Detailed instructions with source are provided here: https://github.com/itseez/opencv_contrib . You need to download this seperate repository before compiling OpenCV.
                 
-        *CMAKE options*: OPENCV_EXTRA_MODULES_PATH=<path_to_opencv_contrib>/modules
+        *CMAKE options*: OPENCV_EXTRA_MODULES_PATH=\<path_to_opencv_contrib\>/modules
                                               
     - *OpenCV CUDA module* - for GPU enabled feature detectors and matcher.
              

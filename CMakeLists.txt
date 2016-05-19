@@ -24,9 +24,10 @@ include(${OD_CMAKE_DIR}/od_macros.cmake)
 option(WITH_DOCUMENTATION "Build the OD documentation" ON)
 option(WITH_GPU "Build GPU components of the project" ON)
 option(WITH_SVMLIGHT "Build SVM Light" OFF)
+option(WITH_EXAMPLES "Build examples" OFF)
 
 # Set modules
-set(OD_MODULES_NAMES 3rdparty common doc detectors)
+set(OD_MODULES_NAMES 3rdparty common doc detectors examples)
 set(OD_MODULES_DIRS ${OD_MODULES_NAMES})
 
 # Add modules

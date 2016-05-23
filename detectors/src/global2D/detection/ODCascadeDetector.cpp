@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 17.07.15.
 //
 
-#include "detection/ODCascadeDetector.h"
+#include "detectors/global2D/detection/ODCascadeDetector.h"
 
 using namespace cv;
 using namespace std;

@@ -32,9 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <common/pipeline/ODDetector.h>
 
-
-
-
 #include <pcl/pcl_macros.h>
 #include <pcl/apps/3d_rec_framework/pipeline/global_nn_classifier.h>
 #include <pcl/apps/3d_rec_framework/pc_source/mesh_source.h>
@@ -113,5 +110,5 @@ namespace od
   }
 }
 
-#include "ODCADDetector3DGlobal.hpp"
+#include "detection/ODCADDetector3DGlobal.hpp"
 #endif //OPENDETECTION_ODPOINTCLOUDGLOBALMATCHINGDETECTOR_H

@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 2.8)
 project(OpenDetection)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 # Initialize variables
 set(OD_SOURCE_DIR ${OpenDetection_SOURCE_DIR})
 set(OD_BINARY_DIR ${OpenDetection_BINARY_DIR})
-set(OD_CMAKE_DIR "${OpenDetection_SOURCE_DIR}/cmake" )
+set(OD_CMAKE_DIR "${OpenDetection_SOURCE_DIR}/cmake")
 set(CMAKE_MODULE_PATH ${OD_CMAKE_DIR}/modules)
 
 # Initialize versioning
 include(${OD_CMAKE_DIR}/od_version.cmake)
 set(OD_VERSION "${OD_MAJOR_VERSION}.${OD_MINOR_VERSION}")
 set(OD_VERSION_DETAILED "${OD_MAJOR_VERSION}.${OD_MINOR_VERSION}.${OD_BUILD_VERSION}")
-configure_file ("${OD_CMAKE_DIR}/od_config.h.in" "${OD_BINARY_DIR}/generated/od_config.h" )
+configure_file ("${OD_CMAKE_DIR}/od_config.h.in" "${OD_BINARY_DIR}/generated/od_config.h")
 
 # Set up macros and configurations
 include(${OD_CMAKE_DIR}/od_targets.cmake)

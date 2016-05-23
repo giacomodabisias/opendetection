@@ -28,4 +28,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 05.06.15.
 //
 
-#include "ODImageLocalMatching.h"
+#include "detectors/local2D/ODImageLocalMatching.h"

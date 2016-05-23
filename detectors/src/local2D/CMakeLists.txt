@@ -26,11 +26,12 @@ if(build)
         "ODImageLocalMatching.cpp"
         "training/ODCADRecogTrainerSnapshotBased.cpp"
         "detection/ODCADRecognizer2DLocal.cpp"
+        ${SIMPLE_RANSAC_SRC_FILES}
         )
 
-    include_directories(${DETECTORS_INCLUDE_DIR}/detectors/local2D)
-    include_directories(${OD_SOURCE_DIR}/common/include)
-    include_directories(${DETECTORS_DIR})
+    include_directories(${DETECTORS_INCLUDE_DIR})
+    include_directories(${COMMON_INCLUDE_DIR})
+    include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
 
     OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES} INCS ${INCLUDES} ${IMPL_INCLUDES})
     install(FILES ${INCLUDES} DESTINATION ${OD_INSTALL_INCLUDE_DIR}/${SUBSYS_NAME} COMPONENT ${LIB_NAME})

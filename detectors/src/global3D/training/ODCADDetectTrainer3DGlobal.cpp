@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 16.06.15.
 //
 
-#include "ODCADDetectTrainer3DGlobal.h"
+#include "detection/ODCADDetectTrainer3DGlobal.h"
 
 #include <pcl/pcl_macros.h>
 #include <pcl/apps/3d_rec_framework/pipeline/global_nn_classifier.h>

@@ -20,11 +20,9 @@ if(build)
         )
 
     include_directories(${DETECTORS_INCLUDE_DIR})
-    include_directories(${DETECTORS_INCLUDE_DIR}/detectors/local2D)
-    include_directories(${OD_SOURCE_DIR}/common/include)
-    include_directories(${DETECTORS_DIR})
-    include_directories(${DETECTORS_IMPL_DIR}/detection/)
-
+    include_directories(${COMMON_INCLUDE_DIR})
+    include_directories(${DETECTORS_IMPL_DIR})
+    include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
 
     OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES} INCS ${INCLUDES} ${IMPL_INCLUDES})
 

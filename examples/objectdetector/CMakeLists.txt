@@ -1,5 +1,8 @@
 
-include_directories(${OD_SOURCE_DIR}/common/include)
+include_directories(${DETECTORS_INCLUDE_DIR})
+include_directories(${COMMON_INCLUDE_DIR})
+include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
+include_directories(${DETECTORS_IMPL_DIR})
 
 option(camera_recognition_example "Build the camera recognition example" ON)
 if(od_image_camera_example)

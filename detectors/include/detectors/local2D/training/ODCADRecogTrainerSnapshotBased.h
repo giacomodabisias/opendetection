@@ -34,7 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "common/pipeline/ODTrainer.h"
 #include "common/utils/utils.h"
-#include "ODImageLocalMatching.h"
+#include "detectors/local2D/ODImageLocalMatching.h"
 
 
 #define VIEW_ANGLE 30

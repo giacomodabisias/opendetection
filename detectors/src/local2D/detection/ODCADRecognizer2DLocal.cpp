@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 08.06.15.
 //
 
-#include "detection/ODCADRecognizer2DLocal.h"
+#include "detectors/local2D/detection/ODCADRecognizer2DLocal.h"
 
 
 #include <opencv2/highgui/highgui.hpp>

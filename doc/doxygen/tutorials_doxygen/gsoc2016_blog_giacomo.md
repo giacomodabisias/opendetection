@@ -66,3 +66,14 @@ This resembles also the structure used in the PCL library.
 
 After refactoring the folders, all the involved CMakeFiles had to be restructured to adapt to the new structure. The first version still uses all file names explicitly, but it should be possible to automate the file detection process by using the cmake command *file(GLOB VAR PATTERN)* which finds all file in a gve folder which match a given pattern. This can be done also in a recursive manner. I will probably use this for some folders to be independent (partially) of file names, locations and number.
 
+##Making examples optional##
+
+Examples should not be built always, or at least it should be possible to not build them at all or partially. To do so I added the **WITH_EXAMPLES** option whichi enables the building of the examples. Then for each example I added a variable to trigger the building process of that examples:
+
+option(image_hog_files_example "Build the hog image example" ON)
+if(image_hog_files_example)
+        OD_ADD_EXAMPLE(od_image_hog_files FILES od_image_hog_files.cpp
+                        LINK_WITH od_common od_global_image_detector)
+endif()
+
+The option command adds an option in the cmake; the first parameter is the cmake option name (which for now is written in that way but it will probably change), the second is a description of the option, and the third is the default option value. I left it on on so that even unexperienced user can build some examples to test the library. The option is then followed by an if which checks the option vale and in case adds the example to the build process. I would like to change also the structure of the example folder by creating subfolders which then contain the different examples subdividing them by **type** . Each folder will then have its own *CMakeLists.txt* file which can be added by the parent cmake with the usual *add_subdirectory* command. This helps also since we can add automatically all the subfolders of the example folder to the build process without stating the names explicitly.

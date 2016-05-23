@@ -31,7 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef OPENDETECTION_SIMPLERANSACDETECTOR_H
 #define OPENDETECTION_SIMPLERANSACDETECTOR_H
 
-#include "ODImageLocalMatching.h"
+#include "detectors/local2D/ODImageLocalMatching.h"
 
 #include "common/pipeline/ODDetector.h"
 #include "common/pipeline/ODScene.h"

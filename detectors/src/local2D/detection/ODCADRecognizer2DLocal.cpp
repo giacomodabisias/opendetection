@@ -40,12 +40,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/utils/utils.h"
 
 // PnP Tutorial
-#include "simple_ransac_detection/Mesh.h"
-#include "simple_ransac_detection/Model.h"
-#include "simple_ransac_detection/PnPProblem.h"
-#include "simple_ransac_detection/RobustMatcher.h"
-#include "simple_ransac_detection/ModelRegistration.h"
-#include "simple_ransac_detection/Utils.h"
+#include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
+#include "od/detectors/local2D/simple_ransac_detection/Model.h"
+#include "od/detectors/local2D/simple_ransac_detection/PnPProblem.h"
+#include "od/detectors/local2D/simple_ransac_detection/RobustMatcher.h"
+#include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
+#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 
 
 using namespace cv;

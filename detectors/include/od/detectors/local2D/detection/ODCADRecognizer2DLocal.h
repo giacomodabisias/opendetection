@@ -45,7 +45,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/core/utility.hpp>
 #include <opencv2/calib3d.hpp>
 
-#include "simple_ransac_detection/Utils.h"
+#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 
 
 class Model;

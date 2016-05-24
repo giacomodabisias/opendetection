@@ -7,7 +7,6 @@ set(build TRUE)
 #PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
 #PCL_SUBSYS_DEPEND(build "${SUBSYS_NAME}" DEPS ${SUBSYS_DEPS})
 
-
 if(build)
 
     set(INCLUDES
@@ -20,10 +19,10 @@ if(build)
         "${DETECTORS_IMPL_DIR}/detection/ODCADDetector3DGlobal.hpp"
         )
 
-    set(srcs
-        "src/ODPointCloudGlobalMatching.cpp"
-        "src/detection/ODCADDetector3DGlobal.cpp"
-        "src/training/ODCADDetectTrainer3DGlobal.cpp"
+    set(SOURCES
+        "ODPointCloudGlobalMatching.cpp"
+        "detection/ODCADDetector3DGlobal.cpp"
+        "training/ODCADDetectTrainer3DGlobal.cpp"
         )
 
     include_directories(${DETECTORS_INCLUDE_DIR})

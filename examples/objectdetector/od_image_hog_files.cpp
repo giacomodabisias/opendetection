@@ -37,29 +37,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "common/pipeline/ObjectDetector.h"
 #include "common/pipeline/ODDetection.h"
 
-
-using namespace od;
-
 int main(int argc, char *argv[])
 {
-  std::string trained_hog(argv[1]), images(argv[2]);
+
+  if(argc < 4){
+    std::cout << "Wrong number of parameters: training_hog_dir, images_dir" << std::endl;
+    return -1;
+  }
+
+  std::string trained_hog(argv[1]);
+  std::string images(argv[2]);
 
   //detector
-  od::g2d::ODHOGDetector *detector = new od::g2d::ODHOGDetector;
-  detector->setTrainedDataLocation(trained_hog);
+  od::g2d::ODHOGDetector detector ;
+  detector.setTrainedDataLocation(trained_hog);
   //detector->setSvmtype(g2d::ODHOGDetector::OD_DAIMLER_PEOPLE);
-  detector->init();
+  detector.init();
 
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(images);
   //GUI
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  while(frameGenerator.isValid() && cv::waitKey(1000) != 27)
+  while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
     od::ODSceneImage * scene = frameGenerator.getNextFrame();
 
     //Detect
-    ODDetections2D *detections =  detector->detectOmni(scene);
+    ODDetections2D *detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
       cv::imshow("Overlay", detections->renderMetainfo(*scene).getCVImage());

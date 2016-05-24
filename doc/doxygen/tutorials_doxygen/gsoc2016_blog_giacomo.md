@@ -70,10 +70,48 @@ After refactoring the folders, all the involved CMakeFiles had to be restructure
 
 Examples should not be built always, or at least it should be possible to not build them at all or partially. To do so I added the **WITH_EXAMPLES** option whichi enables the building of the examples. Then for each example I added a variable to trigger the building process of that examples:
 
+@code
 option(image_hog_files_example "Build the hog image example" ON)
 if(image_hog_files_example)
         OD_ADD_EXAMPLE(od_image_hog_files FILES od_image_hog_files.cpp
                         LINK_WITH od_common od_global_image_detector)
 endif()
+@endcode
 
 The option command adds an option in the cmake; the first parameter is the cmake option name (which for now is written in that way but it will probably change), the second is a description of the option, and the third is the default option value. I left it on on so that even unexperienced user can build some examples to test the library. The option is then followed by an if which checks the option vale and in case adds the example to the build process. I would like to change also the structure of the example folder by creating subfolders which then contain the different examples subdividing them by **type** . Each folder will then have its own *CMakeLists.txt* file which can be added by the parent cmake with the usual *add_subdirectory* command. This helps also since we can add automatically all the subfolders of the example folder to the build process without stating the names explicitly.
+
+##Include structure##
+
+While continuing to restructure the library I came across a decision which can be solved in different ways but for which I still don't have the best solution. Lets assume we want to include a global 3D detector for example, we would use *ODCADDetector3DGlobal.h* . We could have in our file 
+
+@code
+#include <ODCADDetector3DGlobal.h> 
+@endcode
+
+and the compiler would need the include folder where the file is located to compile. This means that the file should be localted directly in the upper include folder, but this is not our case since the structure is like *detectors/global3D/detection/* so it would be better to have
+
+@code
+#include <detectors/global3D/detection/ODCADDetector3DGlobal.h> 
+@endcode
+
+and include the upper level folder. To use the first solution we would need to include *detectors/global3D/detection/* but this is not really appealing since it would mess with the whole include structure. For now I opted for the second solution, but the include structure could be changed at any time. This way the include file structure resables exactly the source file structure:
+
+- common
+	* bindings
+	* pipeline
+	* utils
+- detectors
+	* global2D
+		- detection
+		- training
+	* global3D
+		- detection
+		- training
+	* local2D
+		- detection
+		- training
+	* misc
+		- detection
+
+The new structure compiles fines except for three examples which have a linker bug (undefined reference to `vtable for od::g3d::ODCADDetectTrainer3DGlobal'
+) which I am trying to resolve. I fixed a bit the source code of all the examples removing unnecessary includes, fixing namespaces, maintaining a common interface and avoiding dynamic memory allocation where possible. The next step after fixing the linker bug will be to fix the install paths for includes and libs. 

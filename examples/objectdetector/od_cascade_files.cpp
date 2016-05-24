@@ -30,24 +30,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
 
 #include <detectors/global2D/detection/ODCascadeDetector.h>
-//#include "detectors/global2D/detection/ODHOGDetector.h"
-#include "common/utils/ODFrameGenerator.h"
-
-#include "common/pipeline/ObjectDetector.h"
-#include "common/pipeline/ODDetection.h"
-
-
-using namespace od;
-using namespace std;
+#include <common/utils/ODFrameGenerator.h>
 
 int main(int argc, char *argv[])
 {
-  string trained_cascade(argv[1]), images(argv[2]);
+
+  if(argc < 3){
+    std::cout << "Wrong number of parameters: training_dir, query_images_dir" << std::endl;
+    return -1;
+  }
+
+  std::string trained_cascade(argv[1]);
+  std::string images(argv[2]);
 
   //detector
-  od::g2d::ODCascadeDetector *detector = new od::g2d::ODCascadeDetector;
-  detector->setTrainedDataLocation(trained_cascade);
-  detector->init();
+  od::g2d::ODCascadeDetector detector;
+  detector.setTrainedDataLocation(trained_cascade);
+  detector.init();
 
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(images);
@@ -58,7 +57,7 @@ int main(int argc, char *argv[])
     od::ODSceneImage * scene = frameGenerator.getNextFrame();
 
     //Detect
-    ODDetections2D *detections =  detector->detectOmni(scene);
+    od::ODDetections2D *detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
     {

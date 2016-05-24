@@ -56,6 +56,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include <vector>
 // svmlight related
 // namespace required for avoiding collisions of declarations (e.g. LINEAR being declared in flann, svmlight and libsvm)
+
 namespace svmlight {
     extern "C" {
         #include "3rdparty/svmlight/svm_common.h"

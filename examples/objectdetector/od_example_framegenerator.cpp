@@ -33,9 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    *
    */
 
-#include <boost/smart_ptr/make_shared_array.hpp>
-#include "common/utils/ODFrameGenerator.h"
-
+#include <common/utils/ODFrameGenerator.h>
 
 int main(int argc, char *argv[])
 {

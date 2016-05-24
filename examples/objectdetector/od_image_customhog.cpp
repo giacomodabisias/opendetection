@@ -31,34 +31,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
 
 
-#include "detectors/global2D/detection/ODHOGDetector.h"
-#include "common/utils/ODFrameGenerator.h"
-
-#include "common/pipeline/ObjectDetector.h"
-#include "common/pipeline/ODDetection.h"
-
-
-using namespace od;
-using namespace std;
+#include <detectors/global2D/detection/ODHOGDetector.h>
+#include <common/utils/ODFrameGenerator.h>
 
 int main(int argc, char *argv[])
 {
-  string trained_data_dir(argv[1]);
+
+  if(argc < 4){
+    std::cout << "Wrong number of parameters: trained_data_dir" << std::endl;
+    return -1;
+  }
+
+  std::string trained_data_dir(argv[1]);
   //detector
-  g2d::ODHOGDetector *detector = new g2d::ODHOGDetector(trained_data_dir);
-  detector->setSvmtype(g2d::ODHOGDetector::OD_FILE);
-  detector->init();
+  g2d::ODHOGDetector detector(trained_data_dir);
+  detector.setSvmtype(g2d::ODHOGDetector::OD_FILE);
+  detector.init();
 
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_DEVICE> frameGenerator(0);
   //GUI
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  while(frameGenerator.isValid() && cv::waitKey(20) != 27)
+  while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
     od::ODSceneImage * scene = frameGenerator.getNextFrame();
 
     //Detect
-    ODDetections2D *detections =  detector->detectOmni(scene);
+    ODDetections2D *detections = detector.detectOmni(scene);
 
     if(detections->size() > 0)
       cv::imshow("Overlay", detections->renderMetainfo(*scene).getCVImage());

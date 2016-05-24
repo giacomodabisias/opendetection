@@ -3,7 +3,7 @@ include_directories(${COMMON_INCLUDE_DIR})
 include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
 
 OD_ADD_EXAMPLE(odcadrecog_test_single_model FILES cadrecog2D/od_test_single_db_single_model.cpp
-                LINK_WITH od_common od_local_image_detector)
+                LINK_WITH od_common od_local_image_detector )
 
 include_directories("${OD_BINARY_DIR}/generated")
 set(SOURCE_FILES version/opendetection.cpp)

@@ -95,11 +95,6 @@ namespace od
     protected:
       std::string desc_name;
     };
-
-    /** \example objectdetector/od_pc_global_real_time.cpp
-     *  \example objectdetector/od_pc_global_files.cpp
-     */
-
   }
 }
 

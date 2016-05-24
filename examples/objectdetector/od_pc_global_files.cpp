@@ -33,34 +33,34 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    *
    */
 
-
+#include <vector>
 #include <common/utils/ODFrameGenerator.h>
-#include "common/pipeline/ObjectDetector.h"
-//#include "common/pipeline/ODDetection.h"
-#include "detectors/global3D/ODPointCloudGlobalMatching.h"
+#include <detectors/global3D/ODPointCloudGlobalMatching.h>
 
-
-using namespace std;
 int main(int argc, char *argv[])
 {
 
-  std::string training_input_dir(argv[1]), trained_data_dir(argv[2]), pointcloud_file(argv[3]);
+  if(argc < 4){
+    std::cout << "Wrong number of parameters: training_dir, trained_data_dir, pointcloud_file" << std::endl;
+    return -1;
+  }
+
+  std::string training_input_dir(argv[1]);
+  std::string trained_data_dir(argv[2]);
+  std::string pointcloud_file(argv[3]);
 
   //trainer
-  od::ODTrainer *trainer = new od::g3d::ODCADDetectTrainer3DGlobal(training_input_dir, trained_data_dir);
-  trainer->train();
-
+  od::g3d::ODCADDetectTrainer3DGlobal trainer(training_input_dir, trained_data_dir);
+  trainer.train();
 
   //detector
-  od::g3d::ODCADDetector3DGlobal<> *detector = new od::g3d::ODCADDetector3DGlobal<>();
-  detector->setTrainingInputLocation(training_input_dir);
-  detector->setTrainedDataLocation(trained_data_dir);
-  detector->init();
-
+  od::g3d::ODCADDetector3DGlobal<> detector;
+  detector.setTrainingInputLocation(training_input_dir);
+  detector.setTrainedDataLocation(trained_data_dir);
+  detector.init();
 
   //Get a scene
   od::ODScenePointCloud<pcl::PointXYZRGBA> *frame;
-  vector<od::ODDetection3D *> detections;
 
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(pointcloud_file);
   while(frameGenerator.isValid())
@@ -68,10 +68,9 @@ int main(int argc, char *argv[])
     //get frame
     frame = frameGenerator.getNextFrame();
 
+    od::ODDetections3D * detections = detector.detectOmni(frame);
 
-    od::ODDetections3D * detections = detector->detectOmni(frame);
-
-    for(int i = 0; i < detections->size(); i++)
+    for(size_t i = 0; i < detections->size(); i++)
     {
       detections->at(i)->printSelf();
     }

@@ -26,32 +26,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include <detectors/misc/detection/ODDetectorMultiAlgo.h>
 #include <opencv2/highgui.hpp>
-#include "common/utils/ODFrameGenerator.h"
-
-#include "common/pipeline/ObjectDetector.h"
-#include "common/pipeline/ODDetection.h"
-
-
-using namespace od;
+#include <common/utils/ODFrameGenerator.h>
 
 int main(int argc, char *argv[])
 {
-  std::string trained_data_dir(argv[1]), query_images(argv[2]);;
+
+  if(argc < 3){
+    std::cout << "Wrong number of parameters: training_dir, query_images" << std::endl;
+    return -1;
+  }
+
+  std::string trained_data_dir(argv[1]);
+  std::string query_images(argv[2]);
 
   //detector
-  od::ODDetectorMultiAlgo2D *detector = new od::ODDetectorMultiAlgo2D(trained_data_dir);
-  detector->init();
+  od::ODDetectorMultiAlgo2D detector(trained_data_dir);
+  detector.init();
 
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(query_images);
   //GUI
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  while(frameGenerator.isValid() && cv::waitKey(3000) != 27)
+  while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
     od::ODSceneImage * scene = frameGenerator.getNextFrame();
 
     //Detect
-    ODDetections2D *detections =  detector->detectOmni(scene);
+    ODDetections2D *detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
       cv::imshow("Overlay", detections->renderMetainfo(*scene).getCVImage());

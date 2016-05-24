@@ -75,10 +75,6 @@ namespace od
 
 
     };
-    /** \example objectdetector/od_image_cadrecog_camera.cpp
-    * \example objectdetector/od_image_cadrecog_files.cpp
-    */
-
   }
 }
 

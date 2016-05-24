@@ -30,33 +30,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
 
 #include <detectors/global2D/detection/ODCascadeDetector.h>
-#include "common/utils/ODFrameGenerator.h"
-
-#include "common/pipeline/ObjectDetector.h"
-#include "common/pipeline/ODDetection.h"
-
-
-using namespace od;
+#include <common/utils/ODFrameGenerator.h>
 
 int main(int argc, char *argv[])
 {
+
+  if(argc < 2){
+    std::cout << "Wrong number of parameters: trained_data_dir" << std::endl;
+    return -1;
+  }
+
   std::string trained_cascade(argv[1]);
 
   //detector
-  od::g2d::ODCascadeDetector *detector = new od::g2d::ODCascadeDetector;
-  detector->setTrainedDataLocation(trained_cascade);
-  detector->init();
+  od::g2d::ODCascadeDetector detector;
+  detector.setTrainedDataLocation(trained_cascade);
+  detector.init();
 
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_DEVICE> frameGenerator(0);
   //GUI
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  while(frameGenerator.isValid() && cv::waitKey(20) != 27)
+  while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
     od::ODSceneImage * scene = frameGenerator.getNextFrame();
 
     //Detect
-    ODDetections2D *detections =  detector->detectOmni(scene);
+    od::ODDetections2D *detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
       cv::imshow("Overlay", detections->getMetainfoImage());

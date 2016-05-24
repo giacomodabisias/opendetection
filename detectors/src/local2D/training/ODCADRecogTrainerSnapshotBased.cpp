@@ -24,7 +24,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#include "detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
+#include "od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
 //simplecube/newcube.obj  simplecube/flower.jpeg
 //Lion/Final.obj Lion/Texture.png
 //BigDaddy/Param.obj BigDaddy/Parameterization.png

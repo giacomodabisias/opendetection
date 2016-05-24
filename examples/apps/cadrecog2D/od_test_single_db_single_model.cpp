@@ -24,30 +24,30 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#include "detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
-#include "detectors/local2D/detection/ODCADRecognizer2DLocal.h"
-#include "common/utils/ODFrameGenerator.h"
-
-#include "common/pipeline/ObjectDetector.h"
-#include "common/pipeline/ODDetection.h"
-#include "detectors/local2D/ODImageLocalMatching.h"
-///home/sarkar/work/opencv/real_time_pose_estimation/Data/Lion/test_images/IMG_*.JPG /home/sarkar/work/opencv/face  /home/sarkar/models/MODELS_DATA/Lion/test_images/Lion_old/original/out_camera_data_lion_old.xml /home/sarkar/models/MODELS_DATA/Lion/test_images/Lion_old/original/ransac_detection_txtmap.txt
-
-
-using namespace od;
-using namespace std;
+#include "od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
+#include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
+#include "od/common/utils/ODFrameGenerator.h"
 
 int main(int argc, char *argv[])
 {
-  std::string imagespath(argv[1]), modelsPath(argv[2]), camerapath(argv[3]), outputfile(argv[4]);
-  ofstream logfile(outputfile.c_str());
+
+  if(argc < 5){
+    std::cout << "Wrong number of parameters: image_path  model_path  camera_path  output_file" << std::endl;
+    return -1;
+  }
+
+  std::string imagespath(argv[1]);
+  std::string modelsPath(argv[2]);
+  std::string camerapath(argv[3]);
+  std::string outputfile(argv[4]);
+  std::ofstream logfile(outputfile.c_str());
 
   //detector
-  od::l2d::ODCADRecognizer2DLocal *detector = new od::l2d::ODCADRecognizer2DLocal(modelsPath);
+  od::l2d::ODCADRecognizer2DLocal detector(modelsPath);
   //set commandline options type inputs
-  detector->parseParameterString("--use_gpu --method=1 --error=2 --confidence=0.5 --iterations=1000 --inliers=6 --metainfo");
-  detector->setCameraIntrinsicFile(camerapath);   //set some other inputs
-  detector->init();
+  detector.parseParameterString("--use_gpu --method=1 --error=2 --confidence=0.5 --iterations=1000 --inliers=6 --metainfo");
+  detector.setCameraIntrinsicFile(camerapath);   //set some other inputs
+  detector.init();
 
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(imagespath);
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     //cv::imshow("Overlay", scene->getCVImage());
 
     //Detect
-    ODDetections3D *detections =  detector->detectOmni(scene);
+    od::ODDetections3D *detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
     {
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
       for (int i = 0; i < detections->size(); i++)
       {
-        ODDetection3D *detection = detections->at(i);
+        od::ODDetection3D *detection = detections->at(i);
         detection->printSelf();
         logfile << detection->getId() << endl;
       }

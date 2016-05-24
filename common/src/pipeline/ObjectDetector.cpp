@@ -28,4 +28,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 03.06.15.
 //
 
-#include "common/pipeline/ObjectDetector.h"
+#include "od/common/pipeline/ObjectDetector.h"

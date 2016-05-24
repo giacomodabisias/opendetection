@@ -1,8 +1,8 @@
 //
 // Created by sarkar on 19.06.15.
 //
-#include "common/utils/utils.h"
-#include "opencv2/imgproc/imgproc.hpp"
+#include "od/common/utils/utils.h"
+#include <opencv2/imgproc/imgproc.hpp>
 #include <boost/functional/hash.hpp>
 
 using namespace std;

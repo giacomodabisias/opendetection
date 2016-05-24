@@ -10,7 +10,7 @@ set(build TRUE)
 if(build)
 
     set(INCLUDES
-            "${DETECTORS_INCLUDE_DIR}/detectors/misc/detection/ODDetectorMultiAlgo.h"
+            "${DETECTORS_INCLUDE_DIR}/od/detectors/misc/detection/ODDetectorMultiAlgo.h"
         )
 
     set(IMPL_INCLUDES "")

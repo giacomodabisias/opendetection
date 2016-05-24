@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 
-#include "ODHOGTrainer.h"
+#include "od/detectors/global2D/training/ODHOGTrainer.h"
 
 
 #include <fstream>
@@ -40,7 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/imgproc/imgproc.hpp>
 
 //binding class for svmlight
-#include "common/bindings/svmlight.h"
+#include "od/common/bindings/svmlight.h"
 
 #define TRAINHOG_SVM_TO_TRAIN SVMlight
 

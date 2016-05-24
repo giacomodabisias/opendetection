@@ -27,16 +27,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 06.08.15.
 //
 
-#include "detectors/misc/detection/ODDetectorMultiAlgo.h"
-#include "detectors/global2D/detection/ODCascadeDetector.h"
-#include "detectors/global2D/detection/ODHOGDetector.h"
-#include "detectors/global2D/ODFaceRecognizer.h"
+#include "od/detectors/misc/detection/ODDetectorMultiAlgo.h"
+#include "od/detectors/global2D/detection/ODCascadeDetector.h"
+#include "od/detectors/global2D/detection/ODHOGDetector.h"
+#include "od/detectors/global2D/ODFaceRecognizer.h"
 
-#include "detectors/local2D/detection/ODCADRecognizer2DLocal.h"
-
+#include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
 
 //3D detectors
-#include "detectors/global3D/detection/ODCADDetector3DGlobal.h"
+#include "od/detectors/global3D/detection/ODCADDetector3DGlobal.h"
 
 
 using namespace std;

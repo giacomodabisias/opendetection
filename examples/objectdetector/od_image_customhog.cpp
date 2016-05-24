@@ -31,8 +31,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
 
 
-#include <detectors/global2D/detection/ODHOGDetector.h>
-#include <common/utils/ODFrameGenerator.h>
+#include "od/detectors/global2D/detection/ODHOGDetector.h"
+#include "od/common/utils/ODFrameGenerator.h"
 
 int main(int argc, char *argv[])
 {

@@ -14,7 +14,6 @@
 #include <opencv2/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/ml.hpp>
-#include <common/utils/utils.h>
 
 
 void convertToUnsignedSiftGPU(cv::Mat const &cv_des, vector<unsigned char> &siftgpu_des)

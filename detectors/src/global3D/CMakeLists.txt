@@ -10,13 +10,13 @@ set(build TRUE)
 if(build)
 
     set(INCLUDES
-        "${DETECTORS_INCLUDE_DIR}/detectors/global3D/ODPointCloudGlobalMatching.h"
-        "${DETECTORS_INCLUDE_DIR}/detectors/global3D/detection/ODCADDetector3DGlobal.h"
-        "${DETECTORS_INCLUDE_DIR}/detectors/global3D/training/ODCADDetectTrainer3DGlobal.h"
+        "${DETECTORS_INCLUDE_DIR}/od/detectors/global3D/ODPointCloudGlobalMatching.h"
+        "${DETECTORS_INCLUDE_DIR}/od/detectors/global3D/detection/ODCADDetector3DGlobal.h"
+        "${DETECTORS_INCLUDE_DIR}/od/detectors/global3D/training/ODCADDetectTrainer3DGlobal.h"
         )
 
     set(IMPL_INCLUDES
-        "${DETECTORS_IMPL_DIR}/detection/ODCADDetector3DGlobal.hpp"
+        "${DETECTORS_IMPL_DIR}/od/global3D/detection/ODCADDetector3DGlobal.hpp"
         )
 
     set(SOURCES

@@ -15,9 +15,9 @@ set(build TRUE)
 if(build)
     
     set(INCLUDES
-        "${DETECTORS_INCLUDE_DIR}/detectors/local2D/ODImageLocalMatching.h"
-        "${DETECTORS_INCLUDE_DIR}/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
-        "${DETECTORS_INCLUDE_DIR}/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
+        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/ODImageLocalMatching.h"
+        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
+        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
         )
 
     set(IMPL_INCLUDES "")

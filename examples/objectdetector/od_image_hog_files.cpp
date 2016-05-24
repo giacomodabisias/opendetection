@@ -29,13 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    *
    */
 
-#include <detectors/global2D/detection/ODCascadeDetector.h>
-#include <detectors/global2D/detection/ODHOGDetector.h>
-//#include "detectors/global2D/detection/ODHOGDetector.h"
-#include "common/utils/ODFrameGenerator.h"
-
-#include "common/pipeline/ObjectDetector.h"
-#include "common/pipeline/ODDetection.h"
+#include "od/detectors/global2D/detection/ODCascadeDetector.h"
+#include "od/detectors/global2D/detection/ODHOGDetector.h"
+#include "od/common/utils/ODFrameGenerator.h"
 
 int main(int argc, char *argv[])
 {

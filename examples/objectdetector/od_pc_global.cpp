@@ -34,7 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
 
 #include <iostream>
-#include <detectors/global3D/ODPointCloudGlobalMatching.h>
+#include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
 
 int main(int argc, char *argv[])
 {

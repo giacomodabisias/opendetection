@@ -25,9 +25,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h>
-#include <detectors/local2D/detection/ODCADRecognizer2DLocal.h>
-#include <common/utils/ODFrameGenerator.h>
+#include "od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
+#include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
+#include "od/common/utils/ODFrameGenerator.h"
 
 int main(int argc, char *argv[])
 {

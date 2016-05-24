@@ -3,7 +3,7 @@
 //
 
 #include <GL/gl.h>
-#include "common/utils/ODFeatureDetector2D.h"
+#include "od/common/utils/ODFeatureDetector2D.h"
 
 using namespace std;
 namespace od

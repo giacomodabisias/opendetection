@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 15.07.15.
 //
 
-#include "ODHOGDetector.h"
+#include "od/detectors/global2D/detection/ODHOGDetector.h"
 
 using namespace std;
 

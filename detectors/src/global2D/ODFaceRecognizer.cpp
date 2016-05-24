@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 16.07.15.
 //
 
-#include "detectors/global2D/ODFaceRecognizer.h"
+#include "od/detectors/global2D/ODFaceRecognizer.h"
 
 using namespace cv;
 using namespace std;

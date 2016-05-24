@@ -13,7 +13,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d/features2d.hpp>
-#include "common/utils/ODFeatureDetector2D.h"
+#include "od/common/utils/ODFeatureDetector2D.h"
+#include "od/common/utils/utils.h"
 #include "Model.h"
 
 using namespace std;

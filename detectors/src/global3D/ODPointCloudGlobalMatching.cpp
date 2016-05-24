@@ -27,4 +27,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 16.06.15.
 //
 
-#include "detectors/global3D/ODPointCloudGlobalMatching.h"
+#include "od/detectors/global3D/ODPointCloudGlobalMatching.h"

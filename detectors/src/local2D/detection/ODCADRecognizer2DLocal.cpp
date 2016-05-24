@@ -28,8 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 08.06.15.
 //
 
-#include "detectors/local2D/detection/ODCADRecognizer2DLocal.h"
-
+#include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -38,7 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/viz.hpp>
 #include <sys/time.h>
-#include <common/utils/utils.h>
+#include "od/common/utils/utils.h"
 
 // PnP Tutorial
 #include "simple_ransac_detection/Mesh.h"

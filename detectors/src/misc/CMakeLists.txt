@@ -24,7 +24,7 @@ if(build)
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
 
-    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES} INCS ${INCLUDES} ${IMPL_INCLUDES})
+    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
 
     if(SUBSYS_DEPS)
       target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS})

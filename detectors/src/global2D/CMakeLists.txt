@@ -41,8 +41,7 @@ if(build)
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
 
-    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES} INCS ${INCLUDES} ${impl_incs})
-    install(FILES ${INCLUDES} DESTINATION ${OD_INSTALL_INCLUDE_DIR}/${SUBSYS_NAME} COMPONENT ${LIB_NAME} )
+    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
 
     if(WITH_SVMLIGHT)
         if(SUBSYS_DEPS)

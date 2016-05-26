@@ -29,8 +29,7 @@ if(build)
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
 
-    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES} INCS ${INCLUDES} ${IMPL_INCLUDES})
-    install(FILES ${INCLUDES} DESTINATION ${OD_INSTALL_INCLUDE_DIR}/${SUBSYS_NAME} COMPONENT ${LIB_NAME})
+    OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
 
     if(SUBSYS_DEPS)
       target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS})

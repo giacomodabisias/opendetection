@@ -15,20 +15,6 @@ set(build TRUE)
 
 if(build)
     
-    set(INCLUDES
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/ODImageLocalMatching.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/CsvReader.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/CsvWriter.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/Mesh.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/Model.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/PnPProblem.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/RobustMatcher.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/local2D/simple_ransac_detection/Utils.h"
-        )
-
     set(IMPL_INCLUDES "")
 
 

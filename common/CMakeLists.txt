@@ -14,19 +14,6 @@ set(build TRUE)
 
 if(build)
 
-    set(INCLUDES
-            "include/od/common/pipeline/ObjectDetector.h"
-            "include/od/common/pipeline/ODAlgorithmBase.h"
-            "include/od/common/pipeline/ODScene.h"
-            "include/od/common/pipeline/ODDetection.h"
-            "include/od/common/pipeline/ODTrainer.h"
-            "include/od/common/pipeline/ODDetector.h"
-            "include/od/common/utils/ODFrameGenerator.h"
-            "include/od/common/utils/utils.h"
-            "include/od/common/utils/ODFeatureDetector2D.h"
-            "include/od/common/bindings/svmlight.h"
-        )
-
     set(IMPL_INCLUDES "")
 
     set(SOURCES

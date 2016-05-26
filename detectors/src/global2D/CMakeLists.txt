@@ -19,22 +19,12 @@ if(build)
                 "detection/ODCascadeDetector.cpp"
                 "training/ODHOGTrainer.cpp"
                 )
-        set(INCLUDES
-            "${DETECTORS_INCLUDE_DIR}/od/detectors/global2D/ODFaceRecognizer.h"
-            "${DETECTORS_INCLUDE_DIR}/od/detectors/global2D/detection/ODHOGDetector.h"
-            "${DETECTORS_INCLUDE_DIR}/od/detectors/global2D/detection/ODCascadeDetector.h"
-            "${DETECTORS_INCLUDE_DIR}/od/detectors/global2D/training/ODHOGTrainer.h"
-            )
+                
     else()
         set(SOURCES
                 "ODFaceRecognizer.cpp"
                 "detection/ODCascadeDetector.cpp"
         )
-
-        set(INCLUDES
-            "${DETECTORS_INCLUDE_DIR}/od/detectors/global2D/ODFaceRecognizer.h"
-            "${DETECTORS_INCLUDE_DIR}/od/detectors/global2D/detection/ODCascadeDetector.h"
-            )
 
     endif()
         

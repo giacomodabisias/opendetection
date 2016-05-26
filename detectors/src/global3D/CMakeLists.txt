@@ -4,16 +4,8 @@ set(SUBSYS_DESC "The global detector for point cloouds")
 set(SUBSYS_DEPS od_common ${PCL_LIBRARIES} ${VTK_LIBRARIES} ${OpenCV_LIBS} siftgpu)
 
 set(build TRUE)
-#PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
-#PCL_SUBSYS_DEPEND(build "${SUBSYS_NAME}" DEPS ${SUBSYS_DEPS})
 
 if(build)
-
-    set(INCLUDES
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/global3D/ODPointCloudGlobalMatching.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/global3D/detection/ODCADDetector3DGlobal.h"
-        "${DETECTORS_INCLUDE_DIR}/od/detectors/global3D/training/ODCADDetectTrainer3DGlobal.h"
-        )
 
     set(IMPL_INCLUDES
         "${DETECTORS_IMPL_DIR}/od/global3D/detection/ODCADDetector3DGlobal.hpp"

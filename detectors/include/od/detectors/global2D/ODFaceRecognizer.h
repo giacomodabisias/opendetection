@@ -40,7 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/imgproc.hpp>
 #include <opencv2/objdetect.hpp>
 
-
+#include <string>
 
 namespace od
 {

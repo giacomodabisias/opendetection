@@ -59,7 +59,7 @@ namespace od
 
     void ODCADRecognizer2DLocal::parseParameterString(string parameter_string)
     {
-      const String keys = "{help h        |      | print this message                   }"
+      const std::string keys = "{help h        |      | print this message                   }"
           "{video v       |      | path to recorded video               }"
           "{test_images img       |      | image for detection               }"
           "{cam_id         |      | pass true if you want the input from the camera             }"
@@ -78,7 +78,7 @@ namespace od
 
       char **argv;
       int argc;
-      FileUtils::getArgvArgc(parameter_string, &argv, argc);
+      fileutils::getArgvArgc(parameter_string, &argv, argc);
 
       CommandLineParser parser(argc, argv, keys);
       if(parser.has("help"))
@@ -115,7 +115,7 @@ namespace od
       pnp_detection = PnPProblem(cam_man, dist_coeff);
 
       // get all trained models
-      FileUtils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_, model_names);
+      fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_, model_names);
 
       for(int i = 0; i < model_names.size(); i++)
       {
@@ -126,7 +126,7 @@ namespace od
       if(models.size() > 0)
         f_type_default = models[0].f_type;
 
-      featureDetector = boost::make_shared<ODFeatureDetector2D>(f_type_default, use_gpu);
+      featureDetector = std::make_shared<ODFeatureDetector2D>(f_type_default, use_gpu);
 
     }
 

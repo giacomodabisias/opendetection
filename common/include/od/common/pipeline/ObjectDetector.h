@@ -27,14 +27,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Created by sarkar on 03.06.15.
 //
-
-#ifndef OPENDETECTION_OBJECTDETECTOR_H
-#define OPENDETECTION_OBJECTDETECTOR_H
-
+#pragma once
 #include <string>
 #include <vector>
 #include "od/common/pipeline/ODDetection.h"
-
 
 namespace od
 {
@@ -61,7 +57,7 @@ namespace od
   {
   public:
 
-    ODDetectorCommon( std::string const &trained_data_location_="") : trained_data_location_(trained_data_location_)
+    ODDetectorCommon(const std::string & trained_data_location_= "") : trained_data_location_(trained_data_location_)
     {
       std::string clasname = typeid(this).name();
       TRAINED_DATA_ID_ = clasname;
@@ -81,7 +77,7 @@ namespace od
 
     /** \brief Gets/Sets the directory containing the data for training. The trainer uses the data from directory for training. Detectors can use this location to get additional information in its detection algirhtms as well.
       */
-    void setTrainingInputLocation(std::string training_input_location_)
+    void setTrainingInputLocation(const std::string & training_input_location_)
     {
       this->training_input_location_ = training_input_location_;
     }
@@ -98,7 +94,7 @@ namespace od
     /** \brief The base directory for trained data. This should be same for all Trainers and Detectors and can be considered as the 'database' of trained data. Trainers uses one of its
      * subdirectories based on its type to store algo specific trained data. The corresponding Detector would use the same directory to fetch the trained data for online detection.
      */
-    virtual void setTrainedDataLocation(std::string trained_data_location_)
+    virtual void setTrainedDataLocation(const std::string & trained_data_location_)
     {
       this->trained_data_location_ = trained_data_location_;
     }
@@ -116,12 +112,12 @@ namespace od
       return getSpecificTrainingDataLocation() + "/" + TRAINED_DATA_ID_;
     }
 
-    std::string const &getTrainedDataID() const
+    const std::string & getTrainedDataID() const
     {
       return TRAINED_DATA_ID_;
     }
 
-    void setTrainedDataID(std::string const &trainedDataID)
+    void setTrainedDataID(const std::string & trainedDataID)
     {
       ODDetectorCommon::TRAINED_DATA_ID_ = trainedDataID;
     }
@@ -144,12 +140,12 @@ namespace od
     ObjectDetector()
     { }
 
-    DetectionMethod const &getMethod() const
+    const DetectionMethod & getMethod() const
     {
       return method_;
     }
 
-    void setDetectionMethod(DetectionMethod const &detection_method_)
+    void setDetectionMethod(const DetectionMethod & detection_method_)
     {
       this->method_ = detection_method_;
     }
@@ -169,7 +165,7 @@ namespace od
       return training_input_location_;
     }
 
-    void setTrainingInputLocation(std::string training_input_location_)
+    void setTrainingInputLocation(const std::string & training_input_location_)
     {
       this->training_input_location_ = training_input_location_;
     }
@@ -179,7 +175,7 @@ namespace od
       return training_data_location_;
     }
 
-    void setTrainingDataLocation(std::string training_data_location_)
+    void setTrainingDataLocation(const std::string & training_data_location_)
     {
       this->training_data_location_ = training_data_location_;
     }
@@ -197,10 +193,10 @@ namespace od
     virtual int train() = 0;
 
 
-    virtual int detect(ODScene *scene, std::vector<ODDetection *> detections) {}
+    virtual int detect(ODScene * scene, const std::vector<ODDetection *> & detections) {}
 
-    virtual ODDetection* detect(ODScene *scene) {}
-    virtual ODDetections* detectOmni(ODScene *scene) {}
+    virtual ODDetection* detect(ODScene * scene) {}
+    virtual ODDetections* detectOmni(ODScene * scene) {}
 
   protected:
     DetectionMethod method_;
@@ -212,5 +208,3 @@ namespace od
   };
 
 }
-
-#endif //OPENDETECTION_OBJECTDETECTOR_H

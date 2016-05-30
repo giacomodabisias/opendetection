@@ -39,7 +39,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/utils/ODFeatureDetector2D.h"
 
 #include <iostream>
-#include <time.h>
 // OpenCV
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/utility.hpp>
@@ -216,7 +215,7 @@ namespace od
 
         pnpMethod = cv::SOLVEPNP_EPNP;
         f_type_default = "SIFT";
-        featureDetector = boost::make_shared<ODFeatureDetector2D>(f_type_default, use_gpu);
+        featureDetector = std::make_shared<ODFeatureDetector2D>(f_type_default, use_gpu);
       }
 
       void parseParameterString(string parameter_string);
@@ -259,7 +258,7 @@ namespace od
       vector<Model> models;
       PnPProblem pnp_detection;
       std::string f_type_default;
-      boost::shared_ptr<ODFeatureDetector2D> featureDetector;
+      std::shared_ptr<ODFeatureDetector2D> featureDetector;
 
       bool detectSingleModel(ODSceneImage *scene, Model const &model, ODDetection3D *&pD, cv::Mat &frame_viz);
     };

@@ -25,9 +25,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
-//simplecube/newcube.obj  simplecube/flower.jpeg
-//Lion/Final.obj Lion/Texture.png
-//BigDaddy/Param.obj BigDaddy/Parameterization.png
 
 #include <string>
 #include <stdlib.h>
@@ -87,9 +84,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/xfeatures2d.hpp>
 #include <vtkJPEGWriter.h>
 
-
-//extra
-//xml
 #include "pugixml.hpp"
 
 
@@ -132,7 +126,7 @@ namespace od
           cout << "Processing finished... Writing the final descriptors" << endl;
 
           string filename = boost::filesystem::path(input_file).filename().replace_extension(feature_type + "." + output_extension).c_str();
-          FileUtils::createTrainingDir(output_dir);
+          fileutils::createTrainingDir(output_dir);
 
           write_pairs(pairs_3d_2d, common_descriptors, output_dir + "/" + filename);
           write_pairs_xml(pairs_3d_2d, common_descriptors, output_dir + "/" + filename);
@@ -182,21 +176,21 @@ namespace od
       string input_file, input_dir, output_dir, output_extension;
 
 
-      vtkActor *actor;
-      vtkRenderer *renderer;
+      vtkActor * actor;
+      vtkRenderer * renderer;
       bool snap_mode;
     };
 
     int ODCADRecogTrainerSnapshotBased::train()
     {
-      FileUtils::createTrainingDir(trained_data_location_);
+      fileutils::createTrainingDir(trained_data_location_);
 
       //get models in the directory
       std::vector<std::string> files;
       std::string start = "";
       std::string ext = std::string("obj");
-      bf::path dir = training_input_location_;
-      FileUtils::getFilesInDirectory(dir, start, files, ext);
+      boost::filesystem::path dir = training_input_location_;
+      fileutils::getFilesInDirectory(dir, start, files, ext);
 
       //for each models in the train_input_directory, train them and put them on the training_directory
 
@@ -300,7 +294,7 @@ namespace od
       vtkSmartPointer<vtkJPEGWriter> writer = vtkSmartPointer<vtkJPEGWriter>::New();
       std::string filename;
 
-      filename = input_dir + "/" + string("snapshot") + toString(snap_no) + ".jpg";
+      filename = input_dir + "/" + string("snapshot") + std::to_string(snap_no) + ".jpg";
 
       writer->SetFileName(filename.c_str());
       writer->SetInputConnection(windowToImageFilter->GetOutputPort());
@@ -424,8 +418,8 @@ namespace od
       common_descriptors.push_back(descriptors_local_good);
 
       //writing a local set
-      write_pairs(pairs_local, descriptors_local_good, input_dir + "/" + "local" + toString(ino) + ".pairs");
-      write_pairs_xml(pairs_local, descriptors_local_good, input_dir + "/" + "local" + toString(ino) + ".xml");
+      write_pairs(pairs_local, descriptors_local_good, input_dir + "/" + "local" + std::to_string(ino) + ".pairs");
+      write_pairs_xml(pairs_local, descriptors_local_good, input_dir + "/" + "local" + std::to_string(ino) + ".xml");
       cout << "Processed view " << ino << endl;
     }
 

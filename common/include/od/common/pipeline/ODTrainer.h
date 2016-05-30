@@ -27,19 +27,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Created by sarkar on 08.06.15.
 //
-
-#ifndef OPENDETECTION_TRAINER_H
-#define OPENDETECTION_TRAINER_H
-
-#include <iostream>
+#pragma once
 #include <boost/filesystem.hpp>
-#include <boost/algorithm/string.hpp>
-
 #include "od/common/pipeline/ODAlgorithmBase.h"
 #include "od/common/pipeline/ObjectDetector.h"
 
-
-namespace bf = boost::filesystem;
 
 namespace od
 {
@@ -52,7 +44,8 @@ namespace od
   {
   public:
 
-    ODTrainer(std::string const &training_input_location ="", std::string const &training_data_location="") : ODDetectorCommon(training_data_location)
+    ODTrainer(const std::string & training_input_location = "", const std::string & training_data_location = "") : 
+              ODDetectorCommon(training_data_location)
     {
       training_input_location_ = training_data_location;
     }
@@ -62,4 +55,3 @@ namespace od
   };
 
 }
-#endif //OPENDETECTION_TRAINER_H

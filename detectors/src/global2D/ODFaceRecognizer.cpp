@@ -64,7 +64,7 @@ namespace od
 
         //get models in the directory
         std::vector<std::string> files;
-        FileUtils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_EXT_, files);
+        fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_EXT_, files);
 
         if (files.size() == 0)
         {
@@ -90,7 +90,7 @@ namespace od
         exit(1);
       }
       cvrecognizer_->train(images, labels);
-      FileUtils::createTrainingDir(getSpecificTrainingDataLocation());
+      fileutils::createTrainingDir(getSpecificTrainingDataLocation());
 
       cvrecognizer_->save(getSpecificTrainingDataLocation() + "/trained." + TRAINED_DATA_EXT_);
       trained_ = true;
@@ -115,7 +115,7 @@ namespace od
       cvrecognizer_->predict(face_edited, label, confidence);
 
       //fill in the detection
-      ODDetection2D *detection = new ODDetection2D(ODDetection::OD_DETECTION_CLASS, toString(label), confidence);
+      ODDetection2D *detection = new ODDetection2D(ODDetection::OD_DETECTION_CLASS, std::to_string(label), confidence);
       ODDetections2D *detections = new ODDetections2D;
       detections->push_back(detection);
       return detections;

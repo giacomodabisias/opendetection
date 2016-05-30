@@ -1,15 +1,13 @@
 //
 // Created by sarkar on 19.06.15.
 //
-
-#ifndef OPENDETECTION_ODFRAMEGENERATOR_H
-#define OPENDETECTION_ODFRAMEGENERATOR_H
-
+#pragma once
 #include "od/common/pipeline/ODDetection.h"
 #include "od/common/pipeline/ODScene.h"
 #include <iostream>
 #include <opencv2/videoio.hpp>
 #include <pcl/apps/3d_rec_framework/tools/openni_frame_source.h>
+#include <boost/make_shared.hpp>
 
 namespace od
 {
@@ -19,7 +17,6 @@ namespace od
   };
 
 
-
   /** \brief The FrameGenerator class for capturing and reading Scenes conveniently.
    * Templated with two parameters - SceneType identifying a Scene class, and TYPE identifying the type of input. After the instantiation with a correct TYPE, use the function
    * getNextFrame() to get an instance of next scene of SceneType. getNextFrame() returns valid scenes until all scenes matched are exhausted - the time  when 'isValid()' is false.
@@ -27,15 +24,15 @@ namespace od
    * \tparam SceneT One of the Scene classes - ODSceneImage or ODScenePointCloud
    * \tparam TYPE TYPE can be GENERATOR_TYPE_FILE_LIST which means you provide the list of scene files to be returned by the FrameGenerator in the constructor (for eg. \/home/username/pics/\*.jpg)
    * Or it can be GENERATOR_TYPE_DEVICE which picks up the webcam or the kinect based on the SceneType.
- * \author Kripasindhu Sarkar
- *
- */
+   * \author Kripasindhu Sarkar
+   *
+   */
   template<typename SceneT, GeneratorType TYPE>
   class ODFrameGenerator
   {
   public:
 
-    ODFrameGenerator(std::string input = "");
+    ODFrameGenerator(const std::string & input = "");
     ODFrameGenerator(int input = 0){}
 
     SceneT * getNextFrame();
@@ -46,7 +43,7 @@ namespace od
     int cameraID_;
     std::vector<std::string> file_list_;
     std::string video_read_path_;
-    int curr_image_;
+    unsigned int curr_image_;
     cv::VideoCapture inputCapture_;
     bool exhausted_;
   };
@@ -56,7 +53,7 @@ namespace od
   class ODFrameGenerator<SceneT, GENERATOR_TYPE_FILE_LIST>
   {
   public:
-    ODFrameGenerator(std::string const input = "")
+    ODFrameGenerator(const std::string & input = "")
     {
       file_list_ = myglob(input);
       curr_image_ = -1;
@@ -65,11 +62,12 @@ namespace od
 
     SceneT * getNextFrame()
     {
-      if (exhausted_)
+      if(exhausted_)
       {
         cout << "Files Exhausted!";
-        return NULL;
+        return nullptr;
       }
+
       curr_image_++;
       if(curr_image_ == file_list_.size() - 1)
         exhausted_ = true;
@@ -77,11 +75,15 @@ namespace od
       cout << "Frame: " << file_list_[curr_image_] << endl;
       return new SceneT(file_list_[curr_image_]);
     }
-    bool isValid() {return !exhausted_;}
+    bool isValid() 
+    {return !exhausted_;}
+
     std::string currentFile()
     {
       return file_list_[curr_image_];
     }
+
+  private:
     std::vector<std::string> file_list_;
     bool exhausted_;
     int curr_image_;
@@ -91,24 +93,29 @@ namespace od
   class ODFrameGenerator<ODSceneImage, GENERATOR_TYPE_DEVICE>
   {
   public:
-    ODFrameGenerator(std::string input = "")
+    ODFrameGenerator(const std::string & input = "")
     {
       input_capture_.open(input);
-      if (!input_capture_.isOpened()) { cout << "FATAL: Cannot open video capture!";}
+      if(!input_capture_.isOpened()) 
+        {std::cout << "FATAL: Cannot open video capture!" << std::endl;}
     }
 
     ODFrameGenerator(int input = 0)
     {
       input_capture_.open(input);
-      if (!input_capture_.isOpened()) { cout << "FATAL: Cannot open video capture!";}
+      if(!input_capture_.isOpened()) 
+        {std::cout << "FATAL: Cannot open video capture!" << std::endl;}
     }
 
     ODSceneImage * getNextFrame()
     {
-      cv::Mat frame; input_capture_.read(frame);
+      cv::Mat frame; 
+      input_capture_.read(frame);
       return new ODSceneImage(frame);
     }
-    bool isValid() {return input_capture_.isOpened();}
+
+    bool isValid() 
+    {return input_capture_.isOpened();}
 
     cv::VideoCapture input_capture_;
   };
@@ -147,38 +154,37 @@ namespace od
 */
 
 
-  template<>
-  class ODFrameGenerator<ODScenePointCloud<pcl::PointXYZRGBA> , GENERATOR_TYPE_DEVICE>
+  template<typename PointT>
+  class ODFrameGenerator<ODScenePointCloud<PointT>, GENERATOR_TYPE_DEVICE>
   {
   public:
-    typedef pcl::PointXYZRGBA PointT;
     typedef pcl::PointCloud<PointT> PointCloud;
-    typedef pcl::PointCloud<PointT>::Ptr PointCloudPtr;
-    typedef pcl::PointCloud<PointT>::ConstPtr PointCloudConstPtr;
+    typedef typename pcl::PointCloud<PointT>::Ptr PointCloudPtr;
+    typedef typename pcl::PointCloud<PointT>::ConstPtr PointCloudConstPtr;
 
     /* A simple class for capturing data from an OpenNI camera */
-    ODFrameGenerator(std::string input = "") : grabber_(input), most_recent_frame_(), frame_counter_(0), active_(true)
+    ODFrameGenerator(const std::string & input = "") : grabber_(input), most_recent_frame_(), frame_counter_(0), active_(true)
     {
-      boost::function<void(const PointCloudConstPtr&)> frame_cb = boost::bind (&ODFrameGenerator<ODScenePointCloud<pcl::PointXYZRGBA> , GENERATOR_TYPE_DEVICE>::onNewFrame, this, _1);
-      grabber_.registerCallback (frame_cb);
+      boost::function<void(const PointCloudConstPtr&)> frame_cb = boost::bind(&ODFrameGenerator<ODScenePointCloud<PointT> , GENERATOR_TYPE_DEVICE>::onNewFrame, this, _1);
+      grabber_.registerCallback(frame_cb);
       grabber_.start ();
-      boost::this_thread::sleep (boost::posix_time::seconds(5));
+      boost::this_thread::sleep(boost::posix_time::seconds(5));
     }
 
     ~ODFrameGenerator()
     {
-      // Stop the grabber when shutting down
       grabber_.stop ();
     }
 
-    ODScenePointCloud<pcl::PointXYZRGBA> * getNextFrame()
+    ODScenePointCloud<PointT> * getNextFrame()
     {
       OpenNIFrameSource::PointCloudPtr frame = snap();
 
-      return new ODScenePointCloud<pcl::PointXYZRGBA>(frame);
+      return new ODScenePointCloud<PointT>(frame);
     }
 
-    bool isValid() {return isActive();}
+    bool isValid() 
+    {return isActive();}
 
     const PointCloudPtr snap ()
     {
@@ -205,17 +211,14 @@ namespace od
     {
       mutex_.lock ();
       ++frame_counter_;
-      most_recent_frame_ = boost::make_shared < PointCloud > (*cloud); // Make a copy of the frame
+      most_recent_frame_ = boost::make_shared<PointCloud>(*cloud); // Make a copy of the frame
       mutex_.unlock ();
     }
 
     pcl::OpenNIGrabber grabber_;
     PointCloudPtr most_recent_frame_;
-    int frame_counter_;
+    unsigned int frame_counter_;
     boost::mutex mutex_;
     bool active_;
   };
-
 }
-
-#endif //OPENDETECTION_ODFRAMEGENERATOR_H

@@ -26,10 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *///
 // Created by sarkar on 17.07.15.
 //
-
-#ifndef OPENDETECTION_ODCASCADEDETECTOR_H
-#define OPENDETECTION_ODCASCADEDETECTOR_H
-
+#pragma once
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/utils/utils.h"
@@ -65,7 +62,7 @@ namespace od
 
       void init()
       {
-        haar_cascade_ = boost::make_shared<cv::CascadeClassifier>(FileUtils::getFirstFile(getSpecificTrainingDataLocation(),
+        haar_cascade_ = std::make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(),
                                                                                           TRAINED_DATA_ID_));
       }
 
@@ -73,7 +70,7 @@ namespace od
       ODDetections* detect(ODSceneImage *scene);
 
     private:
-      boost::shared_ptr<cv::CascadeClassifier> haar_cascade_;
+      std::shared_ptr<cv::CascadeClassifier> haar_cascade_;
 
       double scaleFactor_;
       int minNeighbors_;
@@ -87,5 +84,3 @@ namespace od
   }
 
 }
-
-#endif //OPENDETECTION_ODCASCADEDETECTOR_H

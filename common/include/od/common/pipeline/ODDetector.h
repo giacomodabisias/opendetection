@@ -27,16 +27,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Created by sarkar on 08.06.15.
 //
-
-#ifndef OPENDETECTION_ODDETECTOR_H
-#define OPENDETECTION_ODDETECTOR_H
+#pragma once 
 
 #include "od/common/pipeline/ObjectDetector.h"
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/pipeline/ODDetection.h"
 #include "od/common/pipeline/ObjectDetector.h"
 #include "od/common/pipeline/ODAlgorithmBase.h"
-#include <iostream>
 
 namespace od
 {
@@ -55,8 +52,8 @@ namespace od
     ODDetector(std::string const &training_data_location_) : ODDetectorCommon(training_data_location_)
     { }
 
-    virtual ODDetections* detect(ODScene *scene){}
-    virtual ODDetections* detectOmni(ODScene *scene){}
+    virtual ODDetections * detect(ODScene *scene){}
+    virtual ODDetections * detectOmni(ODScene *scene){}
 
     bool metainfo_;
 
@@ -72,10 +69,10 @@ namespace od
   class ODDetector2D: public ODDetector
   {
   public:
-    ODDetector2D(std::string const &trained_data_location_) : ODDetector(trained_data_location_)
+    ODDetector2D(const std::string & trained_data_location_) : ODDetector(trained_data_location_)
     { }
 
-    ODDetections* detect(ODScene *scene)
+    ODDetections * detect(ODScene *scene)
     {
       return detect(dynamic_cast<ODSceneImage *>(scene));
     }
@@ -85,14 +82,14 @@ namespace od
      * \param[in] scene An instance of 2D scene
      * \return [out] detections A number of detections as an ODDetections instance.
     */
-    virtual ODDetections* detect(ODSceneImage *scene) = 0;
+    virtual ODDetections * detect(ODSceneImage * scene) = 0;
 
     /** \brief Function for performing detection on an entire scene.
      *  The purpose of this function is to detect an object in an entire scene. Thus, other than the type of detection we also have information about the location of the detection w.r.t. the scene.
      * \param[in] scene An instance of 2D scene
      * \return [out] detections A number of detections as an ODDetections2D instance containing information about the detection and its 2D location.
     */
-    virtual ODDetections2D* detectOmni(ODSceneImage *scene) = 0;
+    virtual ODDetections2D * detectOmni(ODSceneImage * scene) = 0;
   };
 
   /** \brief The detector of 3D scene.
@@ -102,11 +99,11 @@ namespace od
    * \author Kripasindhu Sarkar
    *
    */
-  template<typename PointT = pcl::PointXYZRGBA>
+  template<typename PointT>
   class ODDetector3D: public ODDetector
   {
   public:
-    ODDetector3D(std::string const &trained_data_location_) : ODDetector(trained_data_location_)
+    ODDetector3D(const std::string & trained_data_location_) : ODDetector(trained_data_location_)
     { }
 
     /** \brief Function for performing detection on a segmented scene.
@@ -114,14 +111,14 @@ namespace od
      * \param[in] scene An instance of 3D scene
      * \return A number of detections as an ODDetections instance.
     */
-    virtual ODDetections* detect(ODScenePointCloud<PointT> *scene) = 0;
+    virtual ODDetections * detect(ODScenePointCloud<PointT> * scene) = 0;
 
     /** \brief Function for performing detection on an entire scene.
      *  The purpose of this function is to detect an object in an entire scene. Thus, other than the type of detection we also have information about the location of the detection w.r.t. the scene.
      * \param[in] scene An instance of 3D scene
      * \return A number of detections as an ODDetections3D instance containing information about the detection and its 3D pose.
     */
-    virtual ODDetections3D* detectOmni(ODScenePointCloud<PointT> *scene) = 0;
+    virtual ODDetections3D * detectOmni(ODScenePointCloud<PointT> * scene) = 0;
   };
 
   /** \brief The detector of 2D scene performing a 'complete detection'.
@@ -135,7 +132,7 @@ namespace od
   class ODDetector2DComplete: public ODDetector
   {
   public:
-    ODDetector2DComplete(std::string const &trained_data_location_) : ODDetector(trained_data_location_)
+    ODDetector2DComplete(const std::string & trained_data_location_) : ODDetector(trained_data_location_)
     { }
 
     /** \brief Function for performing detection on a segmented scene.
@@ -143,15 +140,14 @@ namespace od
      * \param[in] scene An instance of 2D scene
      * \return A number of detections as an ODDetections instance.
     */
-    virtual ODDetections* detect(ODSceneImage *scene) = 0;
+    virtual ODDetections * detect(ODSceneImage * scene) = 0;
 
     /** \brief Function for performing detection on an entire scene.
      *  The purpose of this function is to detect an object in an entire scene. Thus, other than the type of detection we also have information about the location of the detection w.r.t. the scene.
      * \param[in] scene An instance of 2D scene
      * \return A number of detections as an ODDetections3D instance containing information about the detection and its pose in 3D.
     */
-    virtual ODDetections3D* detectOmni(ODSceneImage *scene) = 0;
+    virtual ODDetections3D * detectOmni(ODSceneImage * scene) = 0;
   };
 
 }
-#endif //OPENDETECTION_ODDETECTOR_H

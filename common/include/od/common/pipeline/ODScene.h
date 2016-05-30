@@ -28,16 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 10.06.15.
 //
 
-#ifndef OPENDETECTION_SCENE_H
-#define OPENDETECTION_SCENE_H
-
-//#include <opencv2/core/core.hpp>
-#include <opencv2/core/types.hpp>
-#include <iostream>
-#include <opencv2/imgcodecs.hpp>
+#pragma once
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/io/pcd_io.h>
-#include <boost/smart_ptr/make_shared_object.hpp>
 
 namespace od
 {
@@ -50,9 +45,9 @@ namespace od
   {
   public:
 
-    virtual void *getData() = 0;
+    virtual void * getData() = 0;
 
-    std::string const &getPath() const
+    std::string const & getPath() const
     {
       return path_;
     }
@@ -70,33 +65,33 @@ namespace od
   {
   public:
 
-    std::vector<cv::KeyPoint> const &getKeypoints() const
+    const std::vector<cv::KeyPoint> & getKeypoints() const
     {
       return keypoints_;
     }
 
-    void setKeypoints(std::vector<cv::KeyPoint> const &keypoints_)
+    void setKeypoints(const std::vector<cv::KeyPoint> & keypoints_)
     {
       ODSceneImage::keypoints_ = keypoints_;
     }
 
-    cv::Mat const &getDescriptors() const
+    const cv::Mat & getDescriptors() const
     {
       return descriptors_;
     }
 
-    void setDescriptors(cv::Mat const &descriptors_)
+    void setDescriptors(const cv::Mat & descriptors_)
     {
       ODSceneImage::descriptors_ = descriptors_;
       is_trained_ = true;
     }
 
-    ODSceneImage(cv::Mat const &cvimage):is_trained_(false)
+    ODSceneImage(const cv::Mat & cvimage): is_trained_(false)
     {
       this->cvimage_ = cvimage.clone();
     }
 
-    ODSceneImage(std::string const &path):is_trained_(false)
+    ODSceneImage(const std::string & path): is_trained_(false)
     {
       this->cvimage_ = cv::imread(path);
       this->path_ = path;
@@ -114,7 +109,6 @@ namespace od
 
   protected:
     cv::Mat cvimage_;
-
     std::vector<cv::KeyPoint> keypoints_;
     cv::Mat descriptors_;
     bool is_trained_;
@@ -127,23 +121,23 @@ namespace od
     * \author Kripasindhu Sarkar
     *
     */
-  template <typename PointType = pcl::PointXYZRGBA>
+  template <typename PointType>
   class ODScenePointCloud : public ODScene
   {
 
   public:
     typedef typename pcl::PointCloud<PointType>::Ptr PointCloudPtr;
 
-    ODScenePointCloud(PointCloudPtr const &point_cloud)
+    ODScenePointCloud(const PointCloudPtr & point_cloud)
     {
       point_cloud_ = point_cloud;
     }
 
-    ODScenePointCloud(std::string point_cloud_file): point_cloud_(new pcl::PointCloud<PointType>())
+    ODScenePointCloud(const std::string & point_cloud_file): point_cloud_(new pcl::PointCloud<PointType>())
     {
       if (pcl::io::loadPCDFile<PointType> (point_cloud_file, *point_cloud_ ) == -1)
       {
-        std::cout<<"ERROR: Couldn't read the file "<< point_cloud_file <<std::endl;
+        std::cout << "ERROR: Couldn't read the file "<< point_cloud_file << std::endl;
       }
       this->path_ = point_cloud_file;
     }
@@ -151,25 +145,26 @@ namespace od
     ODScenePointCloud(): point_cloud_(new pcl::PointCloud<PointType>())
     {}
 
-    PointCloudPtr const &getPointCloud() const
+    const PointCloudPtr & getPointCloud() const
     {
       return point_cloud_;
     }
 
-    PointCloudPtr &getPointCloudRef() const
+    PointCloudPtr & getPointCloudRef() const
     {
       return point_cloud_;
     }
 
-    void setPointCloud(PointCloudPtr const &point_cloud_)
+    void setPointCloud(const PointCloudPtr & point_cloud_)
     {
       ODScenePointCloud::point_cloud_ = point_cloud_;
     }
 
-    void * getData() { return (void *)point_cloud_.get(); }
+    void * getData() 
+    { return (void *)point_cloud_.get(); }
+
   protected:
     PointCloudPtr point_cloud_;
   };
 }
 
-#endif //OPENDETECTION_SCENE_H

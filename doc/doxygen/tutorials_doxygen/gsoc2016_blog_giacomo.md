@@ -115,3 +115,21 @@ and include the upper level folder. To use the first solution we would need to i
 
 The new structure compiles fines except for three examples which have a linker bug (undefined reference to `vtable for od::g3d::ODCADDetectTrainer3DGlobal'
 ) which I am trying to resolve. I fixed a bit the source code of all the examples removing unnecessary includes, fixing namespaces, maintaining a common interface and avoiding dynamic memory allocation where possible. The next step after fixing the linker bug will be to fix the install paths for includes and libs. 
+
+##Include structure 2 and install target##
+
+I fixed the linking error; it came from a wrong variable name in a cmake file which specified some source files which were not compiled and so the linking error. I split simple_ransac_detection in src and include and reinserted it in local2D detectors since it is used only there. The source files are just added to the local2D library and compiled together.
+
+Next I moved to fix the install target in the cmake. In our case, since we have already a clean structure of the include folders which we want to maintain we can directly copy the include folders of each module (detectors and common) into the include folder specified by *CMAKE_INSTALL_PREFIX* . We just need to create an upper folder called od-$VERSION to avoid conflicts with different library versions on the same machine. The clean include structure allows also to remove the explicit single include files from the install targets and allows to use directly the cmake command
+
+@code
+install(DIRECTORY ${DETECTORS_INCLUDE_DIR}/od DESTINATION ${OD_INSTALL_INCLUDE_DIR})
+@endcode
+
+with the DIRECTORY keyword to copy the whole folder. Also I removed the include files from the 
+
+@code
+OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
+@endcode
+
+since you don't have to compile headers files.It is enough to specify the include folders to find the includes at compile time. It could be possible to add header precompilation, but I believe this would be an advanced step which could be implemented at the end. I still need to check if this way of installing includes using the *DIRECTORY* keyword without specifying the single files is the clearest way.

@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
   detector.init();
 
   //Get a scene
-  od::ODScenePointCloud<> scene(pointcloud_file);
+  od::ODScenePointCloud<pcl::PointXYZRGBA> scene(pointcloud_file);
 
   od::ODDetections3D * detections = detector.detectOmni(&scene);
 

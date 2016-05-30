@@ -27,19 +27,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Created by sarkar on 12.06.15.
 //
+#pragma once
 
-#ifndef OPENDETECTION_ODDETECTION_H
-#define OPENDETECTION_ODDETECTION_H
-
-#include <iostream>
 #include "od/common/utils/utils.h"
 #include "od/common/pipeline/ODScene.h"
 #include <Eigen/Core>
 #include <opencv2/core/eigen.hpp>
-
-
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
 #include <opencv2/imgproc.hpp>
 
 namespace od
@@ -416,4 +409,3 @@ namespace od
   };
 
 }
-#endif //OPENDETECTION_ODDETECTION_H

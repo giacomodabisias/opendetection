@@ -1,4 +1,3 @@
-
 # installation structure
 if(NOT OD_INSTALL_RUNTIME_DIR)
   set(OD_INSTALL_RUNTIME_DIR bin)

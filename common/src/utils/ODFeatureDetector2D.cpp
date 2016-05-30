@@ -5,83 +5,86 @@
 #include <GL/gl.h>
 #include "od/common/utils/ODFeatureDetector2D.h"
 
-using namespace std;
 namespace od
 {
 
-  ODFeatureDetector2D::ODFeatureDetector2D(string type, bool use_gpu)
+  ODFeatureDetector2D::ODFeatureDetector2D(const std::string & feature_type, bool use_gpu)
   {
-    mode_ = SIFT; //by default it is SIFT
+    mode_ = SIFT;
 
     if(use_gpu) {
 
-
-      //##########GPU VERSION
-
-
-      if(type == "ORB") {
+      if(feature_type == "ORB") {
         mode_ = ORB_GPU;
         feature_detector_ = cv::cuda::ORB::create();
-      } else if(type == "SIFT") {
+      }else if(feature_type == "SIFT") {
         mode_ = SIFT_GPU;
-        sift_gpu_ = new SiftGPU;
-        //char * argv[] = {(char *)"-fo", (char *)"-1",  (char *)"-v", (char *)"1", (char *)"-cuda", (char *)"0"};
+        sift_gpu_ = new SiftGPU();
         char *argv[] = {(char *) "-fo", (char *) "-1", (char *) "-v", (char *) "1"};
         int argc = sizeof(argv) / sizeof(char *);
         sift_gpu_->ParseParam(argc, argv);
         if(sift_gpu_->CreateContextGL() != SiftGPU::SIFTGPU_FULL_SUPPORTED)
-          cout << "FATAL ERROR cannot create SIFTGPU context";
+          std::cout << "FATAL ERROR cannot create SIFTGPU context" << std::endl;
       }
     } else {
 
-      //########CPU VERSIONS
-
-
-      if(type == "SIFT") {
+      if(feature_type == "SIFT") {
         mode_ = SIFT;
         feature_detector_ = cv::xfeatures2d::SIFT::create();
-      } else if(type == "ORB") {
+      } else if(feature_type == "ORB") {
         mode_ = ORB;
         feature_detector_ = cv::ORB::create();
-      } else if(type == "SURF") {
+      } else if(feature_type == "SURF") {
         mode_ = SURF;
         feature_detector_ = cv::xfeatures2d::SURF::create();
       }
     }
   }
 
-  void ODFeatureDetector2D::computeKeypointsAndDescriptors(cv::Mat const &image, cv::Mat &descriptors, vector<cv::KeyPoint> &keypoints)
+  ODFeatureDetector2D::ODFeatureDetector2D(FeatureType type)
+  {
+
+    mode_ = type;
+
+    if(type == SIFT) {
+      feature_detector_ = cv::xfeatures2d::SIFT::create();
+    } else if(type == ORB) {
+      feature_detector_ = cv::ORB::create();
+    } else if(type == SURF) {
+      feature_detector_ = cv::xfeatures2d::SURF::create();
+    } else if(type == ORB_GPU) {
+      feature_detector_ = cv::cuda::ORB::create();
+    } else if(type == SIFT_GPU) {
+      sift_gpu_ = new SiftGPU;
+      //char * argv[] = {(char *)"-fo", (char *)"-1",  (char *)"-v", (char *)"1"};
+      char *argv[] = {(char *) "-fo", (char *) "-1", (char *) "-v", (char *) "3", (char *) "-cuda"};
+      int argc = sizeof(argv) / sizeof(char *);
+      sift_gpu_->ParseParam(argc, argv);
+      if(sift_gpu_->CreateContextGL() != SiftGPU::SIFTGPU_FULL_SUPPORTED)
+        std::cout << "FATAL ERROR cannot create SIFTGPU context";
+    }
+  }
+
+  void ODFeatureDetector2D::computeKeypointsAndDescriptors(const cv::Mat & image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
     if(mode_ == SIFT_GPU) {
-      findSiftGPUDescriptors1(image, descriptors, keypoints);
+      findSiftGPUDescriptors_(image, descriptors, keypoints);
     } else {
       feature_detector_->detect(image, keypoints);
       feature_detector_->compute(image, keypoints, descriptors);
     }
-    //viewImage(image, keypoints);
   }
 
-  void CVMatToSiftGPU(const cv::Mat &image, unsigned char *siftImage, cv::Mat &grey)
+  void CVMatToSiftGPU(const cv::Mat & image, unsigned char * siftImage, cv::Mat & grey)
   {
     siftImage = (unsigned char *) malloc(image.rows * image.cols);
     cv::Mat tmp;
     cv::cvtColor(image, grey, cv::COLOR_BGR2GRAY);
 
     memcpy(siftImage, grey.data, image.rows * image.cols);
-
-
-//  tmp2.convertTo(tmp, CV_8U);
-//  //viewImage(tmp);
-//
-//  for (int y = 0; y < tmp.rows; ++y) {
-//    for (int x = 0; x < tmp.cols; ++x) {
-//      siftImage[y * tmp.cols + x] = tmp.at<unsigned char> (y, x);
-//    }
-//  }
-    return;
   }
 
-  void ODFeatureDetector2D::findSiftGPUDescriptors1(cv::Mat const &image, cv::Mat &descriptors, vector<cv::KeyPoint> &keypoints)
+  void ODFeatureDetector2D::findSiftGPUDescriptors_(cv::Mat const &image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
     unsigned char *data = image.data;
     cv::Mat greyimage;
@@ -93,10 +96,10 @@ namespace od
 
     int nFeat = sift_gpu_->GetFeatureNum();//get feature count
     //allocate memory for readback
-    vector<SiftGPU::SiftKeypoint> keys(nFeat);
+    std::vector<SiftGPU::SiftKeypoint> keys(nFeat);
     //read back keypoints and normalized descritpros
     //specify NULL if you don’t need keypoints or descriptors
-    vector<float> imageDescriptors(128 * nFeat);
+    std::vector<float> imageDescriptors(128 * nFeat);
     sift_gpu_->GetFeatureVector(&keys[0], &imageDescriptors[0]);
 
     sift_gpu_->SaveSIFT("2.sift");
@@ -114,13 +117,11 @@ namespace od
 
       descriptors.push_back(descriptor);
     }
-
-
     //viewImage(image, keypoints);
 
   }
 
-  void ODFeatureDetector2D::findSiftGPUDescriptors(cv::Mat const &image, cv::Mat &descriptors, vector<cv::KeyPoint> &keypoints)
+  void ODFeatureDetector2D::findSiftGPUDescriptors(cv::Mat const &image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
     unsigned char *data = image.data;
     cv::Mat greyimage;
@@ -133,10 +134,10 @@ namespace od
 
     int nFeat = sift_gpu_->GetFeatureNum();//get feature count
     //allocate memory for readback
-    vector<SiftGPU::SiftKeypoint> keys(nFeat);
+    std::vector<SiftGPU::SiftKeypoint> keys(nFeat);
     //read back keypoints and normalized descritpros
     //specify NULL if you don’t need keypoints or descriptors
-    vector<float> imageDescriptors(128 * nFeat);
+    std::vector<float> imageDescriptors(128 * nFeat);
     sift_gpu_->GetFeatureVector(&keys[0], &imageDescriptors[0]);
 
     sift_gpu_->SaveSIFT("2.sift");
@@ -156,16 +157,16 @@ namespace od
 
   }
 
-  void ODFeatureDetector2D::findSiftGPUDescriptors(char const *image_name, cv::Mat &descriptors, vector<cv::KeyPoint> &keypoints)
+  void ODFeatureDetector2D::findSiftGPUDescriptors(const char * image_name, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
     sift_gpu_->RunSIFT(image_name);
 
     int nFeat = sift_gpu_->GetFeatureNum();//get feature count
     //allocate memory for readback
-    vector<SiftGPU::SiftKeypoint> keys(nFeat);
+    std::vector<SiftGPU::SiftKeypoint> keys(nFeat);
     //read back keypoints and normalized descritpros
     //specify NULL if you don’t need keypoints or descriptors
-    vector<float> imageDescriptors(128 * nFeat);
+    std::vector<float> imageDescriptors(128 * nFeat);
     sift_gpu_->GetFeatureVector(&keys[0], &imageDescriptors[0]);
 
     sift_gpu_->SaveSIFT("1.sift");
@@ -173,22 +174,23 @@ namespace od
     //to opencv format
     keypoints.clear();
     descriptors.create(0, 128, CV_32FC1);
-    for(int i = 0; i < nFeat; ++i) {
+    for(size_t i = 0; i < nFeat; ++i) {
       cv::KeyPoint key(keys[i].x, keys[i].y, keys[i].s, keys[i].o);
       keypoints.push_back(key);
       cv::Mat descriptor(1, 128, CV_32FC1);
-      for(int x = 0; x < 128; x++) descriptor.at<float>(x) = floor(0.5 + 512.0f * imageDescriptors[(i << 7) + x]);
+      for(size_t x = 0; x < 128; x++) 
+        descriptor.at<float>(x) = floor(0.5 + 512.0f * imageDescriptors[(i << 7) + x]);
       descriptors.push_back(descriptor);
     }
     cv::Mat image = cv::imread(image_name);
   }
 
-  void ODFeatureDetector2D::computeAndSave(cv::Mat const &image, std::string const path)
+  void ODFeatureDetector2D::computeAndSave(const cv::Mat & image, const std::string &path)
   {
     cv::Mat descriptors;
-    vector<cv::KeyPoint> keypoints;
+    std::vector<cv::KeyPoint> keypoints;
     if(mode_ == SIFT_GPU) {
-      findSiftGPUDescriptors1(image, descriptors, keypoints);
+      findSiftGPUDescriptors_(image, descriptors, keypoints);
       sift_gpu_->SaveSIFT(path.c_str());
     } else {
       //DO NOTHING! IMPLEMENT LATER

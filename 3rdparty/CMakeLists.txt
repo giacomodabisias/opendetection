@@ -1,4 +1,4 @@
-#add mandatory 3rd party builds
+#add mandatory 3rdparty libraries
 add_subdirectory(pugixml_build)
 
 #if(WITH_SVMLIGHT)

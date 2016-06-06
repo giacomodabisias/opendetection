@@ -28,3 +28,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
+
+
+namespace od {
+
+	namespace g3d {
+
+		int ODPointCloudGlobalMatching ::train()
+		{
+		  return trainer_->train();
+		}
+
+		int ODPointCloudGlobalMatching::detect(ODScene * scene, std::vector<ODDetection *> detections)
+		{
+		  //detector_->detect(scene, detections);
+		  return 0;
+		}
+
+	}
+
+}

@@ -26,10 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *///
 // Created by sarkar on 16.06.15.
 //
-
-#ifndef OPENDETECTION_ODPOINTCLOUDGLOBALMATCHINGTRAINER_H
-#define OPENDETECTION_ODPOINTCLOUDGLOBALMATCHINGTRAINER_H
-
+#pragma once
 #include "od/common/pipeline/ODTrainer.h"
 #include <iostream>
 
@@ -71,31 +68,19 @@ namespace od
     {
 
     public:
-      ODCADDetectTrainer3DGlobal(std::string const &training_input_location_ = "", std::string const &training_data_location_ = "") : ODTrainer(
-          training_input_location_, training_data_location_)
-      {
-        desc_name = "esf";
-        TRAINED_LOCATION_DENTIFIER_ = "GLOBAL3DVFH";
-      }
+      ODCADDetectTrainer3DGlobal(const std::string & training_input_location_ = "", const std::string & training_data_location_ = "");
 
       int train();
 
       void init() {};
 
-      std::string const &getDescName() const
-      {
-        return desc_name;
-      }
+      const std::string & getDescName() const;
 
-      void setDescName(std::string const &desc_name)
-      {
-        ODCADDetectTrainer3DGlobal::desc_name = desc_name;
-      }
+      void setDescName(const std::string & desc_name);
 
     protected:
-      std::string desc_name;
+      std::string desc_name_;
     };
   }
 }
 
-#endif //OPENDETECTION_ODPOINTCLOUDGLOBALMATCHINGTRAINER_H

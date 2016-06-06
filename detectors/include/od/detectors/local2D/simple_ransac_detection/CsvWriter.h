@@ -1,25 +1,28 @@
-#ifndef CSVWRITER_H
-#define	CSVWRITER_H
-
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <opencv2/core/core.hpp>
 #include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 
-using namespace std;
-using namespace cv;
 
-class CsvWriter {
-public:
-  CsvWriter(const string &path, const string &separator = " ");
-  ~CsvWriter();
-  void writeXYZ(const vector<Point3f> &list_points3d);
-  void writeUVXYZ(const vector<Point3f> &list_points3d, const vector<Point2f> &list_points2d, const Mat &descriptors);
+namespace od {
+  
+  namespace l2d {
 
-private:
-  ofstream _file;
-  string _separator;
-  bool _isFirstTerm;
-};
+		class CsvWriter {
+		public:
+		  CsvWriter(const std::string & path, const std::string & separator = " ");
+		  ~CsvWriter();
+		  void writeXYZ(const std::vector<cv::Point3f> & list_points3d);
+		  void writeUVXYZ(const std::vector<cv::Point3f> & list_points3d, const std::vector<cv::Point2f> & list_points2d, const cv::Mat & descriptors);
 
-#endif
+		private:
+		  std::ofstream _file_;
+		  std::string _separator_;
+		  bool _is_first_term_;
+		};
+
+	}
+	
+}
+

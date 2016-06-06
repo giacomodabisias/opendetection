@@ -40,17 +40,43 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <pcl/apps/dominant_plane_segmentation.h>
 #include <pcl/console/parse.h>
 
+namespace od {
 
-int od::g3d::ODCADDetectTrainer3DGlobal::train()
-{
-  boost::shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source (new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>);
-  mesh_source->setPath (training_input_location_);
-  mesh_source->setResolution (150);
-  mesh_source->setTesselationLevel (1);
-  mesh_source->setViewAngle (57.f);
-  mesh_source->setRadiusSphere (1.5f);
-  mesh_source->setModelScale (1.f);
-  std::string training_dir =  getSpecificTrainingDataLocation();
-  mesh_source->generate (training_dir);
-  return 1;
+  namespace g3d {
+
+    ODCADDetectTrainer3DGlobal::ODCADDetectTrainer3DGlobal(const std::string & training_input_location_, const std::string & training_data_location_) : 
+                               ODTrainer(training_input_location_, training_data_location_)
+    {
+      desc_name_ = "esf";
+      TRAINED_LOCATION_DENTIFIER_ = "GLOBAL3DVFH";
+    }
+
+
+    int ODCADDetectTrainer3DGlobal::train()
+    {
+      boost::shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source(new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>);
+      mesh_source->setPath(training_input_location_);
+      mesh_source->setResolution(150);
+      mesh_source->setTesselationLevel(1);
+      mesh_source->setViewAngle(57.f);
+      mesh_source->setRadiusSphere(1.5f);
+      mesh_source->setModelScale(1.f);
+      std::string location = getSpecificTrainingDataLocation();
+      mesh_source->generate(location);
+      return 1;
+    }
+
+    const std::string & ODCADDetectTrainer3DGlobal::getDescName() const
+    {
+      return desc_name_;
+    }
+
+    void ODCADDetectTrainer3DGlobal::setDescName(const std::string & desc_name)
+    {
+      desc_name_ = desc_name;
+    }
+
+  }
 }
+
+

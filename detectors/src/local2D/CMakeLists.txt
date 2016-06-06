@@ -3,11 +3,6 @@ set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "The local feature matching based detector")
 set(SUBSYS_DEPS od_common ${PCL_LIBRARIES} ${VTK_LIBRARIES} ${OpenCV_LIBS})
 
-
-
-include_directories(${CMAKE_SOURCE_DIR}/3rdparty/pugixml/src/)
-#link_directories(${CMAKE_SOURCE_DIR}/3rdparty/pugixml/build/)
-
 set(build TRUE)
 #PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
 #PCL_SUBSYS_DEPEND(build "${SUBSYS_NAME}" DEPS ${SUBSYS_DEPS})
@@ -16,7 +11,6 @@ set(build TRUE)
 if(build)
     
     set(IMPL_INCLUDES "")
-
 
     set(SOURCES
         "ODImageLocalMatching.cpp"
@@ -33,6 +27,7 @@ if(build)
         )
 
     include_directories(${DETECTORS_INCLUDE_DIR})
+    include_directories(${CMAKE_3RDPARTY_DIR}/pugixml/src/)
     include_directories(${COMMON_INCLUDE_DIR})
 
     OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})

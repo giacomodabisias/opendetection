@@ -28,9 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 05.06.15.
 //
 
-#ifndef OPENDETECTION_ODIMAGELOCALMATCHINGSIMPLE_H
-#define OPENDETECTION_ODIMAGELOCALMATCHINGSIMPLE_H
-
+#pragma once
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/pipeline/ODTrainer.h"
 #include "od/common/pipeline/ODDetector.h"
@@ -128,11 +126,10 @@ namespace od
 
     protected:
 
-      ODImageLocalMatchingTrainer *trainer_;
-      ODImageLocalMatchingDetector *detector_;
+      ODImageLocalMatchingTrainer * trainer_;
+      ODImageLocalMatchingDetector * detector_;
 
     };
 
   }
 }
-#endif //OPENDETECTION_ODIMAGELOCALMATCHINGSIMPLE_H

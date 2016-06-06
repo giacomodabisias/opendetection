@@ -47,17 +47,163 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
 #include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 
-
-using namespace cv;
-using namespace std;
-using namespace cv::xfeatures2d;
+//using namespace cv::xfeatures2d;
 
 namespace od
 {
   namespace l2d
   {
 
-    void ODCADRecognizer2DLocal::parseParameterString(string parameter_string)
+    ODCADRecognizer2DLocal::ODCADRecognizer2DLocal(const std::string & trained_data_location_): 
+                                                   ODImageLocalMatchingDetector(trained_data_location_)
+    {
+      meta_info_ = true;
+
+      camera_intrinsic_file_ = "Data/out_camera_data_lion_old.yml";         // mesh
+
+      red_ = cv::Scalar(0, 0, 255);
+      green_ = cv::Scalar(0, 255, 0);
+      blue_ = cv::Scalar(255, 0, 0);
+      yellow_ = cv::Scalar(0, 255, 255);
+
+      num_key_points_ = 2000;      // number of detected keypoints
+      ratio_test_ = 0.70f;          // ratio test
+      fast_match_ = true;       // fastRobustMatch() or robustMatch()
+      use_gpu_ = false;
+      use_gpu_match_ = false;
+
+      iterations_count_ = 500;      // number of Ransac iterations.
+      reprojection_error_ = 2.0;  // maximum allowed distance to consider it an inlier.
+      confidence_ = 0.95;        // ransac successful confidence.
+
+      min_inliers_ = 30;    // Kalman threshold updating
+
+      pnp_method_ = cv::SOLVEPNP_EPNP;
+      f_type_default_ = "SIFT";
+      feature_detector_ = std::make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
+    }
+
+    const std::string & ODCADRecognizer2DLocal::getCameraIntrinsicFile() const
+    {
+      return camera_intrinsic_file_;
+    }
+
+    void ODCADRecognizer2DLocal::setCameraIntrinsicFile(const std::string & camera_intrinsic_file)
+    {
+      camera_intrinsic_file_ = camera_intrinsic_file;
+    }
+
+    int ODCADRecognizer2DLocal::getNumKeyPoints() const
+    {
+      return num_key_points_;
+    }
+
+    void ODCADRecognizer2DLocal::setNumKeyPoints(int num_key_points)
+    {
+      num_key_points_ = num_key_points;
+    }
+
+    float ODCADRecognizer2DLocal::getRatioTest() const
+    {
+      return ratio_test_;
+    }
+
+    void ODCADRecognizer2DLocal::setRatioTest(float ratio_test)
+    {
+      ratio_test_ = ratio_test;
+    }
+
+    bool ODCADRecognizer2DLocal::isFastMatch() const
+    {
+      return fast_match_;
+    }
+
+    void ODCADRecognizer2DLocal::setFastMatch(bool fast_match)
+    {
+      fast_match_ = fast_match;
+    }
+
+    bool ODCADRecognizer2DLocal::isUseGpu() const
+    {
+      return use_gpu_;
+    }
+
+    void ODCADRecognizer2DLocal::setUseGpu(bool use_gpu)
+    {
+      use_gpu_ = use_gpu;
+    }
+
+    bool ODCADRecognizer2DLocal::isUseGpuMatch() const
+    {
+      return use_gpu_match_;
+    }
+
+    void ODCADRecognizer2DLocal::setUseGpuMatch(bool use_gpu_match)
+    {
+      use_gpu_match_ = use_gpu_match;
+    }
+
+    bool ODCADRecognizer2DLocal::isMetainfo() const
+    {
+      return meta_info_;
+    }
+
+    void ODCADRecognizer2DLocal::setMetainfo(bool meta_info)
+    {
+      meta_info_ = meta_info;
+    }
+
+    int ODCADRecognizer2DLocal::getIterationsCount() const
+    {
+      return iterations_count_;
+    }
+
+    void ODCADRecognizer2DLocal::setIterationsCount(int iterations_count)
+    {
+      iterations_count_ = iterations_count;
+    }
+
+    float ODCADRecognizer2DLocal::getReprojectionError() const
+    {
+      return reprojection_error_;
+    }
+
+    void ODCADRecognizer2DLocal::setReprojectionError(float reprojection_error)
+    {
+      reprojection_error_ = reprojection_error;
+    }
+
+    double ODCADRecognizer2DLocal::getConfidence() const
+    {
+      return confidence_;
+    }
+
+    void ODCADRecognizer2DLocal::setConfidence(double confidence)
+    {
+      confidence_ = confidence;
+    }
+
+    int ODCADRecognizer2DLocal::getMinInliers() const
+    {
+      return min_inliers_;
+    }
+
+    void ODCADRecognizer2DLocal::setMinInliers(int min_inliers)
+    {
+      min_inliers_ = min_inliers;
+    }
+
+    int ODCADRecognizer2DLocal::getPnpMethod() const
+    {
+      return pnp_method_;
+    }
+
+    void ODCADRecognizer2DLocal::setPnpMethod(int pnp_method)
+    {
+      pnp_method_ = pnp_method;
+    }
+
+    void ODCADRecognizer2DLocal::parseParameterString(const std::string & parameter_string)
     {
       const std::string keys = "{help h        |      | print this message                   }"
           "{video v       |      | path to recorded video               }"
@@ -80,128 +226,99 @@ namespace od
       int argc;
       fileutils::getArgvArgc(parameter_string, &argv, argc);
 
-      CommandLineParser parser(argc, argv, keys);
+      cv::CommandLineParser parser(argc, argv, keys);
       if(parser.has("help"))
       {
         parser.printMessage();
 
       } else
       {
-        camera_intrinsic_file =
-            parser.get<string>("camera_intrinsic_file").size() > 0 ? parser.get<string>("camera_intrinsic_file") : camera_intrinsic_file;
+        camera_intrinsic_file_ =
+            parser.get<std::string>("camera_intrinsic_file").size() > 0 ? parser.get<std::string>("camera_intrinsic_file") : camera_intrinsic_file_;
 
-        use_gpu = parser.has("use_gpu");
-        use_gpu_match = parser.has("use_gpu_match");
-
-        numKeyPoints = !parser.has("keypoints") ? parser.get<int>("keypoints") : numKeyPoints;
-        ratioTest = !parser.has("ratio") ? parser.get<float>("ratio") : ratioTest;
-        fast_match = !parser.has("fast") ? parser.get<bool>("fast") : fast_match;
-        iterationsCount = !parser.has("iterations") ? parser.get<int>("iterations") : iterationsCount;
-        reprojectionError = !parser.has("error") ? parser.get<float>("error") : reprojectionError;
-        confidence = !parser.has("confidence") ? parser.get<float>("confidence") : confidence;
-        minInliers = !parser.has("inliers") ? parser.get<int>("inliers") : minInliers;
-        pnpMethod = !parser.has("method") ? parser.get<int>("method") : pnpMethod;
-        metainfo_ = parser.has("metainfo");
+        use_gpu_ = parser.has("use_gpu");
+        use_gpu_match_ = parser.has("use_gpu_match");
+        num_key_points_ = !parser.has("keypoints") ? parser.get<int>("keypoints") : num_key_points_;
+        ratio_test_ = !parser.has("ratio") ? parser.get<float>("ratio") : ratio_test_;
+        fast_match_ = !parser.has("fast") ? parser.get<bool>("fast") : fast_match_;
+        iterations_count_ = !parser.has("iterations") ? parser.get<int>("iterations") : iterations_count_;
+        reprojection_error_ = !parser.has("error") ? parser.get<float>("error") : reprojection_error_;
+        confidence_ = !parser.has("confidence") ? parser.get<float>("confidence") : confidence_;
+        min_inliers_ = !parser.has("inliers") ? parser.get<int>("inliers") : min_inliers_;
+        pnp_method_ = !parser.has("method") ? parser.get<int>("method") : pnp_method_;
+        meta_info_ = parser.has("metainfo");
       }
 
     }
 
     void ODCADRecognizer2DLocal::init()
     {
-      FileStorage fs(camera_intrinsic_file, FileStorage::READ);
-      Mat cam_man, dist_coeff;
+      cv::FileStorage fs(camera_intrinsic_file_, cv::FileStorage::READ);
+      cv::Mat cam_man, dist_coeff;
       fs["Camera_Matrix"] >> cam_man;
       fs["Distortion_Coefficients"] >> dist_coeff;
-      pnp_detection = PnPProblem(cam_man, dist_coeff);
+      pnp_detection_ = PnPProblem(cam_man, dist_coeff);
 
       // get all trained models
-      fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_, model_names);
+      fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_, model_names_);
 
-      for(int i = 0; i < model_names.size(); i++)
+      for(int i = 0; i < model_names_.size(); i++)
       {
         Model model;
-        model.load_new_xml(model_names[i]);
-        models.push_back(model);
+        model.loadNewXml(model_names_[i]);
+        models_.push_back(model);
       }
-      if(models.size() > 0)
-        f_type_default = models[0].f_type;
+      if(models_.size() > 0)
+        f_type_default_ = models_[0].f_type_;
 
-      featureDetector = std::make_shared<ODFeatureDetector2D>(f_type_default, use_gpu);
+      feature_detector_ = std::make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
 
     }
 
 
 
-    ODDetections* ODCADRecognizer2DLocal::detect(ODSceneImage *scene)
+    ODDetections * ODCADRecognizer2DLocal::detect(ODSceneImage * scene)
     {
-      ODDetections3D *detections = detectOmni(scene);
+      ODDetections3D * detections = detectOmni(scene);
       return detections;
     }
 
-
-    ODDetections3D* ODCADRecognizer2DLocal::detectOmni(ODSceneImage *scene)
-    {
-
-      vector<KeyPoint> keypoints_scene;
-      Mat descriptor_scene;
-      featureDetector->computeKeypointsAndDescriptors(scene->getCVImage(), descriptor_scene, keypoints_scene);
-      scene->setDescriptors(descriptor_scene);
-      scene->setKeypoints(keypoints_scene);
-
-      ODDetections3D *detections = new ODDetections3D;
-      cv::Mat viz = scene->getCVImage().clone();
-
-      for(int i = 0; i < models.size(); i++)
-      {
-
-        ODDetection3D *detection;
-        if(detectSingleModel(scene, models[i], detection, viz))
-        {
-          detections->push_back(detection);
-
-          if(metainfo_)
-            drawModel(viz, &models[i], pnp_detection.get_R_vect(), pnp_detection.get_t_matrix(), pnp_detection.get_A_matrix(), pnp_detection.get_dist_coef(),  yellow);
-        }
-      }
-      detections->setMetainfoImage(viz);
-      return detections;
-    }
-
-    bool ODCADRecognizer2DLocal::detectSingleModel(ODSceneImage *scene, Model const &model, ODDetection3D *&detection3D, Mat & frame_vis)
+    bool ODCADRecognizer2DLocal::detectSingleModel(ODSceneImage * scene, const Model & model, ODDetection3D * detection3D, const cv::Mat & frame_vis)
     {
 
       //reset
-      pnp_detection.clearExtrinsics();
+      pnp_detection_.clearExtrinsics();
 
-      vector<Point3f> list_points3d_model = model.get_points3d();  // list with model 3D coordinates
-      vector<KeyPoint> list_keypoints_model = model.get_keypoints();  // list with model 3D coordinates
-      Mat descriptors_model = model.get_descriptors();                  // list with descriptors of each 3D coordinate
+      std::vector<cv::Point3f> list_points3d_model = model.getPoints3d();  // list with model 3D coordinates
+      std::vector<cv::KeyPoint> list_keypoints_model = model.getKeypoints();  // list with model 3D coordinates
+      cv::Mat descriptors_model = model.getDescriptors();                  // list with descriptors of each 3D coordinate
 
-      RobustMatcher rmatcher(model, use_gpu, use_gpu_match); // instantiate RobustMatcher
+      RobustMatcher rmatcher(model, use_gpu_, use_gpu_match_); // instantiate RobustMatcher
 
 
       // -- Step 1: Robust matching between model descriptors and scene descriptors
-      vector<DMatch> good_matches;       // to obtain the 3D points of the model
-      vector<KeyPoint> keypoints_scene = scene->getKeypoints();  // to obtain the 2D points of the scene
+      std::vector<cv::DMatch> good_matches;       // to obtain the 3D points of the model
+      std::vector<cv::KeyPoint> keypoints_scene = scene->getKeypoints();  // to obtain the 2D points of the scene
 
-      Mat frame = scene->getCVImage();
+      cv::Mat frame = scene->getCVImage();
 
       //normalize
-      Mat scenedes = scene->getDescriptors();
+      cv::Mat scenedes = scene->getDescriptors();
       rmatcher.matchNormalized(scenedes, descriptors_model, good_matches);
       //rmatcher.match(scenedes, descriptors_model, good_matches);
 
-      if(good_matches.size() <= 0) return false;
+      if(good_matches.size() <= 0) 
+        return false;
 
-      vector<Point3f> list_points3d_model_match; // container for the model 3D coordinates found in the scene
-      vector<KeyPoint> list_keypoints_model_match; // container for the model 2D coordinates in the textured image of the corresponding 3D coordinates
-      vector<Point2f> list_points2d_scene_match; // container for the model 2D coordinates found in the scene
+      std::vector<cv::Point3f> list_points3d_model_match; // container for the model 3D coordinates found in the scene
+      std::vector<cv::KeyPoint> list_keypoints_model_match; // container for the model 2D coordinates in the textured image of the corresponding 3D coordinates
+      std::vector<cv::Point2f> list_points2d_scene_match; // container for the model 2D coordinates found in the scene
 
-      for(unsigned int match_index = 0; match_index < good_matches.size(); ++match_index)
+      for(size_t match_index = 0; match_index < good_matches.size(); ++match_index)
       {
-        Point3f point3d_model = list_points3d_model[good_matches[match_index].trainIdx];  // 3D point from model
-        KeyPoint kp_model = list_keypoints_model[good_matches[match_index].trainIdx];  // 2D point from model
-        Point2f point2d_scene = keypoints_scene[good_matches[match_index].queryIdx].pt; // 2D point from the scene
+        cv::Point3f point3d_model = list_points3d_model[good_matches[match_index].trainIdx];  // 3D point from model
+        cv::KeyPoint kp_model = list_keypoints_model[good_matches[match_index].trainIdx];  // 2D point from model
+        cv::Point2f point2d_scene = keypoints_scene[good_matches[match_index].queryIdx].pt; // 2D point from the scene
 
         list_points3d_model_match.push_back(point3d_model);         // add 3D point
         list_keypoints_model_match.push_back(kp_model);
@@ -209,27 +326,55 @@ namespace od
       }
 
 
-      Mat inliers_idx;
-      vector<Point2f> list_points2d_inliers;
+      cv::Mat inliers_idx;
+      std::vector<cv::Point2f> list_points2d_inliers;
 
 
       // -- Step 3: Estimate the pose using RANSAC approach
-      pnp_detection.estimatePoseRANSAC(list_points3d_model_match, list_points2d_scene_match, pnpMethod, inliers_idx,
-                                       iterationsCount, reprojectionError, confidence);
+      pnp_detection_.estimatePoseRANSAC(list_points3d_model_match, list_points2d_scene_match, pnp_method_, inliers_idx,
+                                       iterations_count_, reprojection_error_, confidence_);
 
-      if(inliers_idx.rows < minInliers) return false;
+      if(inliers_idx.rows < min_inliers_) 
+        return false;
 
-      cout << "RECOGNIZED: " << model.id << endl;
+      std::cout << "RECOGNIZED: " << model.id_ << std::endl;
       //else everything is fine; report the detection
       detection3D = new ODDetection3D();
-      detection3D->setLocation(pnp_detection.get_t_matrix());
-      detection3D->setPose(pnp_detection.get_R_matrix());
+      detection3D->setLocation(pnp_detection_.getTMatrix());
+      detection3D->setPose(pnp_detection_.getRMatrix());
       detection3D->setType(ODDetection::OD_DETECTION_RECOG);
-      detection3D->setId(model.id);
-
-
+      detection3D->setId(model.id_);
 
       return true;
+    }
+
+    ODDetections3D * ODCADRecognizer2DLocal::detectOmni(ODSceneImage * scene)
+    {
+
+      std::vector<cv::KeyPoint> keypoints_scene;
+      cv::Mat descriptor_scene;
+      feature_detector_->computeKeypointsAndDescriptors(scene->getCVImage(), descriptor_scene, keypoints_scene);
+      scene->setDescriptors(descriptor_scene);
+      scene->setKeypoints(keypoints_scene);
+
+      ODDetections3D * detections = new ODDetections3D;
+      cv::Mat viz = scene->getCVImage().clone();
+
+      for(size_t i = 0; i < models_.size(); ++i)
+      {
+
+        ODDetection3D * detection;
+        if(detectSingleModel(scene, models_[i], detection, viz))
+        {
+          detections->push_back(detection);
+
+          if(meta_info_)
+            drawModel(viz, &models_[i], pnp_detection_.getRVect(), pnp_detection_.getTMatrix(), pnp_detection_.getAMatrix(), 
+                      pnp_detection_.getDistCoef(),  yellow_);
+        }
+      }
+      detections->setMetainfoImage(viz);
+      return detections;
     }
 
   }

@@ -8,6 +8,8 @@ set(OD_SOURCE_DIR ${OpenDetection_SOURCE_DIR})
 set(OD_BINARY_DIR ${OpenDetection_BINARY_DIR})
 set(OD_CMAKE_DIR "${OpenDetection_SOURCE_DIR}/cmake")
 set(CMAKE_MODULE_PATH ${OD_CMAKE_DIR}/modules)
+set(CMAKE_3RDPARTY_DIR ${OD_SOURCE_DIR}/3rdparty)
+
 
 # Initialize versioning
 include(${OD_CMAKE_DIR}/od_version.cmake)

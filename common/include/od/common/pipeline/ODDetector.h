@@ -55,7 +55,7 @@ namespace od
     virtual ODDetections * detect(ODScene *scene){}
     virtual ODDetections * detectOmni(ODScene *scene){}
 
-    bool metainfo_;
+    bool meta_info_;
 
   };
 

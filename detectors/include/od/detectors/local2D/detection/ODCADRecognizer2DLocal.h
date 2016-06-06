@@ -27,10 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Created by sarkar on 08.06.15.
 //
-
-#ifndef OPENDETECTION_SIMPLERANSACDETECTOR_H
-#define OPENDETECTION_SIMPLERANSACDETECTOR_H
-
+#pragma once
 #include "od/detectors/local2D/ODImageLocalMatching.h"
 
 #include "od/common/pipeline/ODDetector.h"
@@ -39,16 +36,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/utils/ODFeatureDetector2D.h"
 
 #include <iostream>
-// OpenCV
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/utility.hpp>
 #include <opencv2/calib3d.hpp>
 
 #include "od/detectors/local2D/simple_ransac_detection/Utils.h"
-
-
-class Model;
-class PnpProblem;
 
 namespace od
 {
@@ -68,199 +60,89 @@ namespace od
     class ODCADRecognizer2DLocal : public ODImageLocalMatchingDetector
     {
     public:
-      string const &getCameraIntrinsicFile() const
-      {
-        return camera_intrinsic_file;
-      }
 
-      void setCameraIntrinsicFile(string const &camera_intrinsic_file)
-      {
-        ODCADRecognizer2DLocal::camera_intrinsic_file = camera_intrinsic_file;
-      }
+      ODCADRecognizer2DLocal(const std::string & trained_data_location_ = 0);
 
-      int getNumKeyPoints() const
-      {
-        return numKeyPoints;
-      }
+      const std::string & getCameraIntrinsicFile() const;
 
-      void setNumKeyPoints(int numKeyPoints)
-      {
-        ODCADRecognizer2DLocal::numKeyPoints = numKeyPoints;
-      }
+      void setCameraIntrinsicFile(const std::string & camera_intrinsic_file);
 
-      float getRatioTest() const
-      {
-        return ratioTest;
-      }
+      int getNumKeyPoints() const;
+      void setNumKeyPoints(int num_key_points);
 
-      void setRatioTest(float ratioTest)
-      {
-        ODCADRecognizer2DLocal::ratioTest = ratioTest;
-      }
+      float getRatioTest() const;
+      void setRatioTest(float ratio_test);
 
-      bool isFast_match() const
-      {
-        return fast_match;
-      }
+      bool isFastMatch() const;
+      void setFastMatch(bool fast_match);
 
-      void setFast_match(bool fast_match)
-      {
-        ODCADRecognizer2DLocal::fast_match = fast_match;
-      }
+      bool isUseGpu() const;
+      void setUseGpu(bool use_gpu);
 
-      bool isUse_gpu() const
-      {
-        return use_gpu;
-      }
+      bool isUseGpuMatch() const;
+      void setUseGpuMatch(bool use_gpu_match);
 
-      void setUse_gpu(bool use_gpu)
-      {
-        ODCADRecognizer2DLocal::use_gpu = use_gpu;
-      }
+      bool isMetainfo() const;
+      void setMetainfo(bool meta_info);
 
-      bool isUse_gpu_match() const
-      {
-        return use_gpu_match;
-      }
+      int getIterationsCount() const;
+      void setIterationsCount(int iterations_count);
 
-      void setUse_gpu_match(bool use_gpu_match)
-      {
-        ODCADRecognizer2DLocal::use_gpu_match = use_gpu_match;
-      }
+      float getReprojectionError() const;
+      void setReprojectionError(float reprojection_error);
 
-      bool isMetainfo() const
-      {
-        return metainfo_;
-      }
+      double getConfidence() const;
+      void setConfidence(double confidence);
 
-      void setMetainfo(bool metainfo)
-      {
-        ODCADRecognizer2DLocal::metainfo_ = metainfo;
-      }
+      int getMinInliers() const;
+      void setMinInliers(int min_inliers);
 
-      int getIterationsCount() const
-      {
-        return iterationsCount;
-      }
+      int getPnpMethod() const;
+      void setPnpMethod(int pnp_method);
 
-      void setIterationsCount(int iterationsCount)
-      {
-        ODCADRecognizer2DLocal::iterationsCount = iterationsCount;
-      }
-
-      float getReprojectionError() const
-      {
-        return reprojectionError;
-      }
-
-      void setReprojectionError(float reprojectionError)
-      {
-        ODCADRecognizer2DLocal::reprojectionError = reprojectionError;
-      }
-
-      double getConfidence() const
-      {
-        return confidence;
-      }
-
-      void setConfidence(double confidence)
-      {
-        ODCADRecognizer2DLocal::confidence = confidence;
-      }
-
-      int getMinInliers() const
-      {
-        return minInliers;
-      }
-
-      void setMinInliers(int minInliers)
-      {
-        ODCADRecognizer2DLocal::minInliers = minInliers;
-      }
-
-      int getPnpMethod() const
-      {
-        return pnpMethod;
-      }
-
-      void setPnpMethod(int pnpMethod)
-      {
-        ODCADRecognizer2DLocal::pnpMethod = pnpMethod;
-      }
-
-      ODCADRecognizer2DLocal(string const &trained_data_location_ = 0) : ODImageLocalMatchingDetector(
-          trained_data_location_)
-      {
-        metainfo_ = true;
-
-        camera_intrinsic_file = "Data/out_camera_data_lion_old.yml";         // mesh
-
-        red = cv::Scalar(0, 0, 255);
-        green = cv::Scalar(0, 255, 0);
-        blue = cv::Scalar(255, 0, 0);
-        yellow = cv::Scalar(0, 255, 255);
-
-
-        numKeyPoints = 2000;      // number of detected keypoints
-        ratioTest = 0.70f;          // ratio test
-        fast_match = true;       // fastRobustMatch() or robustMatch()
-        use_gpu = false;
-        use_gpu_match = false;
-
-        iterationsCount = 500;      // number of Ransac iterations.
-        reprojectionError = 2.0;  // maximum allowed distance to consider it an inlier.
-        confidence = 0.95;        // ransac successful confidence.
-
-        minInliers = 30;    // Kalman threshold updating
-
-        pnpMethod = cv::SOLVEPNP_EPNP;
-        f_type_default = "SIFT";
-        featureDetector = std::make_shared<ODFeatureDetector2D>(f_type_default, use_gpu);
-      }
-
-      void parseParameterString(string parameter_string);
+      void parseParameterString(const std::string & parameter_string);
 
       void init();
 
-      ODDetections* detect(ODSceneImage *scene);
-
-      ODDetections3D* detectOmni(ODSceneImage *scene);
+      ODDetections * detect(ODSceneImage * scene);
+      ODDetections3D * detectOmni(ODSceneImage * scene);
 
     protected:
 
-      string camera_intrinsic_file;         // mesh
+      bool detectSingleModel(ODSceneImage * scene, const Model & model, ODDetection3D * detection3D, const cv::Mat & frame_viz);
 
-      cv::Scalar red;
-      cv::Scalar green;
-      cv::Scalar blue;
-      cv::Scalar yellow;
+      std::string camera_intrinsic_file_;      
+
+      cv::Scalar red_;
+      cv::Scalar green_;
+      cv::Scalar blue_;
+      cv::Scalar yellow_;
 
 // Robust Matcher parameters
-      int numKeyPoints;      // number of detected keypoints
-      float ratioTest;          // ratio test
-      bool fast_match;       // fastRobustMatch() or robustMatch()
-      bool use_gpu;
-      bool use_gpu_match;
+      int num_key_points_;      // number of detected keypoints
+      float ratio_test_;          // ratio test
+      bool fast_match_;       // fastRobustMatch() or robustMatch()
+      bool use_gpu_;
+      bool use_gpu_match_;
 
 // RANSAC parameters
-      int iterationsCount;      // number of Ransac iterations.
-      float reprojectionError;  // maximum allowed distance to consider it an inlier.
-      double confidence;        // ransac successful confidence.
+      int iterations_count_;      // number of Ransac iterations.
+      float reprojection_error_;  // maximum allowed distance to consider it an inlier.
+      double confidence_;        // ransac successful confidence.
 
 // Kalman Filter parameters
-      int minInliers;    // Kalman threshold updating
+      int min_inliers_;    // Kalman threshold updating
 
 // PnP parameters
-      int pnpMethod;
+      int pnp_method_;
 
       //############NON-CONFIG PARAMETERS used for detection###########
-      vector<string> model_names;
-      vector<Model> models;
-      PnPProblem pnp_detection;
-      std::string f_type_default;
-      std::shared_ptr<ODFeatureDetector2D> featureDetector;
+      std::vector<std::string> model_names_;
+      std::vector<Model> models_;
+      PnPProblem pnp_detection_;
+      std::string f_type_default_;
+      std::shared_ptr<ODFeatureDetector2D> feature_detector_;
 
-      bool detectSingleModel(ODSceneImage *scene, Model const &model, ODDetection3D *&pD, cv::Mat &frame_viz);
     };
     /** \example objectdetector/od_image_cadrecog_camera.cpp
      * \example objectdetector/od_image_cadrecog_files.cpp
@@ -268,4 +150,3 @@ namespace od
   }
 }
 
-#endif //OPENDETECTION_SIMPLERANSACDETECTOR_H

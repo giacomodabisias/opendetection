@@ -26,9 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *///
 // Created by sarkar on 16.06.15.
 //
-
-#ifndef OPENDETECTION_ODPOINTCLOUDGLOBALMATCHING_H
-#define OPENDETECTION_ODPOINTCLOUDGLOBALMATCHING_H
+#pragma once
 
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODTrainer.h"
@@ -49,30 +47,15 @@ namespace od
     class ODPointCloudGlobalMatching : ObjectDetector
     {
 
-      ODPointCloudGlobalMatching()
-      {
-      }
-
-      void init()
-      { }
-
-
-      int train()
-      {
-        return trainer_->train();
-      }
-
-      int detect(ODScene *scene, std::vector<ODDetection *> detections)
-      {
-        //detector_->detect(scene, detections);
-        return 0;
-      }
+      void init(){}
+      int train();
+      int detect(ODScene * scene, std::vector<ODDetection *> detections);
 
     protected:
-      std::string desc_name;
-      ODCADDetectTrainer3DGlobal *trainer_;
-      ODCADDetector3DGlobal<pcl::PointXYZ> *detector_;
+      
+      std::string desc_name_;
+      ODCADDetectTrainer3DGlobal * trainer_;
+      ODCADDetector3DGlobal<pcl::PointXYZ> * detector_;
     };
   }
 }
-#endif //OPENDETECTION_ODPOINTCLOUDGLOBALMATCHING_H

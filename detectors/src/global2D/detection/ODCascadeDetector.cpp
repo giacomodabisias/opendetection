@@ -42,7 +42,7 @@ namespace od
     {
       TRAINED_LOCATION_DENTIFIER_ = "CASCADE";
       TRAINED_DATA_ID_ = "cascade.xml";
-      metainfo_ = true;
+      meta_info_ = true;
     }
 
     void ODCascadeDetector::init()
@@ -72,7 +72,7 @@ namespace od
         detection2D->setBoundingBox(face_i);
         detections->push_back(detection2D);
 
-        if(metainfo_)
+        if(meta_info_)
         {
           cv::rectangle(viz, face_i, CV_RGB(0, 255, 0), 1);
         }

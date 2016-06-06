@@ -72,7 +72,7 @@ namespace od
       boost::shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source(new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>);
       mesh_source->setPath(this->training_input_location_);
       std::string training_dir_specific = this->getSpecificTrainingDataLocation();
-      mesh_source->setModelScale (1.f);
+      mesh_source->setModelScale(1.f);
       mesh_source->generate(training_dir_specific);
 
       boost::shared_ptr<pcl::rec_3d_framework::Source<pcl::PointXYZ> > cast_source;
@@ -150,9 +150,9 @@ namespace od
     }
 
     template<typename PointT>
-    ODDetections3D* ODCADDetector3DGlobal<PointT>::detectOmni(ODScenePointCloud<PointT> *scene)
+    ODDetections3D * ODCADDetector3DGlobal<PointT>::detectOmni(ODScenePointCloud<PointT> * scene)
     {
-      ODDetections3D *detections = new ODDetections3D;
+      ODDetections3D * detections = new ODDetections3D;
 
 
       typename pcl::PointCloud<PointT>::Ptr frame;
@@ -214,10 +214,9 @@ namespace od
     }
 
     template<typename PointT>
-    ODDetections* ODCADDetector3DGlobal<PointT>::detect(ODScenePointCloud<PointT> *scene)
+    ODDetections * ODCADDetector3DGlobal<PointT>::detect(ODScenePointCloud<PointT> * scene)
     {
-      ODDetections *detections = new ODDetections;
-
+      ODDetections * detections = new ODDetections;
 
       typename pcl::PointCloud<PointT>::Ptr frame;
       float Z_DIST_ = 1.25f;
@@ -240,7 +239,7 @@ namespace od
       std::string category = categories[0];
 
       //now fill up the detection:
-      ODDetection *detection = new ODDetection3D(ODDetection::OD_DETECTION_CLASS, categories[0], conf[0]);
+      ODDetection * detection = new ODDetection3D(ODDetection::OD_DETECTION_CLASS, categories[0], conf[0]);
       detections->push_back(detection);
 
       return detections;

@@ -29,38 +29,52 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global2D/detection/ODCascadeDetector.h"
 
-using namespace cv;
-using namespace std;
-
 namespace od
 {
 
   namespace g2d
   {
-    ODDetections2D *ODCascadeDetector::detectOmni(ODSceneImage *scene)
+
+    ODCascadeDetector::ODCascadeDetector(const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
+                                         const cv::Size & min_size, const cv::Size & max_size)
+                                        : ODDetector2D(trained_data_location), scale_factor_(scale_factor), min_neighbors_(min_neighbors), 
+                                                      min_size_(min_size), max_size_(max_size)
     {
-      Mat gray;
-      cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
+      TRAINED_LOCATION_DENTIFIER_ = "CASCADE";
+      TRAINED_DATA_ID_ = "cascade.xml";
+      metainfo_ = true;
+    }
+
+    void ODCascadeDetector::init()
+    {
+      haar_cascade_ = std::make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(),
+                                                                                        TRAINED_DATA_ID_));
+    }
+
+    ODDetections2D * ODCascadeDetector::detectOmni(ODSceneImage * scene)
+    {
+      cv::Mat gray;
+      cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
       // Find the faces in the frame:
-      vector<Rect_<int> > faces;
-      haar_cascade_->detectMultiScale(gray, faces, scaleFactor_, minNeighbors_, 0, minSize_, maxSize_);
+      std::vector<cv::Rect_<int> > faces;
+      haar_cascade_->detectMultiScale(gray, faces, scale_factor_, min_neighbors_, 0, min_size_, max_size_);
 
       //always create detections
-      ODDetections2D *detections = new ODDetections2D;
+      ODDetections2D  * detections = new ODDetections2D;
       cv::Mat viz = scene->getCVImage().clone();
-
-      for(int i = 0; i < faces.size(); i++)
+      cv::Rect face_i;
+      for(size_t i = 0; i < faces.size(); ++i)
       {
         // Process face by face:
-        Rect face_i = faces[i];
+        face_i = faces[i];
 
-        ODDetection2D *detection2D = new ODDetection2D(ODDetection::OD_DETECTION_CLASS, "FACE", 1);
+        ODDetection2D * detection2D = new ODDetection2D(ODDetection::OD_DETECTION_CLASS, "FACE", 1);
         detection2D->setBoundingBox(face_i);
         detections->push_back(detection2D);
 
         if(metainfo_)
         {
-          rectangle(viz, face_i, CV_RGB(0, 255, 0), 1);
+          cv::rectangle(viz, face_i, CV_RGB(0, 255, 0), 1);
         }
       }
       detections->setMetainfoImage(viz);
@@ -68,26 +82,23 @@ namespace od
       return detections;
     }
 
-    ODDetections* ODCascadeDetector::detect(ODSceneImage *scene)
+    ODDetections * ODCascadeDetector::detect(ODSceneImage * scene)
     {
       //always create detections
-      ODDetections *detections = new ODDetections;
+      ODDetections * detections = new ODDetections;
 
-      Mat gray;
-      cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
+      cv::Mat gray;
+      cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
       // Find the faces in the frame:
-      vector<Rect_<int> > faces;
+      std::vector<cv::Rect_<int> > faces;
 
-
-      cv::Size imsize = gray.size();
       //hack for single detection,
       //note: maxsize = minsize = size of input image for single window detection
       //todo: implement in some other way of fast single detection; currently this will work, but maynot be fast
-      haar_cascade_->detectMultiScale(gray, faces, 5, minNeighbors_, 0, gray.size(), gray.size());
-      if (faces.size() > 0)
+      haar_cascade_->detectMultiScale(gray, faces, 5, min_neighbors_, 0, gray.size(), gray.size());
+      if(faces.size() > 0)
       {
-        ODDetection *detection = new ODDetection(ODDetection::OD_DETECTION_CLASS, "FACE", 1);
-        detections->push_back(detection);
+        detections->push_back(new ODDetection(ODDetection::OD_DETECTION_CLASS, "FACE", 1));
       }
       return detections;
     }

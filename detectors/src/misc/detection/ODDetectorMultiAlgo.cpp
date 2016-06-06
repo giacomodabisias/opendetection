@@ -35,7 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
 
 //3D detectors
-#include "od/detectors/global3D/detection/ODCADDetector3DGlobal.h"
+#include "od/detectors/global3D/detection/ODCADDetector3DGlobal.hpp"
 
 
 using namespace std;

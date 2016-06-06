@@ -1,15 +1,69 @@
 //
 // Created by sarkar on 10.08.15.
 //
+#pragma once
+#include "od/common/pipeline/ODDetector.h"
 
-#ifndef OPENDETECTION_ODCADDETECTOR3DGLOBAL_HPP
-#define OPENDETECTION_ODCADDETECTOR3DGLOBAL_HPP
-
-
+#include <pcl/pcl_macros.h>
+#include <pcl/apps/3d_rec_framework/pipeline/global_nn_classifier.h>
+#include <pcl/apps/3d_rec_framework/pc_source/mesh_source.h>
+#include <pcl/apps/3d_rec_framework/feature_wrapper/global/vfh_estimator.h>
+#include <pcl/apps/3d_rec_framework/feature_wrapper/global/esf_estimator.h>
+#include <pcl/apps/3d_rec_framework/feature_wrapper/global/cvfh_estimator.h>
+//#include <pcl/apps/3d_rec_framework/tools/openni_frame_source.h>
+#include <pcl/apps/3d_rec_framework/utils/metrics.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/apps/dominant_plane_segmentation.h>
+#include <pcl/console/parse.h>
 namespace od
 {
   namespace g3d
   {
+
+    template<typename PointT>
+    class ODCADDetector3DGlobal : public ODDetector3D<PointT>
+    {
+
+    public:
+      ODCADDetector3DGlobal(const std::string & training_data_location = "", const std::string & training_input_location = "") : 
+                            ODDetector3D<PointT>(training_data_location), NN(2), desc_name_("esf")
+      {
+        this->TRAINED_LOCATION_DENTIFIER_ = "GLOBAL3DVFH";
+        this->training_input_location_ = training_input_location;
+      }
+
+      void init();
+
+      ODDetections * detect(ODScenePointCloud<PointT> * scene);
+
+      ODDetections3D * detectOmni(ODScenePointCloud<PointT> * scene);
+
+      int getNN() const
+      {
+        return NN;
+      }
+
+      void setNN(int NN)
+      {
+        ODCADDetector3DGlobal::NN = NN;
+      }
+
+      const std::string & getDescName() const
+      {
+        return desc_name_;
+      }
+
+      void setDescName(const std::string & desc_name)
+      {
+        desc_name_ = desc_name;
+      }
+
+    protected:
+      int NN;
+      std::string desc_name_;
+      boost::shared_ptr<pcl::rec_3d_framework::GlobalClassifier<pcl::PointXYZ> > global_;
+
+    };
 
     template<typename PointT>
     void ODCADDetector3DGlobal<PointT>::init()
@@ -17,7 +71,7 @@ namespace od
 
       boost::shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source(new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>);
       mesh_source->setPath(this->training_input_location_);
-      std::string training_dir_specific =  this->getSpecificTrainingDataLocation();
+      std::string training_dir_specific = this->getSpecificTrainingDataLocation();
       mesh_source->setModelScale (1.f);
       mesh_source->generate(training_dir_specific);
 
@@ -31,7 +85,7 @@ namespace od
       normal_estimator->setRemoveOutliers(true);
       normal_estimator->setFactorsForCMR(3, 7);
 
-      if(desc_name.compare("vfh") == 0)
+      if(desc_name_.compare("vfh") == 0)
       {
         boost::shared_ptr<pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> > vfh_estimator;
         vfh_estimator.reset(new pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308>);
@@ -45,13 +99,13 @@ namespace od
             new pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::VFHSignature308>());
         global->setDataSource(cast_source);
         global->setTrainingDir(training_dir_specific);
-        global->setDescriptorName(desc_name);
+        global->setDescriptorName(desc_name_);
         global->setNN(NN);
         global->setFeatureEstimator(cast_estimator);
         global->initialize(false);
-        this->global_ = global;
+        global_ = global;
 
-      } else if(desc_name.compare("cvfh") == 0)
+      } else if(desc_name_.compare("cvfh") == 0)
       {
         boost::shared_ptr<pcl::rec_3d_framework::CVFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> > vfh_estimator;
         vfh_estimator.reset(new pcl::rec_3d_framework::CVFHEstimation<pcl::PointXYZ, pcl::VFHSignature308>);
@@ -62,15 +116,15 @@ namespace od
             vfh_estimator);
 
         boost::shared_ptr<pcl::rec_3d_framework::GlobalNNPipeline<Metrics::HistIntersectionUnionDistance, pcl::PointXYZ, pcl::VFHSignature308> > global(
-            new pcl::rec_3d_framework::GlobalNNPipeline<Metrics::HistIntersectionUnionDistance, pcl::PointXYZ, pcl::VFHSignature308>());
+          new pcl::rec_3d_framework::GlobalNNPipeline<Metrics::HistIntersectionUnionDistance, pcl::PointXYZ, pcl::VFHSignature308>());
         global->setDataSource(cast_source);
         global->setTrainingDir(training_dir_specific);
-        global->setDescriptorName(desc_name);
+        global->setDescriptorName(desc_name_);
         global->setFeatureEstimator(cast_estimator);
         global->setNN(NN);
         global->initialize(false);
-        this->global_ = global;
-      } else if(desc_name.compare("esf") == 0)
+        global_ = global;
+      } else if(desc_name_.compare("esf") == 0)
       {
         boost::shared_ptr<pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640> > estimator;
         estimator.reset(new pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640>);
@@ -83,11 +137,11 @@ namespace od
             new pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::ESFSignature640>());
         global->setDataSource(cast_source);
         global->setTrainingDir(training_dir_specific);
-        global->setDescriptorName(desc_name);
+        global->setDescriptorName(desc_name_);
         global->setFeatureEstimator(cast_estimator);
         global->setNN(NN);
         global->initialize(false);
-        this->global_ = global;
+        global_ = global;
       } else
       {
         std::cout << "FATAL: descriptor type not available.";
@@ -129,9 +183,7 @@ namespace od
       dps.getTableCoefficients(table_plane_);
 
 
-      float dist_ = 0.03f;
-
-      for(size_t i = 0; i < clusters.size(); i++)
+      for(size_t i = 0; i < clusters.size(); ++i)
       {
 
         global_->setInputCloud(xyz_points);
@@ -193,8 +245,7 @@ namespace od
 
       return detections;
     }
+
+    
   }
 }
-
-
-#endif //OPENDETECTION_ODCADDETECTOR3DGLOBAL_HPP

@@ -40,7 +40,7 @@ Depending on OpenCV/PCL version activate/deactivate modules of the library.
 - **Task 9** - small task - merge other gsoc16 contributions : Merge changes from other contribution of GSOC. Other projects will be using existing APIs. There might me need to make small changes to fit to the changes made in this project 
 - **Task 10** -  moderate task - deb packaging : Create an automated way to generate a deb file for the library so it can be installed through debian packaging system.
 
-##Fix 3rd party dependencies##
+##Fix 3rd party dependencies 12/05/15##
 
 The library has some dependencies inserted as source code into the 3rdparty folder; these are pugixml and SiftGPU (and maybe others which will come later). There is also the dependency of svmlight, but this is not mandatory so it will be added as external dependency; if the library is present on the system all the depending libraries will be built.
 
@@ -50,7 +50,7 @@ In general its a bad idea to integrate external source code into a library since
 - **Pugixml** is a bit more tricky since it has no cmake file; it contains a Make file which produces a test executable but no library. The library can be easily built since we have just two include files and one .cpp file. To fix the issue I created a separate pugixml_build folder with a simple custom cmake which builds the library. This way we can just add that folder as add_subdirectory and directly export the newly compile **libpugixml.so** library.
 - **Svmlight** will be inserted in the system with a find_package or something similar and a custom **WITH_SVMLIGHT** cmake flag. These steps will come shortly; we will just leave the svmlight binding.
 
-##Refactoring file structure##
+##Refactoring file structure 13/05/15##
 
 I started to move files in appropriate folders and to fix the "Main" *CmakeLists.txt* file. I renamed the ODconfig.h.in file to od_config.h and moved it into the cmake folder for now. Then I moved the opendetection.cpp source file away from the root (not nice to have source files in the root of a library) and added it as separate app in a new version folder which builds the od_version executable.
 
@@ -66,7 +66,7 @@ This resembles also the structure used in the PCL library.
 
 After refactoring the folders, all the involved CMakeFiles had to be restructured to adapt to the new structure. The first version still uses all file names explicitly, but it should be possible to automate the file detection process by using the cmake command *file(GLOB VAR PATTERN)* which finds all file in a gve folder which match a given pattern. This can be done also in a recursive manner. I will probably use this for some folders to be independent (partially) of file names, locations and number.
 
-##Making examples optional##
+##Making examples optional 17/05/15##
 
 Examples should not be built always, or at least it should be possible to not build them at all or partially. To do so I added the **WITH_EXAMPLES** option whichi enables the building of the examples. Then for each example I added a variable to trigger the building process of that examples:
 
@@ -80,7 +80,7 @@ endif()
 
 The option command adds an option in the cmake; the first parameter is the cmake option name (which for now is written in that way but it will probably change), the second is a description of the option, and the third is the default option value. I left it on on so that even unexperienced user can build some examples to test the library. The option is then followed by an if which checks the option vale and in case adds the example to the build process. I would like to change also the structure of the example folder by creating subfolders which then contain the different examples subdividing them by **type** . Each folder will then have its own *CMakeLists.txt* file which can be added by the parent cmake with the usual *add_subdirectory* command. This helps also since we can add automatically all the subfolders of the example folder to the build process without stating the names explicitly.
 
-##Include structure##
+##Include structure 18/05/15 ##
 
 While continuing to restructure the library I came across a decision which can be solved in different ways but for which I still don't have the best solution. Lets assume we want to include a global 3D detector for example, we would use *ODCADDetector3DGlobal.h* . We could have in our file 
 
@@ -116,7 +116,7 @@ and include the upper level folder. To use the first solution we would need to i
 The new structure compiles fines except for three examples which have a linker bug (undefined reference to `vtable for od::g3d::ODCADDetectTrainer3DGlobal'
 ) which I am trying to resolve. I fixed a bit the source code of all the examples removing unnecessary includes, fixing namespaces, maintaining a common interface and avoiding dynamic memory allocation where possible. The next step after fixing the linker bug will be to fix the install paths for includes and libs. 
 
-##Include structure 2 and install target##
+##Include structure and install target 23/05/15##
 
 I fixed the linking error; it came from a wrong variable name in a cmake file which specified some source files which were not compiled and so the linking error. I split simple_ransac_detection in src and include and reinserted it in local2D detectors since it is used only there. The source files are just added to the local2D library and compiled together.
 
@@ -133,3 +133,19 @@ OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
 @endcode
 
 since you don't have to compile headers files.It is enough to specify the include folders to find the includes at compile time. It could be possible to add header precompilation, but I believe this would be an advanced step which could be implemented at the end. I still need to check if this way of installing includes using the *DIRECTORY* keyword without specifying the single files is the clearest way.
+
+
+##Code refactoring 01/06/15##
+
+Befor modifying and digging into the code I wanted to have a common coding style in all files, fixing also some common coding mistakes when found. Another decision was to use C++11 features whenever possible since it should be considered a basic standard, having already C++17 code online. I started by fixing the "common module"; here I did the following:
+
+- I removed the ToString method since in c++11 it is present as *to_string()*; 
+- I removed global variables from utils since they where just used in one function.
+- I removed the *FileUtils* class which was a class with only static functions. This is equivalent to the new structure which is a namespace with defined functions which is more readable and less prone to errors.
+- I removed the time.h headers everywhere in order to use chrono from the std library.
+- I added constness modifiers and references for passed arguments whereever possible to avoid useless parameter copyes.
+- I modified the frame generator template to have as parameter generic clouds and not only pointrgba point clouds
+
+After this I started to fix the detectors which I am still working on. The first class which has bee updated is the *ODHOGDetector* which had also a lot of naming issues since it used a different naming style. 
+There are stll some function which I dislike, for example the parsing methods. They are mainly based on creating a fake argc,argv couple of variables and the parsing them. This has to be removed in favor of a better and newer parsing library as the one included in boost. This will be one of the first steps which I will do as soon as I finished the basic refactoring step.
+

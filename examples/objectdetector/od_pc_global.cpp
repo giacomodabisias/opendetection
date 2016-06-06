@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
   trainer.train();
 
   //detector
-  od::g3d::ODCADDetector3DGlobal<> detector ;
+  od::g3d::ODCADDetector3DGlobal<pcl::PointXYZRGBA> detector ;
   detector.setTrainingInputLocation(training_input_dir);
   detector.setTrainedDataLocation(trained_data_dir);
   detector.init();

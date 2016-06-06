@@ -32,7 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/utils/utils.h"
 #include "od/common/utils/ODFeatureDetector2D.h"
 
-#include <iostream>
 #include <opencv2/opencv.hpp>
 
 namespace od
@@ -52,30 +51,21 @@ namespace od
     {
     public:
 
-      ODCascadeDetector(std::string const &trained_data_location = "", double scaleFactor = 1.1, int minNeighbors = 3, int flags = 0, cv::Size minSize = cv::Size(), cv::Size maxSize = cv::Size())
-          : ODDetector2D(trained_data_location), scaleFactor_(scaleFactor), minNeighbors_(minNeighbors), minSize_(minSize), maxSize_(maxSize)
-      {
-        TRAINED_LOCATION_DENTIFIER_ = "CASCADE";
-        TRAINED_DATA_ID_ = "cascade.xml";
-        metainfo_ = true;
-      }
+      ODCascadeDetector(const std::string & trained_data_location = "", double scale_factor = 1.1, int min_neighbors = 3, 
+                        int flags = 0, const cv::Size & min_size = cv::Size(), const cv::Size & max_size = cv::Size());
 
-      void init()
-      {
-        haar_cascade_ = std::make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(),
-                                                                                          TRAINED_DATA_ID_));
-      }
+      void init();
 
-      ODDetections2D *detectOmni(ODSceneImage *scene);
-      ODDetections* detect(ODSceneImage *scene);
+      ODDetections2D * detectOmni(ODSceneImage *scene);
+      ODDetections * detect(ODSceneImage *scene);
 
     private:
       std::shared_ptr<cv::CascadeClassifier> haar_cascade_;
 
-      double scaleFactor_;
-      int minNeighbors_;
-      cv::Size minSize_;
-      cv::Size maxSize_;
+      double scale_factor_;
+      int min_neighbors_;
+      cv::Size min_size_;
+      cv::Size max_size_;
 
     };
     /** \examples objectdetector/od_image_cascade.cpp

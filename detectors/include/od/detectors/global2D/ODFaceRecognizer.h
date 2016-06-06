@@ -26,10 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *///
 // Created by sarkar on 16.06.15.
 //
-
-#ifndef OPENDETECTION_ODPOINTCLOUDGLOBALMATCHING_H
-#define OPENDETECTION_ODPOINTCLOUDGLOBALMATCHING_H
-
+#pragma once
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODTrainer.h"
 #include "od/common/utils/utils.h"
@@ -64,12 +61,7 @@ namespace od
 
       OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(FaceRecogType, (OD_FACE_FISCHER)(OD_FACE_EIGEN))
 
-      ODFaceRecognizer(FaceRecogType recogtype = OD_FACE_EIGEN, int num_components = 0, double threshold = DBL_MAX)
-          : recogtype_(recogtype), num_components_(num_components), threshold_(threshold), im_height_(0), im_width_(0)
-      {
-        TRAINED_DATA_IDENTIFIER_ = "FACERECOG";
-        TRAINED_DATA_EXT_ = "facerec.xml";
-      }
+      ODFaceRecognizer(FaceRecogType recog_type = OD_FACE_EIGEN, int num_components = 0, double threshold = DBL_MAX);
 
       void init();
 
@@ -79,17 +71,17 @@ namespace od
 
       int train();
 
-      ODDetections *detect(ODSceneImage *scene);
+      ODDetections * detect(ODSceneImage * scene);
 
 
-      FaceRecogType const &getRecogtype() const
+      const FaceRecogType & getRecogtype() const
       {
-        return recogtype_;
+        return recog_type_;
       }
 
-      void setRecogtype(FaceRecogType const &recogtype_)
+      void setRecogtype(const FaceRecogType & recog_type)
       {
-        ODFaceRecognizer::recogtype_ = recogtype_;
+        recog_type_ = recog_type;
       }
 
       int getThreshold() const
@@ -97,9 +89,9 @@ namespace od
         return threshold_;
       }
 
-      void setThreshold(int threshold_)
+      void setThreshold(int threshold)
       {
-        ODFaceRecognizer::threshold_ = threshold_;
+        threshold_ = threshold;
       }
 
       int getNumComponents() const
@@ -107,14 +99,14 @@ namespace od
         return num_components_;
       }
 
-      void setNumComponents(int num_components_)
+      void setNumComponents(int num_components)
       {
-        ODFaceRecognizer::num_components_ = num_components_;
+        num_components_ = num_components;
       }
 
     protected:
-      cv::Ptr<cv::face::FaceRecognizer> cvrecognizer_;
-      FaceRecogType recogtype_;
+      cv::Ptr<cv::face::FaceRecognizer> cv_recognizer_;
+      FaceRecogType recog_type_;
 
       int im_width_;
       int im_height_;
@@ -123,11 +115,10 @@ namespace od
 
 
     private:
-      static void read_csv(const std::string &filename, std::vector<cv::Mat> &images, std::vector<int> &labels, char separator = ';');
+      void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, char separator = ';');
 
     };
     /** \example objectdetector/od_image_facerecog.cpp
       */
   }
 }
-#endif //OPENDETECTION_ODPOINTCLOUDGLOBALMATCHING_H

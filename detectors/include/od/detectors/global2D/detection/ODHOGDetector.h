@@ -26,10 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *///
 // Created by sarkar on 15.07.15.
 //
-
-#ifndef OPENDETECTION_ODHOGMULTISCALEDETECTOR_H
-#define OPENDETECTION_ODHOGMULTISCALEDETECTOR_H
-
+#pragma once
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/utils/utils.h"
@@ -64,114 +61,56 @@ namespace od
       OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(SVMType, (OD_CUSTOM)(OD_DEFAULT_PEOPLE)(OD_DAIMLER_PEOPLE)(OD_FILE))
 
 
-      ODHOGDetector(std::string const &trained_data_location_ = "", cv::Size winsize = cv::Size(64,128), cv::Size blocksize = cv::Size(16,16), cv::Size blockstride = cv::Size(8,8), cv::Size cellsize = cv::Size(8,8), float hitshreshold = 0.0):
-                                                                      ODDetector2D(trained_data_location_),  winSize(winsize), blockSize(blocksize), blockStride(blockstride),
-                                                                      cellSize(cellsize), hitThreshold(hitshreshold), hog_(winSize, blockSize, blockStride, cellSize, 9, 1, -1,
-                                                                                                                           cv::HOGDescriptor::L2Hys, 0.2, false, cv::HOGDescriptor::DEFAULT_NLEVELS)
-      {
-        TRAINED_LOCATION_DENTIFIER_ = "HOG";
-        TRAINED_DATA_ID_ = "hog.xml";
-        metainfo_ = true;
-        svmtype_ = OD_DEFAULT_PEOPLE;
-
-        if (trained_data_location_ != "")
-          svmtype_ = OD_FILE;
-      }
+      ODHOGDetector(const std::string & trained_data_location_ = "", const cv::Size & win_size = cv::Size(64,128),
+                    const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8), const cv::Size & cell_size = cv::Size(8,8),
+                    float hit_threshold = 0.0):
+                      ODDetector2D(trained_data_location_),  win_size_(win_size), block_size_(block_size), block_stride_(block_stride),
+                      cell_size_(cell_size), hit_threshold_(hit_threshold), hog_(win_size_, block_size, block_stride, cell_size, 9, 1, -1,
+                      cv::HOGDescriptor::L2Hys, 0.2, false, cv::HOGDescriptor::DEFAULT_NLEVELS){}
 
 
       void init();
-      void load(std::string filename);
+      void load(const std::string & file_name);
 
-      void setSVMFromFile(std::string fileName);
+      void setSVMFromFile(const std::string & file_name);
 
-      void setSVMDetector(std::vector<float> svmdetector)
-      {
-        hog_.setSVMDetector(svmdetector);
-      }
+      void setSVMDetector(std::vector<float> svm_detector);
 
-      ODDetections2D *detectOmni(ODSceneImage *scene);
-      ODDetections *detect(ODSceneImage *scene);
+      ODDetections2D * detectOmni(ODSceneImage * scene);
+      ODDetections * detect(ODSceneImage * scene);
 
-      int detect(ODScene *scene, std::vector<ODDetection *> &detections)
-      { }
+      int detect(ODScene * scene, std::vector<ODDetection *> & detections);
 
+      void setTrainedDataLocation(const std::string & trained_data_location);
 
-      void setTrainedDataLocation(std::string trained_data_location_)
-      {
-        this->trained_data_location_ = trained_data_location_;
-        this->svmtype_ = OD_FILE;
-      }
+      const SVMType & getSvmtype() const;
+      void setSvmtype(const SVMType & svm_type_);
 
-      SVMType const &getSvmtype() const
-      {
-        return svmtype_;
-      }
+      const cv::Size & getWinSize() const;
+      void setWinSize(const cv::Size & win_size);
 
-      void setSvmtype(SVMType const &svmtype_)
-      {
-        ODHOGDetector::svmtype_ = svmtype_;
-      }
+      const cv::Size & getBlockSize() const;
+      void setBlockSize(const cv::Size & block_size);
 
-      cv::Size const &getWinSize() const
-      {
-        return winSize;
-      }
+      const cv::Size & getBlockStride() const;
+      void setBlockStride(const cv::Size & block_stride);
 
-      void setWinSize(cv::Size const &winSize)
-      {
-        ODHOGDetector::winSize = winSize;
-      }
+      const cv::Size & getCellSize() const;
+      void setCellSize(const cv::Size & cell_size);
 
-      cv::Size const &getBlockSize() const
-      {
-        return blockSize;
-      }
-
-      void setBlockSize(cv::Size const &blockSize)
-      {
-        ODHOGDetector::blockSize = blockSize;
-      }
-
-      cv::Size const &getBlockStride() const
-      {
-        return blockStride;
-      }
-
-      void setBlockStride(cv::Size const &blockStride)
-      {
-        ODHOGDetector::blockStride = blockStride;
-      }
-
-      cv::Size const &getCellSize() const
-      {
-        return cellSize;
-      }
-
-      void setCellSize(cv::Size const &cellSize)
-      {
-        ODHOGDetector::cellSize = cellSize;
-      }
-
-      float getHitThreshold() const
-      {
-        return hitThreshold;
-      }
-
-      void setHitThreshold(float hitThreshold)
-      {
-        ODHOGDetector::hitThreshold = hitThreshold;
-      }
+      float getHitThreshold() const;
+      void setHitThreshold(float hit_threshold);
 
       void printParameters();
 
     protected:
       //properteis
-      cv::Size winSize;
-      cv::Size blockSize;
-      cv::Size blockStride;
-      cv::Size cellSize;
+      cv::Size win_size_;
+      cv::Size block_size_;
+      cv::Size block_stride_;
+      cv::Size cell_size_;
 
-      float hitThreshold;
+      float hit_threshold_;
 
       cv::HOGDescriptor hog_;
       SVMType svmtype_;
@@ -188,5 +127,3 @@ namespace od
   }
 }
 
-
-#endif //OPENDETECTION_ODHOGMULTISCALEDETECTOR_H

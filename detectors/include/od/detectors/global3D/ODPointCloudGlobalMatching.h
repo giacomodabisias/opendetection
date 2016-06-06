@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODTrainer.h"
 #include "od/detectors/global3D/training/ODCADDetectTrainer3DGlobal.h"
-#include "od/detectors/global3D/detection/ODCADDetector3DGlobal.h"
+#include "od/detectors/global3D/detection/ODCADDetector3DGlobal.hpp"
 
 namespace od
 {

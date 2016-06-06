@@ -29,22 +29,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global2D/ODFaceRecognizer.h"
 
-using namespace cv;
-using namespace std;
-
 namespace od
 {
   namespace g2d
   {
+
+    ODFaceRecognizer::ODFaceRecognizer(FaceRecogType recog_type, int num_components, double threshold)
+        : recog_type_(recog_type), num_components_(num_components), threshold_(threshold), im_height_(0), im_width_(0)
+    {
+      TRAINED_DATA_IDENTIFIER_ = "FACERECOG";
+      TRAINED_DATA_EXT_ = "facerec.xml";
+    }
+
     void ODFaceRecognizer::init()
     {
-      switch(recogtype_)
+      switch(recog_type_)
       {
         case OD_FACE_FISCHER:
-          cvrecognizer_ = cv::face::createFisherFaceRecognizer(num_components_, threshold_);
+          cv_recognizer_ = cv::face::createFisherFaceRecognizer(num_components_, threshold_);
           break;
         case OD_FACE_EIGEN:
-          cvrecognizer_ = cv::face::createEigenFaceRecognizer(num_components_, threshold_);
+          cv_recognizer_ = cv::face::createEigenFaceRecognizer(num_components_, threshold_);
           break;
         default:
           std::cout << "FATAL: FACETYPE NOT FOUND!";
@@ -66,33 +71,33 @@ namespace od
         std::vector<std::string> files;
         fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_EXT_, files);
 
-        if (files.size() == 0)
+        if(files.size() == 0)
         {
-          std::cout << "FATAL: Trained data not found" << endl;
+          std::cout << "FATAL: Trained data not found" << std::endl;
           exit(1);
         }
 
         //choose the first
-        cvrecognizer_->load(files[0]);
+        cv_recognizer_->load(files[0]);
       }
     }
 
     int ODFaceRecognizer::train()
     {
-      vector<cv::Mat> images;
-      vector<int> labels;
+      std::vector<cv::Mat> images;
+      std::vector<int> labels;
       try
       {
         read_csv(training_input_location_, images, labels);
-      } catch(cv::Exception &e)
+      } catch(cv::Exception & e)
       {
-        cerr << "Error opening file \"" << training_input_location_ << "\". Reason: " << e.msg << endl;
+        std::cerr << "Error opening file \"" << training_input_location_ << "\". Reason: " << e.msg << std::endl;
         exit(1);
       }
-      cvrecognizer_->train(images, labels);
+      cv_recognizer_->train(images, labels);
       fileutils::createTrainingDir(getSpecificTrainingDataLocation());
 
-      cvrecognizer_->save(getSpecificTrainingDataLocation() + "/trained." + TRAINED_DATA_EXT_);
+      cv_recognizer_->save(getSpecificTrainingDataLocation() + "/trained." + TRAINED_DATA_EXT_);
       trained_ = true;
 
       //the training set has atleast one image
@@ -100,10 +105,10 @@ namespace od
       im_height_ = images[0].rows;
     }
 
-    ODDetections *ODFaceRecognizer::detect(ODSceneImage *scene)
+    ODDetections * ODFaceRecognizer::detect(ODSceneImage * scene)
     {
       cv::Mat face_edited;
-      cvtColor(scene->getCVImage(), face_edited, CV_BGR2GRAY);
+      cv::cvtColor(scene->getCVImage(), face_edited, CV_BGR2GRAY);
 
       if(trained_)
       {
@@ -112,28 +117,28 @@ namespace od
 
       int label = 100;
       double confidence;
-      cvrecognizer_->predict(face_edited, label, confidence);
+      cv_recognizer_->predict(face_edited, label, confidence);
 
       //fill in the detection
-      ODDetection2D *detection = new ODDetection2D(ODDetection::OD_DETECTION_CLASS, std::to_string(label), confidence);
-      ODDetections2D *detections = new ODDetections2D;
+      ODDetection2D * detection = new ODDetection2D(ODDetection::OD_DETECTION_CLASS, std::to_string(label), confidence);
+      ODDetections2D * detections = new ODDetections2D;
       detections->push_back(detection);
       return detections;
     }
 
 
-    void ODFaceRecognizer::read_csv(const string &filename, vector<cv::Mat> &images, vector<int> &labels, char separator)
+    void ODFaceRecognizer::read_csv(const std::string & filename, std::vector<cv::Mat> & images, std::vector<int> & labels, char separator)
     {
-      std::ifstream file(filename.c_str(), ifstream::in);
+      std::ifstream file(filename.c_str(), std::ifstream::in);
       if(!file)
       {
-        string error_message = "No valid input file was given, please check the given filename.";
+        std::string error_message("No valid input file was given, please check the given filename.");
         CV_Error(CV_StsBadArg, error_message);
       }
-      string line, path, classlabel;
+      std::string line, path, classlabel;
       while(getline(file, line))
       {
-        stringstream liness(line);
+        std::stringstream liness(line);
         getline(liness, path, separator);
         getline(liness, classlabel);
         if(!path.empty() && !classlabel.empty())

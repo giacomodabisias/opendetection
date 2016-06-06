@@ -26,16 +26,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *///
 // Created by sarkar on 13.08.15.
 //
-
-#ifndef OPENDETECTION_ODHOGTRAINER_H
-#define OPENDETECTION_ODHOGTRAINER_H
-
+#pragma once
 #include <opencv2/objdetect.hpp>
 #include "od/common/pipeline/ODTrainer.h"
 #include "od/common/utils/utils.h"
-
-
-
 
 namespace od
 {
@@ -54,131 +48,102 @@ namespace od
     {
 
     public:
-      ODHOGTrainer(std::string const &training_input_location_ = "", std::string const &trained_data_location_ = "", cv::Size winsize = cv::Size(64,128), cv::Size blocksize = cv::Size(16,16), cv::Size blockstride = cv::Size(8,8), cv::Size cellsize = cv::Size(8,8), float hitshreshold = 0.0):
-          ODTrainer(training_input_location_, trained_data_location_),  winSize(winsize), blockSize(blocksize), blockStride(blockstride),
-          cellSize(cellsize), hog_(winSize, blockSize, blockStride, cellSize, 9)
-      {
-
-        TRAINED_LOCATION_DENTIFIER_ = "HOG";
-        TRAINED_DATA_ID_ = "hog.xml";
-
-        //algo parameter init
-        trainingPadding = cv::Size(0, 0);
-        start_hog_pos = cv::Point(15, 15);
-        nofeatures_neg = 10;
-        winStride = cv::Size();
-        train_hard_negetive_ = false;
-
-        if(trained_data_location_ != "")
-        {
-          posSamplesDir = training_input_location_ + "/pos";
-          negSamplesDir = training_input_location_ + "/neg";
-        }
-
-
-        //internal data
-        FileUtils::createTrainingDir(getSpecificTrainingDataLocation());
-        featuresFile = getSpecificTrainingDataLocation() + "/features.dat";
-        svmModelFile = getSpecificTrainingDataLocation() + "/svmlightmodel.dat";
-        svmModelHard = getSpecificTrainingDataLocation() + "/svmlightmodelhard.dat";
-        descriptorVectorFile = getSpecificTrainingDataLocation() + "/descriptorvector.dat";
-        descriptorVectorFile = getSpecificTrainingDataLocation() + "/descriptorvectorHard.dat";
-
-
-      }
+      ODHOGTrainer(const std::string & training_input_location_ = "", const std::string & trained_data_location_ = "", 
+                   const cv::Size & win_size = cv::Size(64,128), const cv::Size & block_size = cv::Size(16,16), 
+                   const cv::Size & block_stride = cv::Size(8,8), const cv::Size & cell_size = cv::Size(8,8), float hits_threshold = 0.0);
 
       int train();
 
-      void init() {}
+      void init(){}
 
-      std::string const &getPosSamplesDir() const
+      const std::string & getPosSamplesDir() const
       {
-        return posSamplesDir;
+        return pos_samples_dir_;
       }
 
-      void setPosSamplesDir(std::string const &posSamplesDir)
+      void setPosSamplesDir(const std::string & pos_samples_dir)
       {
-        ODHOGTrainer::posSamplesDir = posSamplesDir;
+        pos_samples_dir_ = pos_samples_dir;
       }
 
-      std::string const &getNegSamplesDir() const
+      const std::string & getNegSamplesDir() const
       {
-        return negSamplesDir;
+        return neg_samples_dir_;
       }
 
-      void setNegSamplesDir(std::string const &negSamplesDir)
+      void setNegSamplesDir(const std::string & neg_samples_dir)
       {
-        ODHOGTrainer::negSamplesDir = negSamplesDir;
+        neg_samples_dir_ = neg_samples_dir;
       }
 
       int getNOFeaturesNeg() const
       {
-        return nofeatures_neg;
+        return nofeatures_neg_;
       }
 
       void setNOFeaturesNeg(int featno)
       {
-        ODHOGTrainer::nofeatures_neg = featno;
+       no_features_neg_ = featno;
       }
 
-      cv::Point const &getStartHogPos() const
+      const cv::Point & getStartHogPos() const
       {
-        return start_hog_pos;
+        return start_hog_pos_;
       }
 
-      void setStartHogPos(cv::Point const &start_hog_pos)
+      void setStartHogPos(const cv::Point & start_hog_pos)
       {
-        ODHOGTrainer::start_hog_pos = start_hog_pos;
+        start_hog_pos_ = start_hog_pos;
       }
 
-      cv::Size const &getWinSize() const
+      const cv::Size & getWinSize() const
       {
-        return winSize;
+        return win_size_;
       }
 
-      void setWinSize(cv::Size const &winSize)
+      void setWinSize(const cv::Size & win_size)
       {
-        ODHOGTrainer::winSize = winSize;
+        win_size_ = win_size;
       }
 
-      cv::Size const &getBlockSize() const
+      const cv::Size & getBlockSize() const
       {
-        return blockSize;
+        return block_size_;
       }
 
-      void setBlockSize(cv::Size const &blockSize)
+      void setBlockSize(const cv::Size & block_size)
       {
-        ODHOGTrainer::blockSize = blockSize;
+        block_size_ = block_size;
       }
 
-      cv::Size const &getBlockStride() const
+      const cv::Size & getBlockStride() const
       {
-        return blockStride;
+        return block_stride_;
       }
 
-      void setBlockStride(cv::Size const &blockStride)
+      void setBlockStride(const cv::Size & block_stride)
       {
-        ODHOGTrainer::blockStride = blockStride;
+        block_stride_ = block_stride;
       }
 
-      cv::Size const &getCellSize() const
+      const cv::Size & getCellSize() const
       {
-        return cellSize;
+        return cell_size_;
       }
 
-      void setCellSize(cv::Size const &cellSize)
+      void setCellSize(const cv::Size & cell_size)
       {
-        ODHOGTrainer::cellSize = cellSize;
+        cell_size_ = cell_size;
       }
 
-      cv::Size const &getTrainingPadding() const
+      const cv::Size & getTrainingPadding() const
       {
-        return trainingPadding;
+        return training_padding_;
       }
 
-      void setTrainingPadding(cv::Size const &trainingPadding)
+      void setTrainingPadding(const cv::Size & training_padding)
       {
-        ODHOGTrainer::trainingPadding = trainingPadding;
+        training_padding_ = training_padding;
       }
 
       bool isTrainHardNegetive() const
@@ -188,80 +153,74 @@ namespace od
 
       void setTrainHardNegetive(bool train_hard_negetive)
       {
-        ODHOGTrainer::train_hard_negetive_ = train_hard_negetive;
+        train_hard_negetive_ = train_hard_negetive;
       }
 
       double getHitThreshold() const
       {
-        return hitThreshold;
+        return hit_threshold_;
       }
 
     protected:
       //hog specific
-      cv::Size winSize;
-      cv::Size blockSize;
-      cv::Size blockStride;
-      cv::Size cellSize;
+      cv::Size win_size_;
+      cv::Size block_size_;
+      cv::Size block_stride_;
+      cv::Size cell_size_;
 
       cv::HOGDescriptor hog_;
 
       //algo specific
-      cv::Size trainingPadding;
-      cv::Point start_hog_pos;
-      int nofeatures_neg;
-      cv::Size winStride;
+      cv::Size training_padding_;
+      cv::Point start_hog_pos_;
+      int no_features_neg__;
+      cv::Size win_stride_;
       bool train_hard_negetive_;
 
       //directories
-      std::string posSamplesDir;
-      std::string negSamplesDir;
+      std::string pos_samples_dir_;
+      std::string neg_samples_dir__;
 
       //properties retained
-      double hitThreshold;
+      double hit_threshold_;
 
     private:
-      //internal training data
-      std::string featuresFile;
-      std::string svmModelFile;
-      std::string svmModelHard;
-      std::string descriptorVectorFile;
-      std::string descriptorVectorHard;
 
+      void readDescriptorsFromFile(const std::string & file_name, std::vector<float> & descriptor_vector);
 
-      void readDescriptorsFromFile(std::string fileName, std::vector<float> &descriptor_vector);
+      void save(const std::string & filename);
 
-      void save(std::string filename);
+      void createHardTrainingData(const cv::HOGDescriptor & hog, double hit_threshold,
+                                  const std::vector<std::string> & neg_file_names);
 
-      void createHardTrainingData(cv::HOGDescriptor const &hog, double const hitThreshold,
-                              std::vector<std::string> const &negFileNames);
-
-      void calculateFeaturesFromImageLoc(cv::Mat const &imageData, std::vector<float> &featureVector,
-                                     cv::HOGDescriptor const &hog, cv::Point startpos);
+      void calculateFeaturesFromImageLoc(const cv::Mat & image_data, std::vector<float> & feature_vector,
+                                         const cv::HOGDescriptor & hog, const cv::Point & start_pos);
 
 
 
-      void detectTrainingSetTest(cv::HOGDescriptor const &hog, double const hitThreshold,
-                             std::vector<std::string> const &posFileNames, std::vector<std::string> const &negFileNames);
+      void detectTrainingSetTest(const cv::HOGDescriptor & hog, double hit_threshold,
+                                 const std::vector<std::string> & pos_file_names, const std::vector<std::string> & neg_file_names);
 
 
-      void calculateFeaturesFromInput(std::string const &imageFilename, std::vector<float> &featureVector,
-                                  cv::HOGDescriptor &hog);
+      void calculateFeaturesFromInput(const std::string & image_filename, std::vector<float> & featureVector,
+                                  cv::HOGDescriptor & hog);
 
 
 
-      void saveDescriptorVectorToFile(std::vector<float> &descriptorVector, std::vector<unsigned int> &_vectorIndices,
-                                  std::string fileName);
+      void saveDescriptorVectorToFile(std::vector<float> & descriptor_vector, std::vector<unsigned int> & vector_indices,
+                                  std::string file_name);
 
-      void handleNegetivefile(std::string const imageFilename, cv::HOGDescriptor &hog, std::fstream &file);
+      void handleNegetivefile(const std::string & image_filename, cv::HOGDescriptor & hog, std::fstream & file);
 
-      double trainWithSVMLight(std::string svmModelFile, std::string svmDescriptorFile, std::vector<float> &descriptorVector);
+      double trainWithSVMLight(const std::string & svm_model_file, const std::string & svm_descriptor_file, std::vector<float> & descriptor_vector);
+
+      std::string features_file_;
+      std::string svm_model_file_;
+      std::string svm_model_hard_;
+      std::string descriptor_vector_file_;
+      std::string descriptor_vector_hard_;
     };
     /** \example objectdetector/od_hog_train.cpp
      */
-
   }
 }
-
-
-
-#endif //OPENDETECTION_ODHOGTRAINER_H

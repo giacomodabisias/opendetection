@@ -7,10 +7,6 @@ set(build TRUE)
 
 if(build)
 
-    set(IMPL_INCLUDES
-        "${DETECTORS_IMPL_DIR}/od/global3D/detection/ODCADDetector3DGlobal.hpp"
-        )
-
     set(SOURCES
         "ODPointCloudGlobalMatching.cpp"
         "detection/ODCADDetector3DGlobal.cpp"

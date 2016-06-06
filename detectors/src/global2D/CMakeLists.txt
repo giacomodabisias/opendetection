@@ -10,7 +10,6 @@ set(build TRUE)
 
 
 if(build)
-    set(IMPL_INCLUDES "")
 
     if(WITH_SVMLIGHT)
         set(SOURCES

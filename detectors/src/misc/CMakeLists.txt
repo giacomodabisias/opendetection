@@ -9,12 +9,6 @@ set(build TRUE)
 
 if(build)
 
-    set(INCLUDES
-            "${DETECTORS_INCLUDE_DIR}/od/detectors/misc/detection/ODDetectorMultiAlgo.h"
-        )
-
-    set(IMPL_INCLUDES "")
-
     set(SOURCES
             "detection/ODDetectorMultiAlgo.cpp"
         )
@@ -23,6 +17,7 @@ if(build)
     include_directories(${COMMON_INCLUDE_DIR})
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
+    include_directories(${CMAKE_3RDPARTY_DIR}/pugixml/src/)
 
     OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
 

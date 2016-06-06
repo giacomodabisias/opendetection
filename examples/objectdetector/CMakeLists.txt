@@ -3,6 +3,7 @@ include_directories(${DETECTORS_INCLUDE_DIR})
 include_directories(${COMMON_INCLUDE_DIR})
 include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
 include_directories(${DETECTORS_IMPL_DIR})
+include_directories(${CMAKE_3RDPARTY_DIR}/pugixml/src/)
 
 option(camera_recognition_example "Build the camera recognition example" ON)
 if(od_image_camera_example)

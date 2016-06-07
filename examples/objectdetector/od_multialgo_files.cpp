@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <opencv2/highgui.hpp>
-#include "detectors/misc/detection/ODDetectorMultiAlgo.h"
+#include "detectors/misc/detection/ODDetectorMultiAlgo.hpp"
 #include "od/common/utils/ODFrameGenerator.h"
 
 int main(int argc, char *argv[])

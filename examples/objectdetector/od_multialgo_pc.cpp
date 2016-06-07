@@ -31,7 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    *
    */
 
-#include "od/detectors/misc/detection/ODDetectorMultiAlgo.h"
+#include "od/detectors/misc/detection/ODDetectorMultiAlgo.hpp"
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
 #include "common/utils/ODFrameGenerator.h"
 #include <string>

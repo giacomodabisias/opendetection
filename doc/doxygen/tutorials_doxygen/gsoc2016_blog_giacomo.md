@@ -137,7 +137,7 @@ since you don't have to compile headers files.It is enough to specify the includ
 
 ##Code refactoring 01/06/15##
 
-Befor modifying and digging into the code I wanted to have a common coding style in all files, fixing also some common coding mistakes when found. Another decision was to use C++11 features whenever possible since it should be considered a basic standard, having already C++17 code online. I started by fixing the "common module"; here I did the following:
+Before modifying and digging into the code I wanted to have a common coding style in all files, fixing also some common coding mistakes when found. Another decision was to use C++11 features whenever possible since it should be considered a basic standard, having already C++17 code online. I started by fixing the "common module"; here I did the following:
 
 - I removed the ToString method since in c++11 it is present as *to_string()*; 
 - I removed global variables from utils since they where just used in one function.
@@ -149,3 +149,19 @@ Befor modifying and digging into the code I wanted to have a common coding style
 After this I started to fix the detectors which I am still working on. The first class which has bee updated is the *ODHOGDetector* which had also a lot of naming issues since it used a different naming style. 
 There are stll some function which I dislike, for example the parsing methods. They are mainly based on creating a fake argc,argv couple of variables and the parsing them. This has to be removed in favor of a better and newer parsing library as the one included in boost. This will be one of the first steps which I will do as soon as I finished the basic refactoring step.
 
+##Code refactoring 2 07/06/15##
+
+The first code refactoring phase terminated today, since I finished to review a bit all files; the main steps have been:
+
+- moving around code in order to have implementations in the cpp files to reduce multiple compilation time, and declarations in .h files. 
+- added some minor c++11 features like *ranged-loops* instead of iterators which are hard to read, more standard function like *to_string()* and *itos()* where possible
+- removed standard namespace and opencv namespace to avoid name clashing
+- refactored the whole simple ransac file folder which was outside of the namespace
+- used a common coding style through all files which is fundamental
+- I moved the **ODDetectorMultiAlgo.h** and **ODDetectorMultiAlgo.cpp** files into ODDetectorMultiAlgo.hpp since I made the classes template to avoid having the explicit **Pcl::PointXYZRGBA** type since it was using ODCADDetector3DGlobal.hpp which already defined template classes. The new file is situated in the impl folder in detectors to maintain the usual include structure. Now, since the default vale has been removed for the template classes, the type has to be specified when the class is instantiated which can been seen in the examples.
+
+Missing parts and next steps:
+
+- I have to check that compilation works fine also with svmlight which was disabled till now
+- Use shared pointer where normal pointer are used. We have to decide if we want to use boost or stds shared pointers since pcl is using the first version. The second would be better so we would have everything which is possible using std and then when pcl moves toward std shared pointer we move also the rest of the code to that.
+- Remove where possible the argc,argv parsing methods using standard ones.

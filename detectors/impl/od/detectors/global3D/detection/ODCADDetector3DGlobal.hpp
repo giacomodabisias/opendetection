@@ -10,7 +10,6 @@
 #include <pcl/apps/3d_rec_framework/feature_wrapper/global/vfh_estimator.h>
 #include <pcl/apps/3d_rec_framework/feature_wrapper/global/esf_estimator.h>
 #include <pcl/apps/3d_rec_framework/feature_wrapper/global/cvfh_estimator.h>
-//#include <pcl/apps/3d_rec_framework/tools/openni_frame_source.h>
 #include <pcl/apps/3d_rec_framework/utils/metrics.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/apps/dominant_plane_segmentation.h>

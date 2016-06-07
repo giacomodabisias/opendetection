@@ -26,69 +26,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
 
-#include <string>
-#include <stdlib.h>
-
-#include <vtkSmartPointer.h>
-#include <vtkSphereSource.h>
-#include <vtkPolyData.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkActor.h>
-#include <vtkCamera.h>
-#include <vtkMatrix4x4.h>
-#include <vtkRendererCollection.h>
-#include <vtkCommand.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkOBJReader.h>
-#include <vtkUnstructuredGrid.h>
-#include <vtkCell.h>
-#include <vtkCellArray.h>
-#include <vtkIdList.h>
-#include <vtkUnsignedCharArray.h>
-#include <vtkPointData.h>
-#include <string>
-#include <vtkRendererCollection.h>
-#include <vtkCellArray.h>
-#include <vtkInteractorStyleTrackballCamera.h>
-#include <vtkObjectFactory.h>
-#include <vtkPlaneSource.h>
-#include <vtkPoints.h>
-#include <vtkPolyData.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkPropPicker.h>
-#include <vtkPointPicker.h>
-
-#include <vtkImageReader2Factory.h>
-#include <vtkImageReader.h>
-#include <vtkTexture.h>
-#include <vtkAxesActor.h>
-#include <vtkWindowToImageFilter.h>
-#include <vtkPNGWriter.h>
-
-#include <sstream>
-#include <opencv2/core/types.hpp>
-#include <map>
-
-#include <boost/filesystem.hpp>
-
-//opencv
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/core/utility.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/video/tracking.hpp>
-#include <opencv2/xfeatures2d.hpp>
-#include <vtkJPEGWriter.h>
-
-#include "pugixml.hpp"
-
-
-using namespace std;
-
 namespace od
 {
   namespace l2d
@@ -97,18 +34,18 @@ namespace od
     class vtkTimerCallbackSnapshot : public vtkCommand
     {
     public:
-      static vtkTimerCallbackSnapshot *New()
+      static vtkTimerCallbackSnapshot * New()
       {
-        vtkTimerCallbackSnapshot *cb = new vtkTimerCallbackSnapshot;
+        vtkTimerCallbackSnapshot * cb = new vtkTimerCallbackSnapshot;
         cb->snap_count = 0;
         cb->snap_mode = true;
         cb->feature_type = "SIFT";
         return cb;
       }
 
-      virtual void Execute(vtkObject *caller, unsigned long eventId, void * vtkNotUsed(callData))
+      virtual void Execute(vtkObject * caller, unsigned long eventId, void * vtkNotUsed(callData))
       {
-        vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::SafeDownCast(caller);
+        vtkRenderWindowInteractor * iren = vtkRenderWindowInteractor::SafeDownCast(caller);
 
 
         if(!this->snap_mode) return;
@@ -125,7 +62,7 @@ namespace od
           //after getting all snaps, write everything together
           cout << "Processing finished... Writing the final descriptors" << endl;
 
-          string filename = boost::filesystem::path(input_file).filename().replace_extension(feature_type + "." + output_extension).c_str();
+          std::string filename = boost::filesystem::path(input_file).filename().replace_extension(feature_type + "." + output_extension).c_str();
           fileutils::createTrainingDir(output_dir);
 
           write_pairs(pairs_3d_2d, common_descriptors, output_dir + "/" + filename);
@@ -150,13 +87,13 @@ namespace od
       int snap_count;
     public:
 
-      string takeSnapshot(vtkRenderWindow *renderWindow, int snap_no);
+      std::string takeSnapshot(vtkRenderWindow *renderWindow, int snap_no);
 
-      void write_pairs(vector<pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors, string filename);
+      void write_pairs(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors, std::string filename);
 
-      void write_pairs_xml(vector<pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors, string filename);
+      void write_pairs_xml(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors, std::string filename);
 
-      void process_image(string imgname, vtkRenderer *ren, vtkActor *actor, int ino);
+      void process_image(std::string imgname, vtkRenderer *ren, vtkActor *actor, int ino);
 
       void process(vtkRenderWindowInteractor *iren, vtkActor *actor, vtkRenderer *renderer, int ino);
 
@@ -165,15 +102,15 @@ namespace od
 
       struct fcomp3d_euclidian
       {
-        bool operator()(const cv::Point3f &lhs, const cv::Point3f &rhs) const
+        bool operator()(const cv::Point3f & lhs, const cv::Point3f & rhs) const
         { return lhs.x < rhs.x; }
       };
 
-      vector<pair<cv::Point3f, cv::KeyPoint> > pairs_3d_2d;
+      std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs_3d_2d;
       cv::Mat common_descriptors;
-      map<cv::Point3f, cv::KeyPoint, fcomp3d_euclidian> map_3d_2d;
-      string feature_type;
-      string input_file, input_dir, output_dir, output_extension;
+      std::map<cv::Point3f, cv::KeyPoint, fcomp3d_euclidian> map_3d_2d;
+      std::string feature_type;
+      std::string input_file, input_dir, output_dir, output_extension;
 
 
       vtkActor * actor;
@@ -194,7 +131,7 @@ namespace od
 
       //for each models in the train_input_directory, train them and put them on the training_directory
 
-      for(size_t i = 0; i < files.size(); i++)
+      for(size_t i = 0; i < files.size(); ++i)
       {
         trainSingleModel(training_input_location_ + "/" + files[i]);
       }
@@ -202,7 +139,7 @@ namespace od
       return 1;
     }
 
-    void ODCADRecogTrainerSnapshotBased::trainSingleModel(std::string objname)
+    void ODCADRecogTrainerSnapshotBased::trainSingleModel(const std::string & objname)
     {
       ///////////setup object
 
@@ -220,7 +157,7 @@ namespace od
 
       //texture
       // Read texture file
-      string texfilename = getTexfileinObj(objname);
+      std::string texfilename = getTexfileinObj(objname);
       vtkSmartPointer<vtkImageReader2Factory> readerFactory = vtkSmartPointer<vtkImageReader2Factory>::New();
       vtkImageReader2 *imageReader = readerFactory->CreateImageReader2(texfilename.c_str());
       imageReader->SetFileName(texfilename.c_str());
@@ -294,7 +231,7 @@ namespace od
       vtkSmartPointer<vtkJPEGWriter> writer = vtkSmartPointer<vtkJPEGWriter>::New();
       std::string filename;
 
-      filename = input_dir + "/" + string("snapshot") + std::to_string(snap_no) + ".jpg";
+      filename = input_dir + "/" + std::string("snapshot") + std::to_string(snap_no) + ".jpg";
 
       writer->SetFileName(filename.c_str());
       writer->SetInputConnection(windowToImageFilter->GetOutputPort());
@@ -304,10 +241,10 @@ namespace od
     }
 
 
-    void vtkTimerCallbackSnapshot::write_pairs(vector<pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors,
-                                               string filename)
+    void vtkTimerCallbackSnapshot::write_pairs(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors,
+                                               std::string filename)
     {
-      ofstream fout;
+      std::ofstream fout;
       fout.open(filename.c_str());
 
       //headers
@@ -326,8 +263,8 @@ namespace od
       fout.close();
     }
 
-    void vtkTimerCallbackSnapshot::write_pairs_xml(vector<pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors,
-                                                   string filename)
+    void vtkTimerCallbackSnapshot::write_pairs_xml(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors,
+                                                   std::string filename)
     {
 
       pugi::xml_document doc;
@@ -340,7 +277,7 @@ namespace od
       {
         pugi::xml_node p_node = points_node.append_child("Point");
 
-        ostringstream ss;
+        std::ostringstream ss;
         ss << pairs[i].first.x << " " << pairs[i].first.y << " " << pairs[i].first.z;
         p_node.append_attribute("p3d") = ss.str().c_str();
         p_node.append_attribute("nviews") = "1";
@@ -369,25 +306,26 @@ namespace od
 
     bool valid_3D_point(double *pt)
     {
-      if((pt[0] == 0) && (pt[1] == 0) && (pt[2] == 0)) return false;
+      if((pt[0] == 0) && (pt[1] == 0) && (pt[2] == 0)) 
+        return false;
       return true;
     }
 
 //1. find interesting 2d points, 2. find their corresponding 3d points corresponding to the transformation defined by the "actor"
 //3. transform the 3d points to the original by using the inverse of the "actor"
-    void vtkTimerCallbackSnapshot::process_image(string imgname, vtkRenderer *ren, vtkActor *actor, int ino)
+    void vtkTimerCallbackSnapshot::process_image(std::string imgname, vtkRenderer *ren, vtkActor *actor, int ino)
     {
       //1. find interesting 2d location
       cv::Mat img = cv::imread(imgname);
-      vector<cv::KeyPoint> kpts;
+      std::vector<cv::KeyPoint> kpts;
       cv::Mat descriptors_local, descriptors_local_good;
       cv::Ptr<cv::FeatureDetector> fdetector = cv::xfeatures2d::SIFT::create();
       fdetector->detect(img, kpts);
       fdetector->compute(img, kpts, descriptors_local);
 
       //2. find the corresponding 3d points for each 2d location
-      vector<pair<cv::Point3f, cv::KeyPoint> > pairs_local;
-      for(int i = 0; i < kpts.size(); i++)
+      std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs_local;
+      for(size_t i = 0; i < kpts.size(); ++i)
       {
         //find 2d
         vtkSmartPointer<vtkPropPicker> picker = vtkSmartPointer<vtkPropPicker>::New();
@@ -406,7 +344,7 @@ namespace od
 
         if(valid_3D_point(pos))
         {
-          pairs_local.push_back(make_pair(cv::Point3f(pos_model[0], pos_model[1], pos_model[2]), kpts[i]));
+          pairs_local.push_back(std::make_pair(cv::Point3f(pos_model[0], pos_model[1], pos_model[2]), kpts[i]));
           descriptors_local_good.push_back(descriptors_local.row(i));
 
           //updating extra globals!
@@ -420,7 +358,7 @@ namespace od
       //writing a local set
       write_pairs(pairs_local, descriptors_local_good, input_dir + "/" + "local" + std::to_string(ino) + ".pairs");
       write_pairs_xml(pairs_local, descriptors_local_good, input_dir + "/" + "local" + std::to_string(ino) + ".xml");
-      cout << "Processed view " << ino << endl;
+      std::cout << "Processed view " << ino << std::endl;
     }
 
     void vtkTimerCallbackSnapshot::process(vtkRenderWindowInteractor *iren, vtkActor *actor, vtkRenderer *renderer, int ino)
@@ -429,7 +367,7 @@ namespace od
       vtkRenderWindow *win = iren->GetRenderWindow();
 
       //snap
-      string snapname = takeSnapshot(win, ino);
+      std::string snapname = takeSnapshot(win, ino);
       //save
       process_image(snapname, renderer, actor, ino);
 

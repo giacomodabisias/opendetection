@@ -27,22 +27,73 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Created by sarkar on 17.03.15.
 //
-
-#ifndef _SNAPSHOT_SNAP_VTK_H_
-#define _SNAPSHOT_SNAP_VTK_H_
-
-
+#pragma once
 #include "od/common/pipeline/ODTrainer.h"
 #include "od/common/utils/utils.h"
 #include "od/detectors/local2D/ODImageLocalMatching.h"
 
+#include <string>
+#include <stdlib.h>
+
+#include <vtkSmartPointer.h>
+#include <vtkSphereSource.h>
+#include <vtkPolyData.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkCamera.h>
+#include <vtkMatrix4x4.h>
+#include <vtkRendererCollection.h>
+#include <vtkCommand.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkOBJReader.h>
+#include <vtkUnstructuredGrid.h>
+#include <vtkCell.h>
+#include <vtkCellArray.h>
+#include <vtkIdList.h>
+#include <vtkUnsignedCharArray.h>
+#include <vtkPointData.h>
+#include <string>
+#include <vtkRendererCollection.h>
+#include <vtkCellArray.h>
+#include <vtkInteractorStyleTrackballCamera.h>
+#include <vtkObjectFactory.h>
+#include <vtkPlaneSource.h>
+#include <vtkPoints.h>
+#include <vtkPolyData.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkPropPicker.h>
+#include <vtkPointPicker.h>
+
+#include <vtkImageReader2Factory.h>
+#include <vtkImageReader.h>
+#include <vtkTexture.h>
+#include <vtkAxesActor.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkPNGWriter.h>
+
+#include <sstream>
+#include <opencv2/core/types.hpp>
+#include <map>
+
+#include <boost/filesystem.hpp>
+
+//opencv
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/utility.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/video/tracking.hpp>
+#include <opencv2/xfeatures2d.hpp>
+#include <vtkJPEGWriter.h>
+
+#include "pugixml.hpp"
 
 #define VIEW_ANGLE 30
 #define NO_SNAPSHOTS 30
-
-
-
-
 
 namespace od
 {
@@ -58,17 +109,16 @@ namespace od
     {
 
     public:
-      ODCADRecogTrainerSnapshotBased(std::string const &training_input_location_ = "", std::string const &training_data_location_ = "") : ODImageLocalMatchingTrainer(
-          training_input_location_, training_data_location_)
-      { }
+
+      ODCADRecogTrainerSnapshotBased(const std::string & training_input_location_ = "", const std::string & training_data_location_ = "") : 
+                                     ODImageLocalMatchingTrainer(training_input_location_, training_data_location_){}
 
       int train();
-
       void init() {}
-
-      void trainSingleModel(std::string objname);
+      void trainSingleModel(const std::string & objname);
 
     protected:
+
       int no_ring_;
       float view_angle_;
       int no_snapshot_per_ring_;
@@ -77,8 +127,4 @@ namespace od
     };
   }
 }
-
-
-
-#endif //_SNAPSHOT_SNAP_VTK_H_
 

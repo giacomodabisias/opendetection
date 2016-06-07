@@ -26,31 +26,65 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *///
 // Created by sarkar on 06.08.15.
 //
-
-#include "od/detectors/misc/detection/ODDetectorMultiAlgo.h"
+#pragma once
+#include "od/common/pipeline/ODDetector.h"
 #include "od/detectors/global2D/detection/ODCascadeDetector.h"
 #include "od/detectors/global2D/detection/ODHOGDetector.h"
 #include "od/detectors/global2D/ODFaceRecognizer.h"
-
 #include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
-
 //3D detectors
 #include "od/detectors/global3D/detection/ODCADDetector3DGlobal.hpp"
-
-
-using namespace std;
-using namespace od::g2d;
-using namespace od::g3d;
-using namespace od::l2d;
 
 namespace od
 {
 
+  template<typename PointT>
+  class ODDetectorMultiAlgo2D : public ODDetector2D
+  {
+  public:
+    ODDetectorMultiAlgo2D(const std::string & training_data_location_) : ODDetector2D(training_data_location_){}
+
+    ODDetections * detect(ODSceneImage * scene) ;
+    ODDetections2D * detectOmni(ODSceneImage * scene);
+
+    ODDetections * detect(ODScenePointCloud<PointT> * scene);
+    ODDetections3D * detectOmni(ODScenePointCloud<PointT> * scene);
+
+
+    void init();
+
+  private:
+
+    std::vector<ODDetector2D *> detectors_2d_;
+    std::vector<ODDetector3D<PointT> *> detectors_3d_;
+  };
+  template<typename PointT>
+  class ODDetectorMultiAlgo : public ODDetector
+  {
+
+  public:
+    ODDetectorMultiAlgo(const std::string & training_data_location_) : ODDetector(training_data_location_){}
+
+    ODDetections * detect(ODSceneImage * scene) ;
+    ODDetections2D * detectOmni(ODSceneImage * scene);
+
+    ODDetections * detect(ODScenePointCloud<PointT> * scene);
+    ODDetections3D * detectOmni(ODScenePointCloud<PointT> * scene);
+
+    void init();
+
+  private:
+    std::vector<ODDetector2D *> detectors_2d_;
+    std::vector<ODDetector3D<PointT> *> detectors_3d_;
+  };
+
+
   //BASED ON 2D SCENE
-  ODDetections *ODDetectorMultiAlgo2D::detect(ODSceneImage *scene)
+  template<typename PointT>
+  ODDetections * ODDetectorMultiAlgo2D<PointT>::detect(ODSceneImage * scene)
   {
     ODDetections * detections_all = new ODDetections;
-    for (int i = 0; i < detectors_2d_.size(); i++)
+    for (size_t i = 0; i < detectors_2d_.size(); ++i)
     {
       ODDetections * detections_individual = detectors_2d_[i]->detect(scene);
       detections_all->append(detections_individual);
@@ -59,10 +93,11 @@ namespace od
     return detections_all;
   }
 
-  ODDetections2D *ODDetectorMultiAlgo2D::detectOmni(ODSceneImage *scene)
+  template<typename PointT>
+  ODDetections2D * ODDetectorMultiAlgo2D<PointT>::detectOmni(ODSceneImage * scene)
   {
     ODDetections2D * detections_all = new ODDetections2D;
-    for (int i = 0; i < detectors_2d_.size(); i++)
+    for (size_t i = 0; i < detectors_2d_.size(); ++i)
     {
       ODDetections2D * detections_individual = detectors_2d_[i]->detectOmni(scene);
       detections_all->append(detections_individual);
@@ -71,46 +106,38 @@ namespace od
     return detections_all;
   }
 
-
-
-
-
-
-  void ODDetectorMultiAlgo2D::init()
+  template<typename PointT>
+  void ODDetectorMultiAlgo2D<PointT>::init()
   {
     //make a list of different algorithms
     //vector<ODDetector *> detectors = {new ODCascadeDetector(trained_data_location_), new ODHOGDetector(trained_data_location_), new ODCADRecognizer2DLocal(trained_data_location_)};
-    detectors_2d_.push_back(new ODCascadeDetector(trained_data_location_));
-    detectors_2d_.push_back(new ODHOGDetector(trained_data_location_));
+    detectors_2d_.push_back(new g2d::ODCascadeDetector(trained_data_location_));
+    detectors_2d_.push_back(new g2d::ODHOGDetector(trained_data_location_));
     //  detectors.push_back(new ODCADRecognizer2DLocal(trained_data_location_));
 
-    for (int i = 0; i < detectors_2d_.size(); i++)
+    for(size_t i = 0; i < detectors_2d_.size(); ++i)
     {
       detectors_2d_[i]->init();
     }
   }
 
-
-
-
   /////############BASED ON 3D SCENE#####################
-
-  void ODDetectorMultiAlgo::init()
+  template<typename PointT>
+  void ODDetectorMultiAlgo<PointT>::init()
   {
       //3D
-    detectors_3d_.push_back(new ODCADDetector3DGlobal<PointT>(trained_data_location_, training_input_location_));
-
-    for (int i = 0; i < detectors_3d_.size(); i++)
+    detectors_3d_.push_back(new g3d::ODCADDetector3DGlobal<PointT>(trained_data_location_, training_input_location_));
+    for(size_t i = 0; i < detectors_3d_.size(); ++i)
     {
       detectors_3d_[i]->init();
     }
   }
 
-
-  ODDetections* ODDetectorMultiAlgo::detect(ODScenePointCloud<PointT> *scene)
+  template<typename PointT>
+  ODDetections * ODDetectorMultiAlgo<PointT>::detect(ODScenePointCloud<PointT> * scene)
   {
     ODDetections * detections_all = new ODDetections;
-    for (int i = 0; i < detectors_3d_.size(); i++)
+    for(size_t i = 0; i < detectors_3d_.size(); ++i)
     {
       ODDetections * detections_individual = detectors_3d_[i]->detect(scene);
       detections_all->append(detections_individual);
@@ -119,10 +146,11 @@ namespace od
     return detections_all;
   }
 
-  ODDetections3D* ODDetectorMultiAlgo::detectOmni(ODScenePointCloud<PointT> *scene)
+  template<typename PointT>
+  ODDetections3D * ODDetectorMultiAlgo<PointT>::detectOmni(ODScenePointCloud<PointT> * scene)
   {
     ODDetections3D * detections_all = new ODDetections3D;
-    for (int i = 0; i < detectors_3d_.size(); i++)
+    for(size_t i = 0; i < detectors_3d_.size(); i++)
     {
       ODDetections3D * detections_individual = detectors_3d_[i]->detectOmni(scene);
       detections_all->append(detections_individual);
@@ -130,4 +158,5 @@ namespace od
 
     return detections_all;
   }
+
 }

@@ -30,8 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <boost/filesystem.hpp>
 #include "od/common/pipeline/ODAlgorithmBase.h"
-#include "od/common/pipeline/ObjectDetector.h"
-
+#include "od/common/pipeline/ODObjectDetector.h"
 
 namespace od
 {

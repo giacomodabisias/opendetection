@@ -20,7 +20,7 @@
         BOOST_PP_SEQ_ENUM(enumerators)                                        \
     };                                                                        \
                                                                               \
-    inline const char* enumToString(name v)                                       \
+    inline const char * enumToString(name v)                                       \
     {                                                                         \
         switch (v)                                                            \
         {                                                                     \

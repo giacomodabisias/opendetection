@@ -17,8 +17,9 @@ if(build)
     set(IMPL_INCLUDES "")
 
     set(SOURCES
-            "src/pipeline/ObjectDetector.cpp"
+            "src/pipeline/ODObjectDetector.cpp"
             "src/pipeline/ODScene.cpp"
+            "src/pipeline/ODDetection.cpp"
             "src/utils/utils.cpp"
             "src/utils/ODFeatureDetector2D.cpp"
         )

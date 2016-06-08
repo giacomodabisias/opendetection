@@ -29,3 +29,55 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 #include "od/common/pipeline/ODScene.h"
+
+namespace od {
+
+	std::string const & ODScene::getPath() const
+	{
+		return path_;
+	}
+
+
+	ODSceneImage::ODSceneImage(const cv::Mat & cvimage): is_trained_(false)
+	{
+		cvimage_ = cvimage.clone();
+	}
+
+	ODSceneImage::ODSceneImage(const std::string & path): is_trained_(false)
+	{
+		cvimage_ = cv::imread(path);
+		path_ = path;
+	}
+
+	const std::vector<cv::KeyPoint> & ODSceneImage::getKeypoints() const
+	{
+		return keypoints_;
+	}
+
+	void ODSceneImage::setKeypoints(const std::vector<cv::KeyPoint> & keypoints)
+	{
+		keypoints_ = keypoints;
+	}
+
+	const cv::Mat & ODSceneImage::getDescriptors() const
+	{
+		return descriptors_;
+	}
+
+	void ODSceneImage::setDescriptors(const cv::Mat & descriptors)
+	{
+		descriptors_ = descriptors;
+		is_trained_ = true;
+	}
+
+	cv::Mat ODSceneImage::getCVImage()
+	{
+		return cvimage_;
+	}
+
+	void * ODSceneImage::getData()
+	{
+		return &cvimage_;
+	}
+
+}

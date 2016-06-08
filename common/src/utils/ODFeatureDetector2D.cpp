@@ -39,8 +39,6 @@ namespace od
     }
   }
 
-
-
   ODFeatureDetector2D::ODFeatureDetector2D(FeatureType type)
   {
 

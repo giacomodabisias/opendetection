@@ -47,13 +47,12 @@ namespace od
 
     virtual void * getData() = 0;
 
-    std::string const & getPath() const
-    {
-      return path_;
-    }
+    std::string const & getPath() const;
 
   protected:
+
     std::string path_;
+
   };
 
   /** \brief Class for Image Scene.
@@ -65,49 +64,21 @@ namespace od
   {
   public:
 
-    const std::vector<cv::KeyPoint> & getKeypoints() const
-    {
-      return keypoints_;
-    }
+    ODSceneImage(const cv::Mat & cvimage);
+    ODSceneImage(const std::string & path);
 
-    void setKeypoints(const std::vector<cv::KeyPoint> & keypoints_)
-    {
-      ODSceneImage::keypoints_ = keypoints_;
-    }
+    const std::vector<cv::KeyPoint> & getKeypoints() const;
+    void setKeypoints(const std::vector<cv::KeyPoint> & keypoints_);
 
-    const cv::Mat & getDescriptors() const
-    {
-      return descriptors_;
-    }
+    const cv::Mat & getDescriptors() const;
+    void setDescriptors(const cv::Mat & descriptors_);
 
-    void setDescriptors(const cv::Mat & descriptors_)
-    {
-      ODSceneImage::descriptors_ = descriptors_;
-      is_trained_ = true;
-    }
+    cv::Mat getCVImage();
 
-    ODSceneImage(const cv::Mat & cvimage): is_trained_(false)
-    {
-      this->cvimage_ = cvimage.clone();
-    }
-
-    ODSceneImage(const std::string & path): is_trained_(false)
-    {
-      this->cvimage_ = cv::imread(path);
-      this->path_ = path;
-    }
-
-    cv::Mat getCVImage()
-    {
-      return cvimage_;
-    }
-
-    void *getData()
-    {
-      return &cvimage_;
-    }
+    void * getData();
 
   protected:
+
     cv::Mat cvimage_;
     std::vector<cv::KeyPoint> keypoints_;
     cv::Mat descriptors_;
@@ -126,45 +97,62 @@ namespace od
   {
 
   public:
-    typedef typename pcl::PointCloud<PointType>::Ptr PointCloudPtr;
 
-    ODScenePointCloud(const PointCloudPtr & point_cloud)
-    {
-      point_cloud_ = point_cloud;
-    }
+    ODScenePointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud);
+    ODScenePointCloud(const std::string & point_cloud_file);
+    ODScenePointCloud(): point_cloud_(new typename pcl::PointCloud<PointType>()){}
 
-    ODScenePointCloud(const std::string & point_cloud_file): point_cloud_(new pcl::PointCloud<PointType>())
-    {
-      if (pcl::io::loadPCDFile<PointType> (point_cloud_file, *point_cloud_ ) == -1)
-      {
-        std::cout << "ERROR: Couldn't read the file "<< point_cloud_file << std::endl;
-      }
-      this->path_ = point_cloud_file;
-    }
+    const typename pcl::PointCloud<PointType>::Ptr & getPointCloud() const;
+    typename pcl::PointCloud<PointType>::Ptr & getPointCloudRef() const;
+    void setPointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud_);
 
-    ODScenePointCloud(): point_cloud_(new pcl::PointCloud<PointType>())
-    {}
-
-    const PointCloudPtr & getPointCloud() const
-    {
-      return point_cloud_;
-    }
-
-    PointCloudPtr & getPointCloudRef() const
-    {
-      return point_cloud_;
-    }
-
-    void setPointCloud(const PointCloudPtr & point_cloud_)
-    {
-      ODScenePointCloud::point_cloud_ = point_cloud_;
-    }
-
-    void * getData() 
-    { return (void *)point_cloud_.get(); }
+    void * getData();
 
   protected:
-    PointCloudPtr point_cloud_;
+
+    typename pcl::PointCloud<PointType>::Ptr point_cloud_;
+
   };
+
+  template <typename PointType>
+  ODScenePointCloud<PointType>::ODScenePointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud)
+  {
+    point_cloud_ = point_cloud;
+  }
+
+  template <typename PointType>
+  ODScenePointCloud<PointType>::ODScenePointCloud(const std::string & point_cloud_file): point_cloud_(new pcl::PointCloud<PointType>())
+  {
+    if(pcl::io::loadPCDFile<PointType> (point_cloud_file, *point_cloud_ ) == -1)
+    {
+      std::cout << "ERROR: Couldn't read the file "<< point_cloud_file << std::endl;
+    }
+    path_ = point_cloud_file;
+  }
+
+  template <typename PointType>
+  const typename pcl::PointCloud<PointType>::Ptr & ODScenePointCloud<PointType>::getPointCloud() const
+  {
+    return point_cloud_;
+  }
+
+  template <typename PointType>
+  typename pcl::PointCloud<PointType>::Ptr & ODScenePointCloud<PointType>::getPointCloudRef() const
+  {
+    return point_cloud_;
+  }
+
+  template <typename PointType>
+  void ODScenePointCloud<PointType>::setPointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud)
+  {
+    point_cloud_ = point_cloud;
+  }
+
+  template <typename PointType>
+  void * ODScenePointCloud<PointType>::getData() 
+  { 
+    return (void *)point_cloud_.get();
+  }
+
 }
 

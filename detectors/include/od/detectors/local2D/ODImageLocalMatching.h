@@ -27,13 +27,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Created by sarkar on 05.06.15.
 //
-
 #pragma once
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/pipeline/ODTrainer.h"
 #include "od/common/pipeline/ODDetector.h"
-#include "od/common/pipeline/ObjectDetector.h"
-
+#include "od/common/pipeline/ODObjectDetector.h"
 
 namespace od
 {

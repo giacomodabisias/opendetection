@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Eigen/Core>
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc.hpp>
+#include "od/common/utils/shared_pointers.h"
 
 namespace od
 {
@@ -53,53 +54,25 @@ namespace od
 
     OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(DetectionType, (OD_DETECTION_RECOG)(OD_DETECTION_CLASS)(OD_DETECTION_NULL))
 
-    virtual ~ODDetection()
-    { }
+    virtual ~ODDetection() {}
 
-    ODDetection(DetectionType const &type_ = OD_DETECTION_NULL, std::string const &id_ = "", double confidence_ = 1) : type_(type_), id_(id_),
-                                                                                     confidence_(confidence_)
-    { }
+    ODDetection(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1);
 
-    void printSelf()
-    {
-      std::cout << "--Detection-- \nType: " << enumToString(type_) << std::endl;
-      std::cout << "ID: " << id_ << std::endl;
-    }
+    void printSelf();
 
-    DetectionType const &getType() const
-    {
-      return type_;
-    }
+    const DetectionType & getType() const;
+    void setType(const DetectionType & type);
 
-    void setType(DetectionType const &type_)
-    {
-      ODDetection::type_ = type_;
-    }
-
-    std::string const &getId() const
-    {
-      return id_;
-    }
-
-    void setId(std::string const &id_)
-    {
-      ODDetection::id_ = id_;
-    }
-
+    const std::string & getId() const;
+    void setId(const std::string & id);
 
     /** \brief Get/Set the confidence of the detection. ODDetector can use this to provide confidence amnong several detections.
       */
-    double getConfidence() const
-    {
-      return confidence_;
-    }
+    double getConfidence() const;
 
     /** \brief Get/Set the confidence of the detection. ODDetector can use this to provide confidence amnong several detections.
       */
-    void setConfidence(double confidence_)
-    {
-      ODDetection::confidence_ = confidence_;
-    }
+    void setConfidence(double confidence);
 
   private:
     DetectionType type_;
@@ -116,43 +89,19 @@ namespace od
   {
   public:
 
-    virtual ~ODDetection2D()
-    { }
+    virtual ~ODDetection2D(){}
 
-    ODDetection2D(DetectionType const &type_ = OD_DETECTION_NULL, std::string const &id_ = "", double confidence_ = 1) : ODDetection(type_, id_, confidence_)
-    {
-      location_2d_ = Eigen::Vector3d::UnitZ();
-    }
+    ODDetection2D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1);
 
-    Eigen::Vector3d const &getLocation() const
-    {
-      return location_2d_;
-    }
+    const Eigen::Vector3d & getLocation() const;
 
-    void setLocation(Eigen::Vector3d const &location_)
-    {
-      ODDetection2D::location_2d_ = location_;
-    }
+    void setLocation(const Eigen::Vector3d & location);
 
-    cv::Rect const &getBoundingBox() const
-    {
-      return bounding_box_2d_;
-    }
+    const cv::Rect & getBoundingBox() const;
+    void setBoundingBox(const cv::Rect & bounding_box);
 
-    void setBoundingBox(cv::Rect const &bounding_box_)
-    {
-      ODDetection2D::bounding_box_2d_ = bounding_box_;
-    }
-
-    cv::Mat const &getMetainfoImage() const
-    {
-      return metainfo_image_;
-    }
-
-    void setMetainfoImage(cv::Mat const &metainfo_image_)
-    {
-      ODDetection2D::metainfo_image_ = metainfo_image_;
-    }
+    const cv::Mat & getMetainfoImage() const;
+    void setMetainfoImage(const cv::Mat & metainfo_image);
 
 
     Eigen::Vector3d location_2d_;
@@ -168,87 +117,36 @@ namespace od
   class ODDetection3D : public virtual ODDetection
   {
   public:
-    virtual ~ODDetection3D()
-    { }
+    virtual ~ODDetection3D(){}
 
-    Eigen::Vector4d const &getLocation() const
-    {
-      return location_3d_;
-    }
+    ODDetection3D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1);
 
-    void setLocation(Eigen::Vector4d const &location_)
-    {
-      ODDetection3D::location_3d_ = location_;
-    }
-    void setLocation(cv::Mat const &location_)
-    {
-      cv::cv2eigen(location_, this->location_3d_);
-    }
+    const Eigen::Vector4d & getLocation() const;
 
-    Eigen::Matrix3Xd const &getPose() const
-    {
-      return orientation_;
-    }
+    void setLocation(const Eigen::Vector4d & location);
+    void setLocation(const cv::Mat & location);
 
-    void setPose(Eigen::Matrix3Xd const &pose_)
-    {
-      ODDetection3D::orientation_ = pose_;
-    }
-    void setPose(cv::Mat const & pose_cv)
-    {
-      this->orientation_ = Eigen::Map<Eigen::Matrix3d>(pose_cv.clone().ptr<double>());
-    }
+    const Eigen::Matrix3Xd & getPose() const;
 
-    double getScale() const
-    {
-      return scale_;
-    }
+    void setPose(const Eigen::Matrix3Xd & pose);
+    void setPose(const cv::Mat & pose_cv);
 
-    void setScale(double scale)
-    {
-      ODDetection3D::scale_ = scale;
-    }
+    double getScale() const;
+    void setScale(double scale);
 
-    cv::Mat const &getMetainfoImage() const
-    {
-      return metainfo_image_;
-    }
+    const cv::Mat & getMetainfoImage() const;
+    void setMetainfoImage(const cv::Mat & metainfo_image);
 
-    void setMetainfoImage(cv::Mat const &metainfo_image)
-    {
-      ODDetection3D::metainfo_image_ = metainfo_image;
-    }
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr & getMetainfoCluster() const;
+    void setMetainfoCluster(const pcl::PointCloud<pcl::PointXYZ>::Ptr & metainfo_cluster);
 
-    typename pcl::PointCloud<pcl::PointXYZ>::Ptr const &getMetainfoCluster() const
-    {
-      return metainfo_cluster_;
-    }
-
-    void setMetainfoCluster(typename pcl::PointCloud<pcl::PointXYZ>::Ptr const &metainfo_cluster_)
-    {
-      ODDetection3D::metainfo_cluster_ = metainfo_cluster_;
-    }
-
-    ODDetection3D(DetectionType const &type_ = OD_DETECTION_NULL, std::string const &id_ = "", double confidence_ = 1) : ODDetection(type_, id_, confidence_)
-    {
-      location_3d_ = Eigen::Vector4d::UnitW();
-      orientation_.setIdentity();
-      scale_ = 1;
-    }
-
-    void printSelf()
-    {
-      ODDetection::printSelf();
-      std::cout << "Location: " << location_3d_ << std::endl;
-      std::cout << "Pose: " << orientation_ << std::endl;
-      std::cout << "Scale: " << scale_ << std::endl;
-    }
+    void printSelf();
 
     Eigen::Vector4d location_3d_;
     Eigen::Matrix3Xd orientation_;
     double scale_;
     cv::Mat metainfo_image_;
-    typename pcl::PointCloud<pcl::PointXYZ>::Ptr metainfo_cluster_;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr metainfo_cluster_;
   };
 
   /** \brief Detection in 2D with complete information.
@@ -269,57 +167,31 @@ namespace od
   {
   public:
 
-    ODDetections (int n = 0): detections_(n)
-    {
-    }
+    ODDetections (unsigned int n = 0);
 
-    virtual ~ODDetections()
-    {
-      for (int i = 0; i < this->size(); i++)
-        delete detections_[i];
-      detections_.resize(0);
-    }
+    virtual ~ODDetections();
 
-    int size() { return detections_.size(); }
+    int size() const;
 
-    void push_back(ODDetection* detection)
-    {
-      detections_.push_back(detection);
-    }
+    void push_back(ODDetection * detection);
 
-    void append(ODDetections* detections)
-    {
-      detections_.insert(detections_.end(), detections->detections_.begin(), detections->detections_.end());
-      //note the meta information of the appended detections are lost here.
-    }
+    void append(ODDetections * detections);
 
-    ODDetection * operator[](int i) { return detections_[i]; }
-    ODDetection * at(int i) { return (*this)[i]; }
+    ODDetection * operator[](unsigned int i);
+    ODDetection * at(unsigned int i);
 
-    cv::Mat const &getMetainfoImage() const
-    {
-      return metainfo_image_;
-    }
+    const cv::Mat & getMetainfoImage() const;
+    void setMetainfoImage(const cv::Mat & metainfo_image_);
 
-    void setMetainfoImage(cv::Mat const &metainfo_image_)
-    {
-      this->metainfo_image_ = metainfo_image_.clone();
-    }
-
-    typename pcl::PointCloud<pcl::PointXYZ>::Ptr const &getMetainfoCluster() const
-    {
-      return metainfo_cluster_;
-    }
-
-    void setMetainfoCluster(typename pcl::PointCloud<pcl::PointXYZ>::Ptr const &metainfo_cluster_)
-    {
-      this->metainfo_cluster_ = metainfo_cluster_;
-    }
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr & getMetainfoCluster() const;
+    void setMetainfoCluster(const pcl::PointCloud<pcl::PointXYZ>::Ptr & metainfo_cluster);
 
   protected:
+
     std::vector<ODDetection*> detections_;
     cv::Mat metainfo_image_;
     typename pcl::PointCloud<pcl::PointXYZ>::Ptr metainfo_cluster_;
+
   };
 
 
@@ -336,29 +208,10 @@ namespace od
 
     /** \brief Draws rectangles over the input image using the bounding box information present in all the 2D detections. This is a quick function to render and verify the detections made.
       */
-    ODSceneImage renderMetainfo(ODSceneImage input)
-    {
+    ODSceneImage renderMetainfo(ODSceneImage & input);
 
-      //picking up random colors for different detection algorithm, if exist
-      /*std::map<std::string, cv::Scalar> color_map;
-      for(int i = 0; i < detections_.size(); i++)
-      {
-        if(color_map.find(detections_[i]->getId()) == color_map.end())
-         color_map[detections_[i]->getId()] = CV_RGB(rand()%255, rand()%255, rand()%255);
-      }*/
-
-      cv::Mat image = input.getCVImage().clone();
-      for(int i = 0; i < detections_.size(); i++)
-      {
-        ODDetection2D * detection = dynamic_cast<ODDetection2D *>(detections_[i]);
-        cv::rectangle(image, detection->bounding_box_2d_, getHashedColor(detections_[i]->getId(), 100), 2);
-      }
-      return ODSceneImage(image);
-    }
-
-
-    ODDetection2D * operator[](int i) { return dynamic_cast<ODDetection2D *>(detections_[i]); }
-    ODDetection2D * at(int i) { return dynamic_cast<ODDetection2D *>(detections_[i]); }
+    ODDetection2D * operator[](unsigned int i);
+    ODDetection2D * at(unsigned int i);
 
   };
 
@@ -391,8 +244,8 @@ namespace od
     }*/
 
 
-    ODDetection3D * operator[](int i) { return dynamic_cast<ODDetection3D *>(detections_[i]); }
-    ODDetection3D * at(int i) { return dynamic_cast<ODDetection3D *>(detections_[i]); }
+    ODDetection3D * operator[](unsigned int i);
+    ODDetection3D * at(unsigned int i);
   };
 
   /** \brief The container class for ODDetectionComplete returned by ODDetector2DComplete
@@ -404,8 +257,8 @@ namespace od
   {
   public:
 
-    ODDetectionComplete * operator[](int i) { return dynamic_cast<ODDetectionComplete *>(detections_[i]); }
-    ODDetectionComplete * at(int i) { return dynamic_cast <ODDetectionComplete *>(detections_[i]); }
+    ODDetectionComplete * operator[](unsigned int i);
+    ODDetectionComplete * at(unsigned int i);
   };
 
 }

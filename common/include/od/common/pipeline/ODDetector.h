@@ -29,10 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 #pragma once 
 
-#include "od/common/pipeline/ObjectDetector.h"
+#include "od/common/pipeline/ODObjectDetector.h"
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/pipeline/ODDetection.h"
-#include "od/common/pipeline/ObjectDetector.h"
 #include "od/common/pipeline/ODAlgorithmBase.h"
 
 namespace od
@@ -49,8 +48,8 @@ namespace od
   {
   public:
 
-    ODDetector(std::string const &training_data_location_) : ODDetectorCommon(training_data_location_)
-    { }
+    ODDetector(const std::string & training_data_location) : ODDetectorCommon(training_data_location)
+    {}
 
     virtual ODDetections * detect(ODScene *scene){}
     virtual ODDetections * detectOmni(ODScene *scene){}
@@ -69,7 +68,7 @@ namespace od
   class ODDetector2D: public ODDetector
   {
   public:
-    ODDetector2D(const std::string & trained_data_location_) : ODDetector(trained_data_location_)
+    ODDetector2D(const std::string & trained_data_location) : ODDetector(trained_data_location)
     { }
 
     ODDetections * detect(ODScene *scene)
@@ -103,8 +102,8 @@ namespace od
   class ODDetector3D: public ODDetector
   {
   public:
-    ODDetector3D(const std::string & trained_data_location_) : ODDetector(trained_data_location_)
-    { }
+    ODDetector3D(const std::string & trained_data_location) : ODDetector(trained_data_location)
+    {}
 
     /** \brief Function for performing detection on a segmented scene.
      * The purpose of this function is to perform detection on a segmented scene or an 'object candidate'. i.e. the entire scene is considered as an 'object' or an detection. It is possible for a scene to trigger multiple detections.
@@ -132,8 +131,8 @@ namespace od
   class ODDetector2DComplete: public ODDetector
   {
   public:
-    ODDetector2DComplete(const std::string & trained_data_location_) : ODDetector(trained_data_location_)
-    { }
+    ODDetector2DComplete(const std::string & trained_data_location) : ODDetector(trained_data_location)
+    {}
 
     /** \brief Function for performing detection on a segmented scene.
      * The purpose of this function is to perform detection on a segmented scene or an 'object candidate'. i.e. the entire scene is considered as an 'object' or an detection. It is possible for a scene to trigger multiple detections.

@@ -33,13 +33,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/global2D/detection/ODHOGDetector.h"
 #include "od/common/utils/ODFrameGenerator.h"
 
-cv::Size sizesingle(640, 480);
 
 int main(int argc, char *argv[])
 {
   std::string trained_data_dir(argv[1]), input_video(argv[2]), output_video = "output.avi";
   if (argc > 3) output_video = argv[3];
 
+  cv::Size sizesingle(640, 480);
 
   //get 3 detectors of different types
   std::vector<string> messages; 

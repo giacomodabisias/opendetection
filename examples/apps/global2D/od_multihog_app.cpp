@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global2D/detection/ODHOGDetector.h"
 #include "od/common/utils/ODFrameGenerator.h"
-
+#include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
   detectors.push_back(detector3);
 
   //init all detectors
-  for (size_t i = 0; i < detectors.size(); i++) 
+  for(size_t i = 0; i < detectors.size(); ++i) 
     detectors[i].init();
 
   //get scenes
@@ -81,10 +81,11 @@ int main(int argc, char *argv[])
     //detect 3 times
     for (size_t i = 0; i < detectors.size(); i++)
     {
-      od::ODDetections2D *detections =  detectors[i].detectOmni(scene);
+      boost::shared_ptr<od::ODDetections2D> detections =  detectors[i].detectOmni(scene);
       if(detections->size() > 0)
         images_to_show.push_back(detections->renderMetainfo(*scene).getCVImage());
-      else images_to_show.push_back(scene->getCVImage());
+      else 
+        images_to_show.push_back(scene->getCVImage());
     }
 
     cv::Mat multiimage = makeCanvasMultiImages(images_to_show, sizesingle, messages);

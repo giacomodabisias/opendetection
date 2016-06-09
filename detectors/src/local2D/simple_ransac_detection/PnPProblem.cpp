@@ -203,7 +203,7 @@ namespace od {
     }
 
     // Given the mesh, backproject the 3D points to 2D to verify the pose estimation
-    std::vector<cv::Point2f> PnPProblem::verifyPoints(Mesh * mesh)
+    std::vector<cv::Point2f> PnPProblem::verifyPoints(shared_ptr<Mesh> mesh)
     {
       std::vector<cv::Point2f> verified_points_2d;
       for(size_t i = 0; i < mesh->getNumVertices(); ++i)
@@ -305,7 +305,7 @@ namespace od {
     }
 
     // Möller–Trumbore intersection algorithm
-    bool PnPProblem::intersectMollerTrumbore(Ray & ray, Triangle & triangle, double * out)
+    bool PnPProblem::intersectMollerTrumbore(Ray & ray, Triangle & triangle, shared_ptr<double> out)
     {
       const double EPSILON = 0.000001;
 

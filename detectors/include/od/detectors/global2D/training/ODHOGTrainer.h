@@ -27,9 +27,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 13.08.15.
 //
 #pragma once
-#include <opencv2/objdetect.hpp>
+//#include <opencv2/objdetect.hpp>
 #include "od/common/pipeline/ODTrainer.h"
-#include "od/common/utils/utils.h"
+//#include "od/common/utils/utils.h"
 
 namespace od
 {
@@ -48,6 +48,7 @@ namespace od
     {
 
     public:
+
       ODHOGTrainer(const std::string & training_input_location_ = "", const std::string & trained_data_location_ = "", 
                    const cv::Size & win_size = cv::Size(64,128), const cv::Size & block_size = cv::Size(16,16), 
                    const cv::Size & block_stride = cv::Size(8,8), const cv::Size & cell_size = cv::Size(8,8), float hits_threshold = 0.0);
@@ -219,6 +220,7 @@ namespace od
       std::string svm_model_hard_;
       std::string descriptor_vector_file_;
       std::string descriptor_vector_hard_;
+      
     };
     /** \example objectdetector/od_hog_train.cpp
      */

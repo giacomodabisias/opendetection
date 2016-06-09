@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global2D/ODFaceRecognizer.h"
 #include "od/common/utils/ODFrameGenerator.h"
+#include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
     od::ODSceneImage * scene = frameGenerator.getNextFrame();
 
     //Detect
-    od::ODDetections *detections =  objdetector.detect(scene);
+    boost::shared_ptr<od::ODDetections> detections =  objdetector.detect(scene);
     (*detections)[0]->printSelf();
 
     cv::imshow("Overlay", scene->getCVImage());

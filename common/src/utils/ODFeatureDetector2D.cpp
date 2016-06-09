@@ -92,9 +92,9 @@ namespace od
     memcpy(siftImage, grey.data, image.rows * image.cols);
   }
 
-  void ODFeatureDetector2D::findSiftGPUDescriptors_(cv::Mat const &image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
+  void ODFeatureDetector2D::findSiftGPUDescriptors_(const cv::Mat & image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
-    unsigned char *data = image.data;
+    unsigned char * data = image.data;
     cv::Mat greyimage;
     if(image.type() != CV_8U) {
       cv::cvtColor(image, greyimage, cv::COLOR_BGR2GRAY);
@@ -129,7 +129,7 @@ namespace od
 
   }
 
-  void ODFeatureDetector2D::findSiftGPUDescriptors(cv::Mat const &image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
+  void ODFeatureDetector2D::findSiftGPUDescriptors(const cv::Mat & image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
     unsigned char *data = image.data;
     cv::Mat greyimage;
@@ -165,9 +165,9 @@ namespace od
 
   }
 
-  void ODFeatureDetector2D::findSiftGPUDescriptors(const char * image_name, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
+  void ODFeatureDetector2D::findSiftGPUDescriptors(const std::string & image_name, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
-    sift_gpu_->RunSIFT(image_name);
+    sift_gpu_->RunSIFT(image_name.c_str());
 
     int nFeat = sift_gpu_->GetFeatureNum();//get feature count
     //allocate memory for readback
@@ -193,7 +193,7 @@ namespace od
     cv::Mat image = cv::imread(image_name);
   }
 
-  void ODFeatureDetector2D::computeAndSave(const cv::Mat & image, const std::string &path)
+  void ODFeatureDetector2D::computeAndSave(const cv::Mat & image, const std::string & path)
   {
     cv::Mat descriptors;
     std::vector<cv::KeyPoint> keypoints;

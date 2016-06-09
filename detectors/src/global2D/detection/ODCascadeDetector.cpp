@@ -47,11 +47,10 @@ namespace od
 
     void ODCascadeDetector::init()
     {
-      haar_cascade_ = std::make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(),
-                                                                                        TRAINED_DATA_ID_));
+      haar_cascade_ = make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_));
     }
 
-    ODDetections2D * ODCascadeDetector::detectOmni(ODSceneImage * scene)
+    shared_ptr<ODDetections2D> ODCascadeDetector::detectOmni(shared_ptr<ODSceneImage> scene)
     {
       cv::Mat gray;
       cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
@@ -60,7 +59,7 @@ namespace od
       haar_cascade_->detectMultiScale(gray, faces, scale_factor_, min_neighbors_, 0, min_size_, max_size_);
 
       //always create detections
-      ODDetections2D  * detections = new ODDetections2D;
+      shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
       cv::Mat viz = scene->getCVImage().clone();
       cv::Rect face_i;
       for(size_t i = 0; i < faces.size(); ++i)
@@ -68,7 +67,7 @@ namespace od
         // Process face by face:
         face_i = faces[i];
 
-        ODDetection2D * detection2D = new ODDetection2D(ODDetection::OD_DETECTION_CLASS, "FACE", 1);
+        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>(ODDetection::OD_DETECTION_CLASS, "FACE", 1);
         detection2D->setBoundingBox(face_i);
         detections->push_back(detection2D);
 
@@ -82,10 +81,10 @@ namespace od
       return detections;
     }
 
-    ODDetections * ODCascadeDetector::detect(ODSceneImage * scene)
+    shared_ptr<ODDetections> ODCascadeDetector::detect(shared_ptr<ODSceneImage> scene)
     {
       //always create detections
-      ODDetections * detections = new ODDetections;
+      shared_ptr<ODDetections> detections = make_shared<ODDetections>();
 
       cv::Mat gray;
       cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
@@ -98,7 +97,7 @@ namespace od
       haar_cascade_->detectMultiScale(gray, faces, 5, min_neighbors_, 0, gray.size(), gray.size());
       if(faces.size() > 0)
       {
-        detections->push_back(new ODDetection(ODDetection::OD_DETECTION_CLASS, "FACE", 1));
+        detections->push_back(make_shared<ODDetection>(ODDetection::OD_DETECTION_CLASS, "FACE", 1));
       }
       return detections;
     }

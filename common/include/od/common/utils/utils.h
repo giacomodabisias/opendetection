@@ -52,7 +52,7 @@ namespace od
     */
   cv::Mat makeCanvasMultiImages(const std::vector<cv::Mat> & imgs, const cv::Size & cellSize, const std::vector<std::string> & messages);
 
-  cv::Scalar getHashedColor(const std::string & name, int offset);
+  cv::Scalar getHashedColor(const std::string & name, int offset = 100);
 
   std::string getTexfileinObj(const std::string & objfilename);
 

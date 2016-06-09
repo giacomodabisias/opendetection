@@ -131,10 +131,10 @@ namespace od
 
     virtual int train() = 0;
 
-    virtual int detect(ODScene * scene, const std::vector<ODDetection *> & detections) {}
+    virtual int detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections) {}
 
-    virtual ODDetection * detect(ODScene * scene) {}
-    virtual ODDetections * detectOmni(ODScene * scene) {}
+    virtual shared_ptr<ODDetection> detect(shared_ptr<ODScene> scene) {}
+    virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene) {}
 
   protected:
 

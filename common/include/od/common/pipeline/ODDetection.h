@@ -28,13 +28,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 12.06.15.
 //
 #pragma once
-
 #include "od/common/utils/utils.h"
 #include "od/common/pipeline/ODScene.h"
+#include "od/common/utils/ODShared_pointers.h"
+
 #include <Eigen/Core>
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc.hpp>
-#include "od/common/utils/shared_pointers.h"
 
 namespace od
 {
@@ -56,7 +56,7 @@ namespace od
 
     virtual ~ODDetection() {}
 
-    ODDetection(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1);
+    ODDetection(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1.0);
 
     void printSelf();
 
@@ -75,9 +75,11 @@ namespace od
     void setConfidence(double confidence);
 
   private:
+
     DetectionType type_;
     std::string id_;
     double confidence_;
+
   };
 
   /** \brief Detection for 2D with 2D location information
@@ -91,7 +93,7 @@ namespace od
 
     virtual ~ODDetection2D(){}
 
-    ODDetection2D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1);
+    ODDetection2D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1.0);
 
     const Eigen::Vector3d & getLocation() const;
 
@@ -107,6 +109,7 @@ namespace od
     Eigen::Vector3d location_2d_;
     cv::Rect bounding_box_2d_;
     cv::Mat metainfo_image_;
+
   };
 
   /** \brief Detection in 3D with 3D location information.
@@ -117,9 +120,10 @@ namespace od
   class ODDetection3D : public virtual ODDetection
   {
   public:
+
     virtual ~ODDetection3D(){}
 
-    ODDetection3D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1);
+    ODDetection3D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1.0);
 
     const Eigen::Vector4d & getLocation() const;
 
@@ -147,6 +151,7 @@ namespace od
     double scale_;
     cv::Mat metainfo_image_;
     pcl::PointCloud<pcl::PointXYZ>::Ptr metainfo_cluster_;
+
   };
 
   /** \brief Detection in 2D with complete information.
@@ -173,12 +178,12 @@ namespace od
 
     int size() const;
 
-    void push_back(ODDetection * detection);
+    void push_back(shared_ptr<ODDetection> detection);
 
-    void append(ODDetections * detections);
+    void append(shared_ptr<ODDetections> detections);
 
-    ODDetection * operator[](unsigned int i);
-    ODDetection * at(unsigned int i);
+    shared_ptr<ODDetection> operator[](unsigned int i);
+    shared_ptr<ODDetection> at(unsigned int i);
 
     const cv::Mat & getMetainfoImage() const;
     void setMetainfoImage(const cv::Mat & metainfo_image_);
@@ -188,7 +193,7 @@ namespace od
 
   protected:
 
-    std::vector<ODDetection*> detections_;
+    std::vector<shared_ptr<ODDetection>> detections_;
     cv::Mat metainfo_image_;
     typename pcl::PointCloud<pcl::PointXYZ>::Ptr metainfo_cluster_;
 
@@ -210,8 +215,8 @@ namespace od
       */
     ODSceneImage renderMetainfo(ODSceneImage & input);
 
-    ODDetection2D * operator[](unsigned int i);
-    ODDetection2D * at(unsigned int i);
+    shared_ptr<ODDetection2D> operator[](unsigned int i);
+    shared_ptr<ODDetection2D> at(unsigned int i);
 
   };
 
@@ -244,8 +249,8 @@ namespace od
     }*/
 
 
-    ODDetection3D * operator[](unsigned int i);
-    ODDetection3D * at(unsigned int i);
+    shared_ptr<ODDetection3D> operator[](unsigned int i);
+    shared_ptr<ODDetection3D> at(unsigned int i);
   };
 
   /** \brief The container class for ODDetectionComplete returned by ODDetector2DComplete
@@ -257,8 +262,8 @@ namespace od
   {
   public:
 
-    ODDetectionComplete * operator[](unsigned int i);
-    ODDetectionComplete * at(unsigned int i);
+    shared_ptr<ODDetectionComplete>  operator[](unsigned int i);
+    shared_ptr<ODDetectionComplete> at(unsigned int i);
   };
 
 }

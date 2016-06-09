@@ -39,7 +39,7 @@ namespace od {
       void setDescriptorMatcher(const cv::Ptr<cv::DescriptorMatcher> & match) {  matcher_ = match; }
 
       // Compute the keypoints of an image
-      void computeKeyPoints( const cv::Mat& image, std::vector<cv::KeyPoint> & keypoints);
+      void computeKeyPoints( const cv::Mat & image, std::vector<cv::KeyPoint> & keypoints);
 
       // Compute the descriptors of an image given its keypoints
       void computeDescriptors( const cv::Mat & image, std::vector<cv::KeyPoint> & keypoints, cv::Mat & descriptors);
@@ -68,8 +68,8 @@ namespace od {
                            std::vector<cv::KeyPoint> & keypoints_frame,
                            const cv::Mat & descriptors_model );
 
-      void findFeatureAndMatch(cv::Mat const & frame, std::vector<cv::DMatch> & good_matches, std::vector<cv::KeyPoint> & keypoints_frame,
-                               cv::Mat const & descriptors_model);
+      void findFeatureAndMatch(const cv::Mat & frame, std::vector<cv::DMatch> & good_matches, std::vector<cv::KeyPoint> & keypoints_frame,
+                               const cv::Mat & descriptors_model);
 
       void match(const cv::Mat & descriptors_frame, const cv::Mat & descriptors_model, std::vector<cv::DMatch> & good_matches);
 
@@ -80,8 +80,8 @@ namespace od {
 
     private:
 
-      void instantiateMatcher(Model const & feature_type, bool use_gpu);
-      void instantiateMatcher1(Model const & model, bool use_gpu);
+      void instantiateMatcher(const Model & feature_type, bool use_gpu);
+      void instantiateMatcher1(const Model & model, bool use_gpu);
 
       // pointer to the feature point detector object
       cv::Ptr<od::ODFeatureDetector2D> featureDetector_;

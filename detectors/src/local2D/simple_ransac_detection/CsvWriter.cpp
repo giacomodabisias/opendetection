@@ -5,14 +5,14 @@ namespace od {
   namespace l2d {
 
     CsvWriter::CsvWriter(const std::string & path, const std::string & separator){
-      _file_.open(path.c_str(), std::ofstream::out);
-      _is_first_term_ = true;
-      _separator_ = separator;
+      file_.open(path.c_str(), std::ofstream::out);
+      is_first_term_ = true;
+      separator_ = separator;
     }
 
     CsvWriter::~CsvWriter() {
-      _file_.flush();
-      _file_.close();
+      file_.flush();
+      file_.close();
     }
 
     void CsvWriter::writeXYZ(const std::vector<cv::Point3f> & list_points3d)
@@ -24,7 +24,7 @@ namespace od {
         y = std::to_string(list_points3d[i].y);
         z = std::to_string(list_points3d[i].z);
 
-        _file_ << x << _separator_ << y << _separator_ << z << std::endl;
+        file_ << x << separator_ << y << separator_ << z << std::endl;
       }
 
     }
@@ -40,14 +40,14 @@ namespace od {
         y = std::to_string(list_points3d[i].y);
         z = std::to_string(list_points3d[i].z);
 
-        _file_ << u << _separator_ << v << _separator_ << x << _separator_ << y << _separator_ << z;
+        file_ << u << separator_ << v << separator_ << x << separator_ << y << separator_ << z;
 
         for(size_t j = 0; j < 32; ++j)
         {
           descriptor_str = std::to_string(descriptors.at<float>(i,j));
-          _file_ << _separator_ << descriptor_str;
+          file_ << separator_ << descriptor_str;
         }
-        _file_ << std::endl;
+        file_ << std::endl;
       }
     }
 

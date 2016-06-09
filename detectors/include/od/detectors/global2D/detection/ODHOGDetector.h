@@ -76,10 +76,10 @@ namespace od
 
       void setSVMDetector(std::vector<float> svm_detector);
 
-      ODDetections2D * detectOmni(ODSceneImage * scene);
-      ODDetections * detect(ODSceneImage * scene);
+      shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
+      shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
 
-      int detect(ODScene * scene, std::vector<ODDetection *> & detections);
+      int detect(shared_ptr<ODScene> scene, std::vector<shared_ptr<ODDetection> > & detections);
 
       void setTrainedDataLocation(const std::string & trained_data_location);
 

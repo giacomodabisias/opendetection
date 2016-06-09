@@ -35,8 +35,8 @@ namespace od {
       cv::Point3f getNearest3DPoint(std::vector<cv::Point3f> & points_list, const cv::Point3f & origin);
         
       bool backproject2DPoint(const Mesh * mesh, const cv::Point2f & point2d, cv::Point3f & point3d);
-      bool intersectMollerTrumbore(Ray & ray, Triangle & Triangle, double * out);
-      std::vector<cv::Point2f> verifyPoints(Mesh * mesh);
+      bool intersectMollerTrumbore(Ray & ray, Triangle & Triangle, shared_ptr<double> out);
+      std::vector<cv::Point2f> verifyPoints(shared_ptr<Mesh> mesh);
       cv::Point2f backproject3DPoint(const cv::Point3f & point3d);
       bool estimatePose(const std::vector<cv::Point3f> & list_points3d, const std::vector<cv::Point2f> & list_points2d, int flags);
       void estimatePoseRANSAC(const std::vector<cv::Point3f> & list_points3d, const std::vector<cv::Point2f> & list_points2d,

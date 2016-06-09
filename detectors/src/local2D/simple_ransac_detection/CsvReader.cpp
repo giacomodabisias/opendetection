@@ -5,9 +5,9 @@ namespace od {
   namespace l2d {
 
         /** The default constructor of the CSV reader Class */
-        CsvReader::CsvReader(const std::string & path, const char & separator){
-            _file_.open(path.c_str(), std::ifstream::in);
-            _separator_ = separator;
+        CsvReader::CsvReader(const std::string & path, const std::string & separator){
+            file_.open(path.c_str(), std::ifstream::in);
+            separator_ = separator;
         }
 
         /* Read a plane text file with .ply format */
@@ -20,16 +20,16 @@ namespace od {
             bool end_vertex = false;
 
             // Read the whole *.ply file
-            while(getline(_file_, line)) {
+            while(getline(file_, line)) {
                 std::stringstream liness(line);
 
             // read header
             if(!end_header)
             {
-                getline(liness, tmp_str, _separator_);
+                getline(liness, tmp_str, separator_.c_str());
                 if(tmp_str == "element")
                 {
-                    getline(liness, tmp_str, _separator_);
+                    getline(liness, tmp_str, separator_.c_str());
                     getline(liness, n);
                     if(tmp_str == "vertex") 
                         num_vertex = std::stoi(n);
@@ -47,7 +47,7 @@ namespace od {
                  if(!end_vertex && count < num_vertex)
                  {
                      std::string x, y, z;
-                     getline(liness, x, _separator_);
+                     getline(liness, x, separator_.c_str());
                      getline(liness, y, _separator_);
                      getline(liness, z);
 

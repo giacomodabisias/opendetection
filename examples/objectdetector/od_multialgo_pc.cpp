@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
 #include "common/utils/ODFrameGenerator.h"
 #include <string>
+#include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -53,7 +54,7 @@ int main(int argc, char *argv[])
   detector.init();
 
   //GUI and feedback
-  od::ODScenePointCloud<pcl::PointXYZRGBA> *frame;
+  od::ODScenePointCloud<pcl::PointXYZRGBA> * frame;
 
   pcl::visualization::PCLVisualizer vis ("kinect");
   size_t previous_cluster_size = 0;
@@ -69,7 +70,7 @@ int main(int argc, char *argv[])
     //remove previous point clouds and text and add new ones in the visualizer
     vis.removePointCloud ("frame");
     vis.addPointCloud<pcl::PointXYZRGBA> (frame->getPointCloud(), "frame");
-    for (size_t i = 0; i < previous_cluster_size; i++)
+    for(size_t i = 0; i < previous_cluster_size; ++i)
     {
       cluster_name << "cluster_" << i;
       vis.removePointCloud (cluster_name.str ());
@@ -83,10 +84,10 @@ int main(int argc, char *argv[])
 
     //Detect
 
-    od::ODDetections3D * detections = detector->detectOmni(frame);
+    boost::shared_ptr<od::ODDetections3D> detections = detector->detectOmni(frame);
 
     //add all the detections in the visualizer with its id as text
-    for (size_t i = 0; i < detections->size (); i++)
+    for(size_t i = 0; i < detections->size (); ++i)
     {
       cluster_name << "cluster_" << i;
       pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZ> random_handler (detections->at(i)->getMetainfoCluster());
@@ -99,6 +100,7 @@ int main(int argc, char *argv[])
       vis.addText3D (detections->at(i)->getId(), pos, 0.015f, 1, 0, 1, cluster_name.str() + "_txt", 0);
       cluster_name.str(std::string());
     }
+
     previous_cluster_size = detections->size ();
 
     vis.spinOnce ();

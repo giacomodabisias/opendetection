@@ -33,9 +33,9 @@ namespace od
 
       void init();
 
-      ODDetections * detect(ODScenePointCloud<PointT> * scene);
+      shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
 
-      ODDetections3D * detectOmni(ODScenePointCloud<PointT> * scene);
+      shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene);
 
       int getNN() const
       {
@@ -58,9 +58,10 @@ namespace od
       }
 
     protected:
+
       int NN;
       std::string desc_name_;
-      boost::shared_ptr<pcl::rec_3d_framework::GlobalClassifier<pcl::PointXYZ> > global_;
+      shared_ptr<pcl::rec_3d_framework::GlobalClassifier<pcl::PointXYZ> > global_;
 
     };
 
@@ -68,16 +69,16 @@ namespace od
     void ODCADDetector3DGlobal<PointT>::init()
     {
 
-      boost::shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source(new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>);
+      shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source(new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>);
       mesh_source->setPath(this->training_input_location_);
       std::string training_dir_specific = this->getSpecificTrainingDataLocation();
       mesh_source->setModelScale(1.f);
       mesh_source->generate(training_dir_specific);
 
-      boost::shared_ptr<pcl::rec_3d_framework::Source<pcl::PointXYZ> > cast_source;
-      cast_source = boost::static_pointer_cast<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> >(mesh_source);
+      shared_ptr<pcl::rec_3d_framework::Source<pcl::PointXYZ> > cast_source;
+      cast_source = dynamic_pointer_cast<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> >(mesh_source);
 
-      boost::shared_ptr<pcl::rec_3d_framework::PreProcessorAndNormalEstimator<pcl::PointXYZ, pcl::Normal> > normal_estimator;
+      shared_ptr<pcl::rec_3d_framework::PreProcessorAndNormalEstimator<pcl::PointXYZ, pcl::Normal> > normal_estimator;
       normal_estimator.reset(new pcl::rec_3d_framework::PreProcessorAndNormalEstimator<pcl::PointXYZ, pcl::Normal>);
       normal_estimator->setCMR(true);
       normal_estimator->setDoVoxelGrid(true);
@@ -86,15 +87,15 @@ namespace od
 
       if(desc_name_.compare("vfh") == 0)
       {
-        boost::shared_ptr<pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> > vfh_estimator;
+        shared_ptr<pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> > vfh_estimator;
         vfh_estimator.reset(new pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308>);
         vfh_estimator->setNormalEstimator(normal_estimator);
 
-        boost::shared_ptr<pcl::rec_3d_framework::GlobalEstimator<pcl::PointXYZ, pcl::VFHSignature308> > cast_estimator;
-        cast_estimator = boost::dynamic_pointer_cast<pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> >(
+        shared_ptr<pcl::rec_3d_framework::GlobalEstimator<pcl::PointXYZ, pcl::VFHSignature308> > cast_estimator;
+        cast_estimator = dynamic_pointer_cast<pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> >(
             vfh_estimator);
 
-        boost::shared_ptr<pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::VFHSignature308> > global(
+        shared_ptr<pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::VFHSignature308> > global(
             new pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::VFHSignature308>());
         global->setDataSource(cast_source);
         global->setTrainingDir(training_dir_specific);
@@ -106,15 +107,15 @@ namespace od
 
       } else if(desc_name_.compare("cvfh") == 0)
       {
-        boost::shared_ptr<pcl::rec_3d_framework::CVFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> > vfh_estimator;
+        shared_ptr<pcl::rec_3d_framework::CVFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> > vfh_estimator;
         vfh_estimator.reset(new pcl::rec_3d_framework::CVFHEstimation<pcl::PointXYZ, pcl::VFHSignature308>);
         vfh_estimator->setNormalEstimator(normal_estimator);
 
-        boost::shared_ptr<pcl::rec_3d_framework::GlobalEstimator<pcl::PointXYZ, pcl::VFHSignature308> > cast_estimator;
-        cast_estimator = boost::dynamic_pointer_cast<pcl::rec_3d_framework::CVFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> >(
+        shared_ptr<pcl::rec_3d_framework::GlobalEstimator<pcl::PointXYZ, pcl::VFHSignature308> > cast_estimator;
+        cast_estimator = dynamic_pointer_cast<pcl::rec_3d_framework::CVFHEstimation<pcl::PointXYZ, pcl::VFHSignature308> >(
             vfh_estimator);
 
-        boost::shared_ptr<pcl::rec_3d_framework::GlobalNNPipeline<Metrics::HistIntersectionUnionDistance, pcl::PointXYZ, pcl::VFHSignature308> > global(
+        shared_ptr<pcl::rec_3d_framework::GlobalNNPipeline<Metrics::HistIntersectionUnionDistance, pcl::PointXYZ, pcl::VFHSignature308> > global(
           new pcl::rec_3d_framework::GlobalNNPipeline<Metrics::HistIntersectionUnionDistance, pcl::PointXYZ, pcl::VFHSignature308>());
         global->setDataSource(cast_source);
         global->setTrainingDir(training_dir_specific);
@@ -125,14 +126,14 @@ namespace od
         global_ = global;
       } else if(desc_name_.compare("esf") == 0)
       {
-        boost::shared_ptr<pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640> > estimator;
+        shared_ptr<pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640> > estimator;
         estimator.reset(new pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640>);
 
-        boost::shared_ptr<pcl::rec_3d_framework::GlobalEstimator<pcl::PointXYZ, pcl::ESFSignature640> > cast_estimator;
-        cast_estimator = boost::dynamic_pointer_cast<pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640> >(
+        shared_ptr<pcl::rec_3d_framework::GlobalEstimator<pcl::PointXYZ, pcl::ESFSignature640> > cast_estimator;
+        cast_estimator = dynamic_pointer_cast<pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640> >(
             estimator);
 
-        boost::shared_ptr<pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::ESFSignature640> > global(
+        shared_ptr<pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::ESFSignature640> > global(
             new pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::ESFSignature640>());
         global->setDataSource(cast_source);
         global->setTrainingDir(training_dir_specific);
@@ -149,9 +150,9 @@ namespace od
     }
 
     template<typename PointT>
-    ODDetections3D * ODCADDetector3DGlobal<PointT>::detectOmni(ODScenePointCloud<PointT> * scene)
+    shared_ptr<ODDetections3D> ODCADDetector3DGlobal<PointT>::detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene)
     {
-      ODDetections3D * detections = new ODDetections3D;
+      shared_ptr<ODDetections3D> detections = make_shared<ODDetections3D>();
 
 
       typename pcl::PointCloud<PointT>::Ptr frame;
@@ -201,7 +202,7 @@ namespace od
         //position at 3D identified!
 
         //now fill up the detection:
-        ODDetection3D *detection = new ODDetection3D;
+        shared_ptr<ODDetection3D> detection = make_shared<ODDetection3D>();
         detection->setType(ODDetection::OD_DETECTION_CLASS);
         detection->setId(categories[0]);
         detection->setLocation(centroid);
@@ -213,9 +214,9 @@ namespace od
     }
 
     template<typename PointT>
-    ODDetections * ODCADDetector3DGlobal<PointT>::detect(ODScenePointCloud<PointT> * scene)
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<PointT>::detect(shared_ptr<ODScenePointCloud<PointT> > scene)
     {
-      ODDetections * detections = new ODDetections;
+      shared_ptr<ODDetections> detections = make_shared<ODDetections>();
 
       typename pcl::PointCloud<PointT>::Ptr frame;
       float Z_DIST_ = 1.25f;
@@ -238,7 +239,7 @@ namespace od
       std::string category = categories[0];
 
       //now fill up the detection:
-      ODDetection * detection = new ODDetection3D(ODDetection::OD_DETECTION_CLASS, categories[0], conf[0]);
+     shared_ptr<ODDetection> detection = make_shared<ODDetection3D>(ODDetection::OD_DETECTION_CLASS, categories[0], conf[0]);
       detections->push_back(detection);
 
       return detections;

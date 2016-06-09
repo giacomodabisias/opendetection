@@ -27,9 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 16.06.15.
 //
 #pragma once
-
-#include "od/common/pipeline/ODDetector.h"
-#include "od/common/pipeline/ODTrainer.h"
 #include "od/detectors/global3D/training/ODCADDetectTrainer3DGlobal.h"
 #include "od/detectors/global3D/detection/ODCADDetector3DGlobal.hpp"
 
@@ -49,13 +46,13 @@ namespace od
 
       void init(){}
       int train();
-      int detect(ODScene * scene, std::vector<ODDetection *> detections);
+      int detect(shared_ptr<ODScene> scene, std::vector<shared_ptr<ODDetection>> & detections);
 
     protected:
       
       std::string desc_name_;
-      ODCADDetectTrainer3DGlobal * trainer_;
-      ODCADDetector3DGlobal<pcl::PointXYZ> * detector_;
+      shared_ptr<ODCADDetectTrainer3DGlobal> trainer_;
+      shared_ptr<ODCADDetector3DGlobal<pcl::PointXYZ> > detector_;
     };
   }
 }

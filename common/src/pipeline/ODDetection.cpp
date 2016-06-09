@@ -164,8 +164,6 @@ namespace od
 
  	ODDetections::~ODDetections()
 	{
-	  for(size_t i = 0; i < size(); ++i)
-	    delete detections_[i];
 	  detections_.resize(0);
 	}
 
@@ -174,24 +172,24 @@ namespace od
 		return detections_.size(); 
 	}
 
-	void ODDetections::push_back(ODDetection * detection)
+	void ODDetections::push_back(shared_ptr<ODDetection> detection)
 	{
 		detections_.push_back(detection);
 	}
 
-	void ODDetections::append(ODDetections * detections)
+	void ODDetections::append(shared_ptr<ODDetections> detections)
 	{
 		detections_.insert(detections_.end(), detections->detections_.begin(), detections->detections_.end());
 	}
 
-	ODDetection * ODDetections::operator[](unsigned int i)
+	shared_ptr<ODDetection> ODDetections::operator[](unsigned int i)
 	{
 		return detections_[i]; 
 	}
 	
-	ODDetection * ODDetections::at(unsigned int i)
+	shared_ptr<ODDetection> ODDetections::at(unsigned int i)
 	{
-		return (*this)[i]; 
+		return detections_[i]; 
 	}
 
 	const cv::Mat & ODDetections::getMetainfoImage() const
@@ -229,7 +227,7 @@ namespace od
 	  cv::Mat image = input.getCVImage().clone();
 	  for(size_t i = 0; i < detections_.size(); ++i)
 	  {
-	    ODDetection2D * detection = dynamic_cast<ODDetection2D *>(detections_[i]);
+	    shared_ptr<ODDetection2D> detection = dynamic_pointer_cast<ODDetection2D>(detections_[i]);
 	    if(detection)
 	    	cv::rectangle(image, detection->bounding_box_2d_, getHashedColor(detections_[i]->getId(), 100), 2);
 	  }
@@ -237,36 +235,36 @@ namespace od
 	}
 
 
-	ODDetection2D * ODDetections2D::operator[](unsigned int i)
+	shared_ptr<ODDetection2D> ODDetections2D::operator[](unsigned int i)
 	{
-	 	return dynamic_cast<ODDetection2D *>(detections_[i]); 
+	 	return dynamic_pointer_cast<ODDetection2D>(detections_[i]); 
 	}
 
-	ODDetection2D * ODDetections2D::at(unsigned int i)
+	shared_ptr<ODDetection2D> ODDetections2D::at(unsigned int i)
 	{ 
-	 	return dynamic_cast<ODDetection2D *>(detections_[i]); 
+	 	return dynamic_pointer_cast<ODDetection2D>(detections_[i]); 
 	}
 
 
-	ODDetection3D * ODDetections3D::operator[](unsigned int i)
+	shared_ptr<ODDetection3D> ODDetections3D::operator[](unsigned int i)
 	{ 
-		return dynamic_cast<ODDetection3D *>(detections_[i]); 
+		return dynamic_pointer_cast<ODDetection3D>(detections_[i]); 
 	}
 
-	ODDetection3D * ODDetections3D::at(unsigned int i) 
+	shared_ptr<ODDetection3D> ODDetections3D::at(unsigned int i) 
 	{
-		return dynamic_cast<ODDetection3D *>(detections_[i]); 
+		return dynamic_pointer_cast<ODDetection3D>(detections_[i]); 
 	}
 
 
-	ODDetectionComplete * ODDetectionsComplete::operator[](unsigned int i) 
+	shared_ptr<ODDetectionComplete> ODDetectionsComplete::operator[](unsigned int i) 
 	{ 
-		return dynamic_cast<ODDetectionComplete *>(detections_[i]); 
+		return dynamic_pointer_cast<ODDetectionComplete>(detections_[i]); 
 	}
 
-	ODDetectionComplete * ODDetectionsComplete::at(unsigned int i) 
+	shared_ptr<ODDetectionComplete> ODDetectionsComplete::at(unsigned int i) 
 	{ 
-		return dynamic_cast <ODDetectionComplete *>(detections_[i]); 
+		return dynamic_pointer_cast<ODDetectionComplete>(detections_[i]); 
 	}
 
 

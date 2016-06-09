@@ -34,13 +34,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/utils/utils.h"
 #include "od/common/utils/ODFeatureDetector2D.h"
+#include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
+#include "od/detectors/local2D/simple_ransac_detection/Model.h"
+#include "od/detectors/local2D/simple_ransac_detection/PnPProblem.h"
+#include "od/detectors/local2D/simple_ransac_detection/RobustMatcher.h"
+#include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
+#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
+#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 
 #include <iostream>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/utility.hpp>
-#include <opencv2/calib3d.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/video/tracking.hpp>
+#include <opencv2/xfeatures2d.hpp>
+#include <opencv2/viz.hpp>
 
-#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 
 namespace od
 {
@@ -104,12 +116,12 @@ namespace od
 
       void init();
 
-      ODDetections * detect(ODSceneImage * scene);
-      ODDetections3D * detectOmni(ODSceneImage * scene);
+      shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
+      shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODSceneImage> scene);
 
     protected:
 
-      bool detectSingleModel(ODSceneImage * scene, const Model & model, ODDetection3D * detection3D, const cv::Mat & frame_viz);
+      bool detectSingleModel(shared_ptr<ODSceneImage> scene, const Model & model, shared_ptr<ODDetection3D> & detection3D, const cv::Mat & frame_viz);
 
       std::string camera_intrinsic_file_;      
 
@@ -141,7 +153,7 @@ namespace od
       std::vector<Model> models_;
       PnPProblem pnp_detection_;
       std::string f_type_default_;
-      std::shared_ptr<ODFeatureDetector2D> feature_detector_;
+      shared_ptr<ODFeatureDetector2D> feature_detector_;
 
     };
     /** \example objectdetector/od_image_cadrecog_camera.cpp

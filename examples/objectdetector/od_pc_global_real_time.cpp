@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
 #include "od/common/utils/ODFrameGenerator.h"
 #include <string>
+#include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
   detector.init();
 
   //GUI and feedback
-  od::ODScenePointCloud<pcl::PointXYZRGBA> *frame;
+  od::ODScenePointCloud<pcl::PointXYZRGBA> * frame;
 
   pcl::visualization::PCLVisualizer vis ("kinect");
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_DEVICE> frameGenerator;
@@ -78,10 +79,10 @@ int main(int argc, char *argv[])
     vis.addPointCloud<pcl::PointXYZRGBA> (frame->getPointCloud(), "frame");
 
     //Detect
-    od::ODDetections3D * detections = detector.detectOmni(frame);
+    boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(frame);
 
     //add all the detections in the visualizer with its id as text
-    for (size_t i = 0; i < detections->size (); i++)
+    for(size_t i = 0; i < detections->size(); ++i)
     {
       pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZ> random_handler (detections->at(i)->getMetainfoCluster());
       vis.addPointCloud<pcl::PointXYZ> (detections->at(i)->getMetainfoCluster(), random_handler, "cluster_" + i);

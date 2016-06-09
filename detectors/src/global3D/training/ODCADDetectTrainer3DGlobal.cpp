@@ -29,23 +29,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global3D/training/ODCADDetectTrainer3DGlobal.h"
 
-#include <pcl/pcl_macros.h>
-#include <pcl/apps/3d_rec_framework/pipeline/global_nn_classifier.h>
-#include <pcl/apps/3d_rec_framework/pc_source/mesh_source.h>
-#include <pcl/apps/3d_rec_framework/feature_wrapper/global/vfh_estimator.h>
-#include <pcl/apps/3d_rec_framework/feature_wrapper/global/esf_estimator.h>
-#include <pcl/apps/3d_rec_framework/feature_wrapper/global/cvfh_estimator.h>
-#include <pcl/apps/3d_rec_framework/utils/metrics.h>
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/apps/dominant_plane_segmentation.h>
-#include <pcl/console/parse.h>
-
 namespace od {
 
   namespace g3d {
 
-    ODCADDetectTrainer3DGlobal::ODCADDetectTrainer3DGlobal(const std::string & training_input_location_, const std::string & training_data_location_) : 
-                               ODTrainer(training_input_location_, training_data_location_)
+    ODCADDetectTrainer3DGlobal::ODCADDetectTrainer3DGlobal(const std::string & training_input_location_, const std::string & training_data_location_): 
+                                                           ODTrainer(training_input_location_, training_data_location_)
     {
       desc_name_ = "esf";
       TRAINED_LOCATION_DENTIFIER_ = "GLOBAL3DVFH";
@@ -54,7 +43,8 @@ namespace od {
 
     int ODCADDetectTrainer3DGlobal::train()
     {
-      boost::shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source(new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>);
+      shared_ptr<pcl::rec_3d_framework::MeshSource<pcl::PointXYZ> > mesh_source(new pcl::rec_3d_framework::MeshSource<pcl::PointXYZ>());
+
       mesh_source->setPath(training_input_location_);
       mesh_source->setResolution(150);
       mesh_source->setTesselationLevel(1);
@@ -63,6 +53,7 @@ namespace od {
       mesh_source->setModelScale(1.f);
       std::string location = getSpecificTrainingDataLocation();
       mesh_source->generate(location);
+      
       return 1;
     }
 

@@ -9,7 +9,6 @@ if(build)
 
     set(SOURCES
         "ODPointCloudGlobalMatching.cpp"
-        "detection/ODCADDetector3DGlobal.cpp"
         "training/ODCADDetectTrainer3DGlobal.cpp"
         )
 

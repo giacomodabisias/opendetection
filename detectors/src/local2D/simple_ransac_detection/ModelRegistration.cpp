@@ -38,7 +38,7 @@ namespace od {
 
     bool ModelRegistration::isRegistrable() const 
     {
-      return (n_registrations_ < max_registrations_); 
+      return n_registrations_ < max_registrations_; 
     }
 
     ModelRegistration::ModelRegistration()

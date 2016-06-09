@@ -27,8 +27,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 16.06.15.
 //
 #pragma once
-#include "od/common/pipeline/ODTrainer.h"
 #include <iostream>
+#include <pcl/pcl_macros.h>
+#include <pcl/apps/3d_rec_framework/pipeline/global_nn_classifier.h>
+#include <pcl/apps/3d_rec_framework/pc_source/mesh_source.h>
+#include <pcl/apps/3d_rec_framework/feature_wrapper/global/vfh_estimator.h>
+#include <pcl/apps/3d_rec_framework/feature_wrapper/global/esf_estimator.h>
+#include <pcl/apps/3d_rec_framework/feature_wrapper/global/cvfh_estimator.h>
+#include <pcl/apps/3d_rec_framework/utils/metrics.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/apps/dominant_plane_segmentation.h>
+#include <pcl/console/parse.h>
+#include "od/common/pipeline/ODTrainer.h"
 
 namespace od
 {

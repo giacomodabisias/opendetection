@@ -71,7 +71,7 @@ namespace od
 
       int train();
 
-      ODDetections * detect(ODSceneImage * scene);
+      shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
 
 
       const FaceRecogType & getRecogtype() const
@@ -105,6 +105,7 @@ namespace od
       }
 
     protected:
+
       cv::Ptr<cv::face::FaceRecognizer> cv_recognizer_;
       FaceRecogType recog_type_;
 
@@ -115,7 +116,8 @@ namespace od
 
 
     private:
-      void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, char separator = ';');
+      
+      void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, const std::string & separator = ';');
 
     };
     /** \example objectdetector/od_image_facerecog.cpp

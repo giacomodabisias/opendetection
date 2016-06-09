@@ -1,6 +1,3 @@
-//
-// Created by sarkar on 19.06.15.
-//
 #pragma once
 #include "od/common/pipeline/ODDetection.h"
 #include "od/common/pipeline/ODScene.h"
@@ -176,26 +173,28 @@ namespace od
       grabber_.stop ();
     }
 
-    ODScenePointCloud<PointT> * getNextFrame()
+    shared_ptr<ODScenePointCloud<PointT>> getNextFrame()
     {
       OpenNIFrameSource::PointCloudPtr frame = snap();
 
-      return new ODScenePointCloud<PointT>(frame);
+      return make_shared<ODScenePointCloud<PointT>>(frame);
     }
 
     bool isValid() 
-    {return isActive();}
+    {
+      return isActive();
+    }
 
     const PointCloudPtr snap ()
     {
-      return (most_recent_frame_);
+      return most_recent_frame_;
     }
 
     bool isActive ()
     {
       return active_;
     }
-    void onKeyboardEvent (const pcl::visualization::KeyboardEvent & event)
+    void onKeyboardEvent(const pcl::visualization::KeyboardEvent & event)
     {
       // When the spacebar is pressed, trigger a frame capture
       mutex_.lock ();
@@ -207,11 +206,11 @@ namespace od
     }
 
   protected:
-    void onNewFrame (const PointCloudConstPtr &cloud)
+    void onNewFrame(const PointCloudConstPtr & cloud)
     {
       mutex_.lock ();
       ++frame_counter_;
-      most_recent_frame_ = boost::make_shared<PointCloud>(*cloud); // Make a copy of the frame
+      most_recent_frame_ = make_shared<PointCloud>(*cloud); // Make a copy of the frame
       mutex_.unlock ();
     }
 

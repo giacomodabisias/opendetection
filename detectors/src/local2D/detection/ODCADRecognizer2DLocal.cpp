@@ -30,25 +30,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/video/tracking.hpp>
-#include <opencv2/xfeatures2d.hpp>
-#include <opencv2/viz.hpp>
-#include <sys/time.h>
-#include "od/common/utils/utils.h"
-
-// PnP Tutorial
-#include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
-#include "od/detectors/local2D/simple_ransac_detection/Model.h"
-#include "od/detectors/local2D/simple_ransac_detection/PnPProblem.h"
-#include "od/detectors/local2D/simple_ransac_detection/RobustMatcher.h"
-#include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
-#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
-
-//using namespace cv::xfeatures2d;
-
 namespace od
 {
   namespace l2d
@@ -80,7 +61,7 @@ namespace od
 
       pnp_method_ = cv::SOLVEPNP_EPNP;
       f_type_default_ = "SIFT";
-      feature_detector_ = std::make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
+      feature_detector_ = make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
     }
 
     const std::string & ODCADRecognizer2DLocal::getCameraIntrinsicFile() const
@@ -262,7 +243,7 @@ namespace od
       // get all trained models
       fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_, model_names_);
 
-      for(int i = 0; i < model_names_.size(); i++)
+      for(size_t i = 0; i < model_names_.size(); ++i)
       {
         Model model;
         model.loadNewXml(model_names_[i]);
@@ -271,19 +252,20 @@ namespace od
       if(models_.size() > 0)
         f_type_default_ = models_[0].f_type_;
 
-      feature_detector_ = std::make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
+      feature_detector_ = make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
 
     }
 
 
 
-    ODDetections * ODCADRecognizer2DLocal::detect(ODSceneImage * scene)
+    shared_ptr<ODDetections> ODCADRecognizer2DLocal::detect(shared_ptr<ODSceneImage> scene)
     {
-      ODDetections3D * detections = detectOmni(scene);
-      return detections;
+      shared_ptr<ODDetections3D> detections = detectOmni(scene);
+      return dynamic_pointer_cast<ODDetections>(detections);
     }
 
-    bool ODCADRecognizer2DLocal::detectSingleModel(ODSceneImage * scene, const Model & model, ODDetection3D * detection3D, const cv::Mat & frame_vis)
+    bool ODCADRecognizer2DLocal::detectSingleModel(shared_ptr<ODSceneImage> scene, const Model & model, shared_ptr<ODDetection3D> & detection3D, 
+                                                   const cv::Mat & frame_vis)
     {
 
       //reset
@@ -339,7 +321,8 @@ namespace od
 
       std::cout << "RECOGNIZED: " << model.id_ << std::endl;
       //else everything is fine; report the detection
-      detection3D = new ODDetection3D();
+      if(!detection3D)
+        detection3D = make_shared<ODDetection3D>();
       detection3D->setLocation(pnp_detection_.getTMatrix());
       detection3D->setPose(pnp_detection_.getRMatrix());
       detection3D->setType(ODDetection::OD_DETECTION_RECOG);
@@ -348,7 +331,7 @@ namespace od
       return true;
     }
 
-    ODDetections3D * ODCADRecognizer2DLocal::detectOmni(ODSceneImage * scene)
+    shared_ptr<ODDetections3D> ODCADRecognizer2DLocal::detectOmni(shared_ptr<ODSceneImage> scene)
     {
 
       std::vector<cv::KeyPoint> keypoints_scene;
@@ -357,13 +340,13 @@ namespace od
       scene->setDescriptors(descriptor_scene);
       scene->setKeypoints(keypoints_scene);
 
-      ODDetections3D * detections = new ODDetections3D;
+      shared_ptr<ODDetections3D> detections = make_shared<ODDetections3D>();
       cv::Mat viz = scene->getCVImage().clone();
 
       for(size_t i = 0; i < models_.size(); ++i)
       {
 
-        ODDetection3D * detection;
+        shared_ptr<ODDetection3D> detection = make_shared<ODDetection3D>();
         if(detectSingleModel(scene, models_[i], detection, viz))
         {
           detections->push_back(detection);

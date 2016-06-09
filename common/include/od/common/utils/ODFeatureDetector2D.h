@@ -30,7 +30,7 @@ namespace od
 
     void computeKeypointsAndDescriptors(const cv::Mat & image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints);
 
-    void findSiftGPUDescriptors(const char * image_name, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints);
+    void findSiftGPUDescriptors(const std::string & image_name, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints);
 
     void findSiftGPUDescriptors(const cv::Mat & image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints);
 

@@ -17,9 +17,11 @@ namespace od {
 		  void writeUVXYZ(const std::vector<cv::Point3f> & list_points3d, const std::vector<cv::Point2f> & list_points2d, const cv::Mat & descriptors);
 
 		private:
-		  std::ofstream _file_;
-		  std::string _separator_;
-		  bool _is_first_term_;
+
+		  std::ofstream file_;
+		  std::string separator_;
+		  bool is_first_term_;
+
 		};
 
 	}

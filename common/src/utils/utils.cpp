@@ -24,7 +24,7 @@ namespace od
   {
     for (int r = 0; r < descriptors.rows; r++)
     {
-      float norm=0;
+      float norm = 0;
       for (size_t c = 0; c < descriptors.cols; c++) 
         norm += (descriptors.at<float>(r, c)*descriptors.at<float>(r, c));
 
@@ -118,7 +118,7 @@ namespace od
     return "";
   }
 
-  cv::Scalar getHashedColor(const std::string & name, int offset = 100)
+  cv::Scalar getHashedColor(const std::string & name, int offset)
   {
     boost::hash<std::string> string_hash;
     const int hashed = string_hash(name);

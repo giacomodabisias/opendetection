@@ -34,6 +34,7 @@ namespace od
     class vtkTimerCallbackSnapshot : public vtkCommand
     {
     public:
+
       static vtkTimerCallbackSnapshot * New()
       {
         vtkTimerCallbackSnapshot * cb = new vtkTimerCallbackSnapshot;
@@ -84,7 +85,9 @@ namespace od
       }
 
     private:
+
       int snap_count;
+
     public:
 
       std::string takeSnapshot(vtkRenderWindow *renderWindow, int snap_no);
@@ -112,10 +115,10 @@ namespace od
       std::string feature_type;
       std::string input_file, input_dir, output_dir, output_extension;
 
-
       vtkActor * actor;
       vtkRenderer * renderer;
       bool snap_mode;
+
     };
 
     int ODCADRecogTrainerSnapshotBased::train()
@@ -159,7 +162,7 @@ namespace od
       // Read texture file
       std::string texfilename = getTexfileinObj(objname);
       vtkSmartPointer<vtkImageReader2Factory> readerFactory = vtkSmartPointer<vtkImageReader2Factory>::New();
-      vtkImageReader2 *imageReader = readerFactory->CreateImageReader2(texfilename.c_str());
+      vtkImageReader2 * imageReader = readerFactory->CreateImageReader2(texfilename.c_str());
       imageReader->SetFileName(texfilename.c_str());
       imageReader->Update();
 
@@ -190,7 +193,7 @@ namespace od
 
       //Set up the camera at a very proper location and angle (about 30)
       renderer->ResetCamera();
-      vtkCamera *camera = renderer->GetActiveCamera();
+      vtkCamera * camera = renderer->GetActiveCamera();
       camera->Elevation(VIEW_ANGLE);
       ////////////////////
 
@@ -254,7 +257,7 @@ namespace od
       {
         fout << pairs[i].first.x << " " << pairs[i].first.y << " " << pairs[i].first.z << endl;
         fout << pairs[i].second.pt.x << " " << pairs[i].second.pt.y << " " << pairs[i].second.octave << " " << pairs[i].second.angle << " " << pairs[i].second.response << " " << pairs[i].second.size << endl;
-        for(int j = 0; j < descriptors.cols; j++)
+        for(size_t j = 0; j < descriptors.cols; ++j)
         {
           fout << descriptors.at<float>(i, j) << " ";
         }
@@ -332,12 +335,12 @@ namespace od
         picker->Pick(kpts[i].pt.x, img.rows - kpts[i].pt.y, 0, ren); //IMPORTANT: note that the y coordinate is converted from pixel coordinates to picking coordinates
 
         //find transformed 3d
-        double *pos = picker->GetPickPosition();
+        double * pos = picker->GetPickPosition();
 
         //3 find original 3d
-        vtkMatrix4x4 *curr_transform_inv = vtkMatrix4x4::New();
+        vtkMatrix4x4 * curr_transform_inv = vtkMatrix4x4::New();
         vtkMatrix4x4::Invert(actor->GetMatrix(), curr_transform_inv);
-        double *pos_model = curr_transform_inv->MultiplyDoublePoint(pos);
+        double * pos_model = curr_transform_inv->MultiplyDoublePoint(pos);
 
         //std::cout << "2D position is: " << kpts[i].pt.x << " " << kpts[i].pt.x << std::endl;
         //std::cout << "3d position (world coordinates) is: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl << endl;
@@ -377,13 +380,14 @@ namespace od
     class MouseInteractorStyle2 : public vtkInteractorStyleTrackballCamera
     {
     public:
-      static MouseInteractorStyle2 *New();
+
+      static MouseInteractorStyle2 * New();
 
       vtkTypeMacro(MouseInteractorStyle2, vtkInteractorStyleTrackballCamera);
 
       virtual void OnLeftButtonDown()
       {
-        int *clickPos = this->GetInteractor()->GetEventPosition();
+        int * clickPos = this->GetInteractor()->GetEventPosition();
 
         // Pick from this location.
         /*vtkSmartPointer<vtkPointPicker>  picker =
@@ -416,8 +420,6 @@ namespace od
         // Forward events
         vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
       }
-
-    private:
 
     };
 

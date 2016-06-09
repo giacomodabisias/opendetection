@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include "od/common/utils/ODFrameGenerator.h"
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
+#include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
   detector.init();
 
   //Get a scene
-  od::ODScenePointCloud<pcl::PointXYZRGBA> *frame;
+  od::ODScenePointCloud<pcl::PointXYZRGBA> * frame;
 
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(pointcloud_file);
   while(frameGenerator.isValid())
@@ -68,9 +69,9 @@ int main(int argc, char *argv[])
     //get frame
     frame = frameGenerator.getNextFrame();
 
-    od::ODDetections3D * detections = detector.detectOmni(frame);
+    boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(frame);
 
-    for(size_t i = 0; i < detections->size(); i++)
+    for(size_t i = 0; i < detections->size(); ++i)
     {
       detections->at(i)->printSelf();
     }

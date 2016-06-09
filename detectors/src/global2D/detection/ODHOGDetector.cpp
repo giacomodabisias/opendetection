@@ -37,8 +37,8 @@ namespace od
   {
 
     ODHOGDetector::ODHOGDetector(const std::string & trained_data_location_ = "", const cv::Size & win_size = cv::Size(64,128),
-                  const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8), const cv::Size & cell_size = cv::Size(8,8),
-                  float hit_threshold = 0.0)
+                                 const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8), 
+                                 const cv::Size & cell_size = cv::Size(8,8), float hit_threshold = 0.0)
     {
       TRAINED_LOCATION_DENTIFIER_ = "HOG";
       TRAINED_DATA_ID_ = "hog.xml";
@@ -90,10 +90,10 @@ namespace od
       hog_.setSVMDetector(svm_detector);
     }
 
-    ODDetections2D * ODHOGDetector::detectOmni(ODSceneImage * scene)
+    shared_ptr<ODDetections2D> ODHOGDetector::detectOmni(ODSceneImage * scene)
     {
       //always create a detection
-      ODDetections2D * detections = new ODDetections2D;
+      shared_ptr<ODDetections2D> detections =  make_shared<ODDetections2D>();
 
       vector<cv::Rect> found, found_filtered;
       hog_.detectMultiScale(scene->getCVImage(), found, hit_threshold, cv::Size(8, 8), cv::Size(32, 32), 1.05, 2);
@@ -101,7 +101,7 @@ namespace od
       cv::Mat viz = scene->getCVImage().clone();
       for(int i = 0; i < found.size(); i++)
       {
-        ODDetection2D * detection2D = new ODDetection2D;
+        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>;
         detection2D->setBoundingBox(found[i]);
         detection2D->setId("PEOPLE");
         detection2D->setType(ODDetection::OD_DETECTION_CLASS);
@@ -122,10 +122,10 @@ namespace od
       return detections;
     }
 
-    ODDetections * ODHOGDetector::detect(ODSceneImage * scene)
+    shared_ptr<ODDetections> ODHOGDetector::detect(shared_ptr<ODSceneImage> scene)
     {
       //always create a detection
-      ODDetections * detections = new ODDetections;
+      shared_ptr<ODDetections> detections = make_shared<ODDetections>;
 
       cv::Mat scaled_window;
       cv::resize(scene->getCVImage(), scaled_window, hog_.win_size);
@@ -133,9 +133,9 @@ namespace od
       std::vector<cv::Point> found_locations;
 
       hog_.detect(scene->getCVImage(), found_locations, hitThreshold);
-      if (!found_locations.empty())
+      if(!found_locations.empty())
       {
-        ODDetection2D * detection2D = new ODDetection2D;
+        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>;
         detection2D->setId("PEOPLE");
         detection2D->setType(ODDetection::OD_DETECTION_CLASS);
         detections->push_back(detection2D);
@@ -162,7 +162,7 @@ namespace od
 
     const cv::Size & ODHOGDetector::getWinSize() const
     {
-      return win_size;
+      return win_size_;
     }
 
     void ODHOGDetector::setWinSize(const cv::Size & win_size)
@@ -182,27 +182,27 @@ namespace od
 
     const cv::Size & getBlockStride() const
     {
-      return block_stride;
+      return block_stride_;
     }
 
     void ODHOGDetector::setBlockStride(const cv::Size & block_stride)
     {
-      ODHOGDetector::blockStride = blockStride;
+      block_stride_ = block_stride;
     }
 
     const cv::Size & ODHOGDetector::getCellSize() const
     {
-      return cell_size;
+      return cell_size_;
     }
 
     void ODHOGDetector::setCellSize(const cv::Size & cell_size)
     {
-      ODHOGDetector::cellSize = cellSize;
+      cell_size_ = cell_size;
     }
 
     float ODHOGDetector::getHitThreshold() const
     {
-      return hit_threshold;
+      return hit_threshold_;
     }
 
     void ODHOGDetector::setHitThreshold(float hit_threshold)

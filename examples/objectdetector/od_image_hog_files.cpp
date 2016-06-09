@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/global2D/detection/ODCascadeDetector.h"
 #include "od/detectors/global2D/detection/ODHOGDetector.h"
 #include "od/common/utils/ODFrameGenerator.h"
+#include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
     od::ODSceneImage * scene = frameGenerator.getNextFrame();
 
     //Detect
-    ODDetections2D *detections =  detector.detectOmni(scene);
+    boost::shared_ptr<ODDetections2D> detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
       cv::imshow("Overlay", detections->renderMetainfo(*scene).getCVImage());

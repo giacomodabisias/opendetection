@@ -121,7 +121,8 @@ namespace od
   }
 
   template <typename PointType>
-  ODScenePointCloud<PointType>::ODScenePointCloud(const std::string & point_cloud_file): point_cloud_(new pcl::PointCloud<PointType>())
+  ODScenePointCloud<PointType>::ODScenePointCloud(const std::string & point_cloud_file): 
+                                                  point_cloud_(new pcl::PointCloud<PointType>())
   {
     if(pcl::io::loadPCDFile<PointType> (point_cloud_file, *point_cloud_ ) == -1)
     {

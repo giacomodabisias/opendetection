@@ -47,11 +47,7 @@ namespace od
     {
 
     public:
-      ODImageLocalMatchingTrainer(std::string const &training_input_location_, std::string const &training_data_location_) : ODTrainer(training_input_location_, training_data_location_)
-      {
-        TRAINED_LOCATION_DENTIFIER_ = "FEATCORR";
-        TRAINED_DATA_ID_ = "corr.xml";
-      }
+      ODImageLocalMatchingTrainer(const std::string & training_input_location_, const std::string & training_data_location_);
     };
 
     /** \brief ODImageLocalMatchingDetector
@@ -63,11 +59,8 @@ namespace od
     {
 
     public:
-      ODImageLocalMatchingDetector(std::string const &training_data_location_) : ODDetector2DComplete(training_data_location_)
-      {
-        TRAINED_LOCATION_DENTIFIER_ = "FEATCORR";
-        TRAINED_DATA_ID_ = ".xml";
-      }
+      ODImageLocalMatchingDetector(const std::string & training_data_location_);
+
     };
 
     /** \brief ODImageLocalMatching
@@ -80,52 +73,28 @@ namespace od
 
     public:
 
-      ODImageLocalMatchingTrainer *getTrainer() const
-      {
-        return trainer_;
-      }
+      shared_ptr<ODImageLocalMatchingTrainer> getTrainer() const;
 
-      void setTrainer(ODImageLocalMatchingTrainer *trainer_)
-      {
-        ODImageLocalMatching::trainer_ = trainer_;
-      }
+      void setTrainer(shared_ptr<ODImageLocalMatchingTrainer> trainer_);
 
-      ODImageLocalMatchingDetector *getDetector() const
-      {
-        return detector_;
-      }
+      shared_ptr<ODImageLocalMatchingDetector> getDetector() const;
 
-      void setDetector(ODImageLocalMatchingDetector *detector_)
-      {
-        ODImageLocalMatching::detector_ = detector_;
-      }
+      void setDetector(shared_ptr<ODImageLocalMatchingDetector> detector_);
 
 
-      ODImageLocalMatching()
-      {
-        TRAINED_DATA_EXT_ = "corr.xml";
-      }
+      ODImageLocalMatching();
 
-      void init()
-      { }
+      void init() {}
 
 
-      int train()
-      {
-        return trainer_->train();
-      }
+      int train();
 
-      int detect(ODScene *scene, std::vector<ODDetection *> detections)
-      {
-        //detector_->detect(scene, detections);
-        return 1;
-      }
-
+      int detect(shared_ptr<ODScene> scene, std::vector<shared_ptr<ODDetection> > detections);
 
     protected:
 
-      ODImageLocalMatchingTrainer * trainer_;
-      ODImageLocalMatchingDetector * detector_;
+      shared_ptr<ODImageLocalMatchingTrainer> trainer_;
+      shared_ptr<ODImageLocalMatchingDetector> detector_;
 
     };
 

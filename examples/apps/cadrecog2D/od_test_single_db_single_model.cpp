@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
 #include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
 #include "od/common/utils/ODFrameGenerator.h"
+#include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -53,13 +54,14 @@ int main(int argc, char *argv[])
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(imagespath);
   //GUI
   //cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  while(frameGenerator.isValid() && cv::waitKey(1000) != 27)
+  od::ODSceneImage * scene;
+  while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
-    od::ODSceneImage * scene = frameGenerator.getNextFrame();
+    scene = frameGenerator.getNextFrame();
     //cv::imshow("Overlay", scene->getCVImage());
 
     //Detect
-    od::ODDetections3D *detections =  detector.detectOmni(scene);
+    boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(scene);
 
     if(detections->size() > 0)
     {
@@ -68,20 +70,17 @@ int main(int argc, char *argv[])
 
       for (int i = 0; i < detections->size(); i++)
       {
-        od::ODDetection3D *detection = detections->at(i);
+        boost::shared_ptr<od::ODDetection3D> detection = detections->at(i);
         detection->printSelf();
         logfile << detection->getId() << endl;
       }
 
       //cv::imshow("Overlay", detections->getMetainfoImage());
     }
-    else
+    //else
       //cv::imshow("Overlay", scene->getCVImage());
 
-
-
     delete scene;
-    delete detections;
 
   }
 

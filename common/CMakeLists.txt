@@ -25,13 +25,16 @@ if(build)
             "src/bindings/svmlight.cpp"
         )
 
+
+    set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
+
+
     include_directories(${COMMON_INCLUDE_DIR})
 
     OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
     install(DIRECTORY ${COMMON_INCLUDE_DIR}/od DESTINATION ${OD_INSTALL_INCLUDE_DIR} COMPONENT ${LIB_NAME})
+    target_link_libraries(${LIB_NAME} ${SUBSYS_DEPS})
 
-    if(SUBSYS_DEPS)
-      target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS})
-    endif(SUBSYS_DEPS)
+
 
 endif(build)

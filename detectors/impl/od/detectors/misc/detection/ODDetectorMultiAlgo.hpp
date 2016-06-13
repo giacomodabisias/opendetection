@@ -64,6 +64,7 @@ namespace od
   {
 
   public:
+    
     ODDetectorMultiAlgo(const std::string & training_data_location_) : ODDetector(training_data_location_){}
 
     shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage > scene) ;
@@ -75,8 +76,10 @@ namespace od
     void init();
 
   private:
+
     std::vector<shared_ptr<ODDetector2D> > detectors_2d_;
     std::vector<shared_ptr<ODDetector3D<PointT> > > detectors_3d_;
+
   };
 
 

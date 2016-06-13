@@ -11,38 +11,21 @@ set(build TRUE)
 
 if(build)
 
-    if(WITH_SVMLIGHT)
-        set(SOURCES
-                "ODFaceRecognizer.cpp"
-                "detection/ODHOGDetector.cpp"
-                "detection/ODCascadeDetector.cpp"
-                "training/ODHOGTrainer.cpp"
-                )
-                
-    else()
-        set(SOURCES
-                "ODFaceRecognizer.cpp"
-                "detection/ODCascadeDetector.cpp"
-        )
-
-    endif()
-        
+    set(SOURCES
+            "ODFaceRecognizer.cpp"
+            "detection/ODCascadeDetector.cpp"
+            "detection/ODHOGDetector.cpp"
+            "training/ODHOGTrainer.cpp"
+    )
+    
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
 
     OD_ADD_LIBRARY_ALL("${SUBSYS_NAME}" SRCS ${SOURCES})
 
-    if(WITH_SVMLIGHT)
-        if(SUBSYS_DEPS)
-          target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS} svm)
-        endif(SUBSYS_DEPS)
-    else()
-        if(SUBSYS_DEPS)
-          target_link_libraries("${LIB_NAME}" ${SUBSYS_DEPS} )
-        endif(SUBSYS_DEPS)
-    endif()
+    set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
 
-    
+    target_link_libraries(${LIB_NAME} ${SUBSYS_DEPS})
 
     #PCL_MAKE_PKGCONFIG("${LIB_NAME}" "${SUBSYS_NAME}" "${SUBSYS_DESC}" "${SUBSYS_DEPS}" "" "" "" "")
 

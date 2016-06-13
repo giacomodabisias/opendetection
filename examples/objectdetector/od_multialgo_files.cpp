@@ -25,9 +25,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <opencv2/highgui.hpp>
 #include "od/detectors/misc/detection/ODDetectorMultiAlgo.hpp"
 #include "od/common/utils/ODFrameGenerator.h"
+#include <opencv2/highgui.hpp>
 #include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])

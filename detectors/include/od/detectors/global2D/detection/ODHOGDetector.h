@@ -64,7 +64,7 @@ namespace od
 
 
       ODHOGDetector(const std::string & trained_data_location_ = "", const cv::Size & win_size = cv::Size(64,128),
-                    const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8), 
+                    const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8),
                     const cv::Size & cell_size = cv::Size(8,8), float hit_threshold = 0.0);
 
       void init();

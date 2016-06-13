@@ -17,37 +17,34 @@ if(image_recognition_example)
                         LINK_WITH od_common od_local_image_detector)
 endif()
 
-if(WITH_SVMLIGHT)
-        option(hog_train_example "Build the hog train example" ON)
-        if(hog_train_example)
-                OD_ADD_EXAMPLE(od_hog_train FILES od_hog_train.cpp
-                                LINK_WITH od_common od_global_image_detector)
-        endif()
+option(hog_train_example "Build the hog train example" ON)
+if(hog_train_example)
+        OD_ADD_EXAMPLE(od_hog_train FILES od_hog_train.cpp
+                        LINK_WITH od_common od_global_image_detector)
+endif()
 
-        option(image_hog_files_example "Build the hog image example" ON)
-        if(image_hog_files_example)
-                OD_ADD_EXAMPLE(od_image_hog_files FILES od_image_hog_files.cpp
-                                LINK_WITH od_common od_global_image_detector)
-        endif()
+option(image_hog_files_example "Build the hog image example" ON)
+if(image_hog_files_example)
+        OD_ADD_EXAMPLE(od_image_hog_files FILES od_image_hog_files.cpp
+                        LINK_WITH od_common od_global_image_detector)
+endif()
 
-        option(image_customhog_example "Build the custom hog example" ON)
-        if(image_customhog_example)
-                OD_ADD_EXAMPLE(od_image_customhog FILES od_image_customhog.cpp
-                                LINK_WITH od_common od_global_image_detector)
-        endif()
+option(image_customhog_example "Build the custom hog example" ON)
+if(image_customhog_example)
+        OD_ADD_EXAMPLE(od_image_customhog FILES od_image_customhog.cpp
+                        LINK_WITH od_common od_global_image_detector)
+endif()
 
-        option(multialgo_files_example "Build the multialgo example" ON)
-        if(multialgo_files_example)
-                OD_ADD_EXAMPLE(od_multialgo_files FILES od_multialgo_files.cpp
-                                LINK_WITH od_miscellaneous_detector)
-        endif()
+option(multialgo_files_example "Build the multialgo_files example" ON)
+if(multialgo_files_example)
+        OD_ADD_EXAMPLE(od_multialgo_files FILES od_multialgo_files.cpp
+                        LINK_WITH od_common od_global_image_detector)
+endif()
 
-        option(multialgo_pc_example "Build the multialgo_pc example" ON)
-        if(multialgo_pc_example)
-                OD_ADD_EXAMPLE(od_multialgo_pc FILES od_multialgo_pc.cpp
-                                LINK_WITH od_miscellaneous_detector)
-        endif()
-
+option(multialgo_pc_example "Build the multialgo_pc example" ON)
+if(multialgo_pc_example)
+        OD_ADD_EXAMPLE(od_multialgo_pc FILES od_multialgo_pc.cpp
+                        LINK_WITH od_common od_global_image_detector)
 endif()
 
 option(cascade_cam_example "Build the cascade camera example" ON)

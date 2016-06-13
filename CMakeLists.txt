@@ -25,7 +25,6 @@ include(${OD_CMAKE_DIR}/od_macros.cmake)
 # Optional parameters
 option(WITH_DOCUMENTATION "Build the OD documentation" ON)
 option(WITH_GPU "Build GPU components of the project" ON)
-option(WITH_SVMLIGHT "Build SVM Light" OFF)
 option(WITH_EXAMPLES "Build examples" OFF)
 option(WITH_BOOST_SHARED_PTR "use boost::shared_ptr instead of std::shared_ptr" ON)
 

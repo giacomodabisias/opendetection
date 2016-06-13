@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
   while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
-    od::ODSceneImage * scene = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODSceneImage> scene = frameGenerator.getNextFrame();
     cv::imshow("Overlay", scene->getCVImage());
 
     //Detect
@@ -69,8 +69,6 @@ int main(int argc, char *argv[])
       cv::imshow("Overlay", detections->getMetainfoImage());
     else
       cv::imshow("Overlay", scene->getCVImage());
-
-    delete scene;
 
   }
 

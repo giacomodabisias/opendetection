@@ -29,30 +29,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 #pragma once
 #include "od/detectors/local2D/ODImageLocalMatching.h"
-
-#include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODScene.h"
-#include "od/common/utils/utils.h"
-#include "od/common/utils/ODFeatureDetector2D.h"
 #include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
-#include "od/detectors/local2D/simple_ransac_detection/Model.h"
-#include "od/detectors/local2D/simple_ransac_detection/PnPProblem.h"
 #include "od/detectors/local2D/simple_ransac_detection/RobustMatcher.h"
-#include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
-#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
-#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 
 #include <iostream>
-
-#include <opencv2/core/core.hpp>
-#include <opencv2/core/utility.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/video/tracking.hpp>
-#include <opencv2/xfeatures2d.hpp>
-#include <opencv2/viz.hpp>
-
 
 namespace od
 {

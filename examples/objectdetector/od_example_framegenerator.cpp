@@ -40,19 +40,17 @@ int main(int argc, char *argv[])
   //GUI and feedback
   pcl::visualization::PCLVisualizer vis ("kinect");
 
-  od::ODScenePointCloud<pcl::PointXYZRGBA> * frame;
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_DEVICE> frameGenerator("");
   while(frameGenerator.isValid())
   {
     //get frame
-    frame = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA>> frame = frameGenerator.getNextFrame();
 
     vis.removePointCloud ("frame");
     vis.addPointCloud<pcl::PointXYZRGBA> (frame->getPointCloud(), "frame");
     vis.spinOnce ();
 
     //free frame
-    delete frame;
   }
   return 0;
 }

@@ -29,20 +29,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global2D/detection/ODHOGDetector.h"
 
-using namespace std;
-
 namespace od
 {
   namespace g2d
   {
 
-    ODHOGDetector::ODHOGDetector(const std::string & trained_data_location_ = "", const cv::Size & win_size = cv::Size(64,128),
-                                 const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8), 
-                                 const cv::Size & cell_size = cv::Size(8,8), float hit_threshold = 0.0)
+    ODHOGDetector::ODHOGDetector(const std::string & trained_data_location_, const cv::Size & win_size, const cv::Size & block_size, 
+                                 const cv::Size & block_stride, const cv::Size & cell_size, float hit_threshold): 
+                                  ODDetector2D(trained_data_location_),  win_size_(win_size), block_size_(block_size), block_stride_(block_stride),
+                                  cell_size_(cell_size), hit_threshold_(hit_threshold), hog_(win_size, block_size, block_stride, cell_size, 9, 1, -1,
+                                  cv::HOGDescriptor::L2Hys, 0.2, false, cv::HOGDescriptor::DEFAULT_NLEVELS)
     {
       TRAINED_LOCATION_DENTIFIER_ = "HOG";
       TRAINED_DATA_ID_ = "hog.xml";
-      metainfo_ = true;
+      meta_info_ = true;
       svm_type_ = OD_DEFAULT_PEOPLE;
 
       if (trained_data_location_ != "")
@@ -56,20 +56,20 @@ namespace od
       {
         case OD_DEFAULT_PEOPLE:
           hog_.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
-          cout << "HOG TYPE: OpenCV Default People" << endl;
+          std::cout << "HOG TYPE: OpenCV Default People" << std::endl;
           //hog_.save(getSpecificTrainingDataLocation() + "/defaultpeople." + TRAINED_DATA_EXT_);
           break;
         case OD_DAIMLER_PEOPLE:
-          hog_.win_size = cv::Size(48, 96);
-          hit_threshold = 1.2;
+          hog_.winSize = cv::Size(48, 96);
+          hit_threshold_ = 1.2;
           hog_.setSVMDetector(cv::HOGDescriptor::getDaimlerPeopleDetector());
-          cout << "HOG TYPE: OpenCV Daimler People" << endl;
+          std::cout << "HOG TYPE: OpenCV Daimler People" << std::endl;
           //hog_.save(getSpecificTrainingDataLocation() + "/daimlerpeople." + TRAINED_DATA_EXT_);
           break;
         case OD_FILE:
-          string hogfile = FileUtils::getFirstFile(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_);
+          std::string hogfile = fileutils::getFirstFile(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_);
           load(hogfile);
-          cout << "HOG TYPE: Custom HOG features loaded from: " << hogfile << endl;
+          std::cout << "HOG TYPE: Custom HOG features loaded from: " << hogfile << std::endl;
           break;
           //dont set anything for custom, it is to be set by the user by setSVMDetector
       }
@@ -90,24 +90,24 @@ namespace od
       hog_.setSVMDetector(svm_detector);
     }
 
-    shared_ptr<ODDetections2D> ODHOGDetector::detectOmni(ODSceneImage * scene)
+    shared_ptr<ODDetections2D> ODHOGDetector::detectOmni(shared_ptr<ODSceneImage> scene)
     {
       //always create a detection
-      shared_ptr<ODDetections2D> detections =  make_shared<ODDetections2D>();
+      shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
 
-      vector<cv::Rect> found, found_filtered;
-      hog_.detectMultiScale(scene->getCVImage(), found, hit_threshold, cv::Size(8, 8), cv::Size(32, 32), 1.05, 2);
+      std::vector<cv::Rect> found, found_filtered;
+      hog_.detectMultiScale(scene->getCVImage(), found, hit_threshold_, cv::Size(8, 8), cv::Size(32, 32), 1.05, 2);
 
       cv::Mat viz = scene->getCVImage().clone();
-      for(int i = 0; i < found.size(); i++)
+      for(size_t i = 0; i < found.size(); ++i)
       {
-        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>;
+        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>();
         detection2D->setBoundingBox(found[i]);
         detection2D->setId("PEOPLE");
         detection2D->setType(ODDetection::OD_DETECTION_CLASS);
         detections->push_back(detection2D);
 
-        if(metainfo_)
+        if(meta_info_)
         {
           cv::Rect r = found[i];
           r.x += cvRound(r.width * 0.1);
@@ -125,17 +125,17 @@ namespace od
     shared_ptr<ODDetections> ODHOGDetector::detect(shared_ptr<ODSceneImage> scene)
     {
       //always create a detection
-      shared_ptr<ODDetections> detections = make_shared<ODDetections>;
+      shared_ptr<ODDetections> detections = make_shared<ODDetections>();
 
       cv::Mat scaled_window;
-      cv::resize(scene->getCVImage(), scaled_window, hog_.win_size);
+      cv::resize(scene->getCVImage(), scaled_window, hog_.winSize);
 
       std::vector<cv::Point> found_locations;
 
-      hog_.detect(scene->getCVImage(), found_locations, hitThreshold);
+      hog_.detect(scene->getCVImage(), found_locations, hit_threshold_);
       if(!found_locations.empty())
       {
-        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>;
+        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>();
         detection2D->setId("PEOPLE");
         detection2D->setType(ODDetection::OD_DETECTION_CLASS);
         detections->push_back(detection2D);
@@ -147,15 +147,15 @@ namespace od
     void ODHOGDetector::setTrainedDataLocation(const std::string & trained_data_location)
     {
       trained_data_location_ = trained_data_location;
-      svmtype_ = OD_FILE;
+      svm_type_ = OD_FILE;
     }
 
-    const SVMType & ODHOGDetector::getSvmtype() const
+    const ODHOGDetector::SVMType & ODHOGDetector::getSvmtype() const
     {
       return svm_type_;
     }
 
-    void ODHOGDetector::setSvmtype(const SVMType & svm_type)
+    void ODHOGDetector::setSvmtype(const ODHOGDetector::SVMType & svm_type)
     {
       svm_type_ = svm_type;
     }
@@ -172,7 +172,7 @@ namespace od
 
     const cv::Size & ODHOGDetector::getBlockSize() const
     {
-      return block_size;
+      return block_size_;
     }
 
     void ODHOGDetector::setBlockSize(const cv::Size & block_size)
@@ -180,7 +180,7 @@ namespace od
       block_size_ = block_size;
     }
 
-    const cv::Size & getBlockStride() const
+    const cv::Size & ODHOGDetector::getBlockStride() const
     {
       return block_stride_;
     }
@@ -212,13 +212,13 @@ namespace od
 
     void ODHOGDetector::setSVMFromFile(const std::string & file_name)
     {
-      vector<float> descriptor_vector;
-      printf("Reading descriptor vector from file '%s'\n", file_name.c_str());
+      std::vector<float> descriptor_vector;
+      std::cout << "Reading descriptor vector from file " << file_name << std::endl;;
 
-      ifstream file;
+      std::ifstream file;
       float percent;
-      file.open(file_name.c_str(), ios::in);
-      if (file.good() && file.is_open()) {
+      file.open(file_name.c_str(), std::ios::in);
+      if(file.good() && file.is_open()) {
 
         double d;
         while(file >> d)
@@ -234,11 +234,11 @@ namespace od
 
     void ODHOGDetector::printParameters()
     {
-      cout << "winSize: " << win_size_ << endl;
-      cout << "blockSize: " << block_size_ << endl;
-      cout << "blockStride: " << block_stride_ << endl;
-      cout << "cellSize: " << cell_size_ << endl;
-      cout << "hitThreshold: " << hit_threshold_ << endl;
+      std::cout << "winSize: " << win_size_ << std::endl;
+      std::cout << "blockSize: " << block_size_ << std::endl;
+      std::cout << "blockStride: " << block_stride_ << std::endl;
+      std::cout << "cellSize: " << cell_size_ << std::endl;
+      std::cout << "hitThreshold: " << hit_threshold_ << std::endl;
     }
   }
 }

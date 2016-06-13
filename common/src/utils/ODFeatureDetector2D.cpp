@@ -2,7 +2,6 @@
 // Created by sarkar on 20.04.15.
 //
 
-#include <GL/gl.h>
 #include "od/common/utils/ODFeatureDetector2D.h"
 
 namespace od

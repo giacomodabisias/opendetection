@@ -73,15 +73,6 @@ namespace od {
 		// Converts a given Euler angles to Rotation Matrix
 		cv::Mat euler2rot(const cv::Mat & euler);
 
-		// Converts a given string to an integer
-		int StringToInt (const std::string & Text );
-
-		// Converts a given float to a string
-		std::string FloatToString (float Number );
-
-		// Converts a given integer to a string
-		std::string IntToString (int Number );
-
 	}
 
 }

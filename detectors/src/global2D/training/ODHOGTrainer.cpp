@@ -31,17 +31,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/global2D/training/ODHOGTrainer.h"
 
 
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-//binding class for svmlight
-#include "od/common/bindings/svmlight.h"
-
 #define TRAINHOG_SVM_TO_TRAIN SVMlight
 
 namespace od
@@ -71,19 +60,19 @@ namespace od
       //algo parameter init
       training_padding_ = cv::Size(0, 0);
       start_hog_pos_ = cv::Point(15, 15);
-      nofeatures_neg_ = 10;
+      no_features_neg_ = 10;
       win_stride_ = cv::Size();
-      train_hard_negetive_ = false;
+      train_hard_negative_ = false;
 
       if(trained_data_location_ != "")
       {
-        pos_samples_dir = training_input_location_ + "/pos";
-        neg_samples_dir = training_input_location_ + "/neg";
+        pos_samples_dir_ = training_input_location_ + "/pos";
+        neg_samples_dir_ = training_input_location_ + "/neg";
       }
 
 
       //internal data
-      FileUtils::createTrainingDir(getSpecificTrainingDataLocation());
+      fileutils::createTrainingDir(getSpecificTrainingDataLocation());
       features_file_ = getSpecificTrainingDataLocation() + "/features.dat";
       svm_model_file_ = getSpecificTrainingDataLocation() + "/svmlightmodel.dat";
       svm_model_hard_ = getSpecificTrainingDataLocation() + "/svmlightmodelhard.dat";
@@ -93,14 +82,12 @@ namespace od
 
     }
 
-    void ODHOGTrainer::saveDescriptorVectorToFile(std::vector<float> & descriptor_vector, std::vector<unsigned int> & vector_indices, 
-                                                  const std::string & file_name)
+    void ODHOGTrainer::saveDescriptorVectorToFile(const std::vector<float> & descriptor_vector, const std::string & file_name)
     {
       std::cout << "Saving descriptor vector to file " << file_name << std::endl;
-      std::string separator = " "; // Use blank as default separator between single features
-      fstream file;
+      std::fstream file;
       float percent;
-      file.open(file_name.c_str(), ios::out);
+      file.open(file_name.c_str(), std::ios::out);
       const unsigned int descriptors_num = descriptor_vector.size();
 
       if(file.good() && file.is_open())
@@ -112,11 +99,9 @@ namespace od
           if((feature % 10 == 0) || (feature == (descriptors_num - 1)))
           {
             percent = ((1 + feature) * 100 / descriptors_num);
-            printf("%4u (%3.0f%%)", feature, percent);
-            fflush(stdout);
-            resetCursor();
+            std::cout << feature << "(" <<percent << "%)" << "\xd";
           }
-          file << descriptor_vector[feature] << separator;
+          file << descriptor_vector[feature] << " ";
         }
         printf("\n");
         file << std::endl;
@@ -125,16 +110,16 @@ namespace od
       }
     }
 
-    void ODHOGTrainer::calculateFeaturesFromInput(const std::string & image_file_name, std::vector<float> & feature_vector, HOGDescriptor & hog)
+    void ODHOGTrainer::calculateFeaturesFromInput(const std::string & image_file_name, std::vector<float> & feature_vector, cv::HOGDescriptor & hog)
     {
 
       cv::Mat image_data_orig, image_data;
-      image_data_orig = imread(image_file_name, 0);
+      image_data_orig = cv::imread(image_file_name, 0);
 
 
       if(image_data_orig.empty())
       {
-        featureVector.clear();
+        feature_vector.clear();
         std::cout << "Error: HOG image " << image_file_name << " is empty, features calculation skipped!" << std::endl;
         return;
       }
@@ -147,18 +132,19 @@ namespace od
       image_data_orig.release(); // Release the image again after features are extracted
     }
 
-    void ODHOGTrainer::detectTrainingSetTest(const HOGDescriptor & hog, double hit_threshold, const std::vector<std::string> & pos_file_names, 
-                                             const vector<string> & neg_file_names)
+    void ODHOGTrainer::detectTrainingSetTest(const cv::HOGDescriptor & hog, double hit_threshold, const std::vector<std::string> & pos_file_names, 
+                                             const std::vector<std::string> & neg_file_names)
     {
       unsigned int true_positives = 0;
       unsigned int true_negatives = 0;
       unsigned int false_positives = 0;
       unsigned int false_negatives = 0;
       std::vector<cv::Point> found_detection;
+      cv::Mat image_data;
       // Walk over positive training samples, generate images and detect
-      for(auto & pf : pos_file_names.begin())
+      for(auto & pf : pos_file_names)
       {
-        const cv::Mat image_data = cv::imread(pf, 0);
+        image_data = cv::imread(pf, 0);
         hog.detect(image_data, found_detection, hit_threshold, win_stride_, training_padding_);
         if(found_detection.size() > 0)
         {
@@ -170,10 +156,10 @@ namespace od
         }
       }
       // Walk over negative training samples, generate images and detect
-      for(auto & nf : negFileNames)
+      for(auto & nf : neg_file_names)
       {
-        const cv::Mat imageData = cv::imread(nf, 0);
-        hog.detect(image_data, found_detection, hit_threshold, win_stride, training_padding);
+        image_data = cv::imread(nf, 0);
+        hog.detect(image_data, found_detection, hit_threshold, win_stride_, training_padding_);
         if(found_detection.size() > 0)
         {
           false_positives += found_detection.size();
@@ -183,12 +169,12 @@ namespace od
         }
       }
 
-      std::cout << "Results: " << std::endl; << "\tTrue Positives: " << true_positives << std::endl << "\tTrue Negatives: "
+      std::cout << "Results: " << std::endl << "\tTrue Positives: " << true_positives << std::endl << "\tTrue Negatives: "
                 << true_negatives << "\tFalse Positives: " << false_positives << std::endl << " \tFalse Negatives:" << false_negatives << std::endl;
     }
 
 
-    void ODHOGTrainer::calculateFeaturesFromImageLoc(const Mat & image_data, std::vector<float> & feature_vector, const HOGDescriptor & hog, 
+    void ODHOGTrainer::calculateFeaturesFromImageLoc(const cv::Mat & image_data, std::vector<float> & feature_vector, const cv::HOGDescriptor & hog, 
                                                      const cv::Point & start_pos)
     {
 
@@ -197,14 +183,14 @@ namespace od
       hog.compute(image_data, feature_vector, win_stride_, training_padding_, locations);
     }
 
-    void ODHOGTrainer::handleNegetivefile(const std::string & image_file_name, HOGDescriptor & hog, std::fstream & file)
+    void ODHOGTrainer::handleNegetivefile(const std::string & image_file_name, cv::HOGDescriptor & hog, std::fstream & file)
     {
 
       cv::Mat image_data = cv::imread(image_file_name, 0);
 
       //cout << "Image size : " << imageData.size() << "random points : " << endl;
       //get hog at random 10 image location
-      for(size_t i = 0; i < nofeatures_neg; ++i)
+      for(size_t i = 0; i < no_features_neg_; ++i)
       {
         cv::Point feat_loc(rand() % (image_data.cols - win_size_.width), rand() % (image_data.rows - win_size_.height));
         //cout << feat_loc << endl;
@@ -213,7 +199,7 @@ namespace od
         std::vector<float> feature_vector;
         calculateFeaturesFromImageLoc(image_data, feature_vector, hog, feat_loc);
 
-        if(!featureVector.empty())
+        if(!feature_vector.empty())
         {
           /* Put positive or negative sample class to file,
        * true=positive, false=negative,
@@ -221,7 +207,7 @@ namespace od
        */
           file << "-1";
           // Save feature vector components
-          for(size_t feature = 0; feature < featureVector.size(); ++feature)
+          for(size_t feature = 0; feature < feature_vector.size(); ++feature)
           {
             file << " " << (feature + 1) << ":" << feature_vector[feature];
           }
@@ -231,7 +217,7 @@ namespace od
 
     }
 
-    void ODHOGTrainer::createHardTrainingData(const HOGDescriptor & hog, double hit_threshold, const std::vector<std::string> & neg_file_names)
+    void ODHOGTrainer::createHardTrainingData(const cv::HOGDescriptor & hog, double hit_threshold, const std::vector<std::string> & neg_file_names)
     {
       std::fstream file;
       file.open(features_file_.c_str(), std::fstream::app);
@@ -266,7 +252,7 @@ namespace od
           resize(neg_img, resized_neg, win_size_);
           // imshow("hardneg", resized_neg); waitKey(4000);
 
-          cv::vector<float> feature_vector;
+          std::vector<float> feature_vector;
           calculateFeaturesFromImageLoc(resized_neg, feature_vector, hog, cv::Point(0, 0));
 
           if(!feature_vector.empty())
@@ -274,7 +260,7 @@ namespace od
             file << "-1";
             for(size_t feature = 0; feature < feature_vector.size(); ++feature)
             {
-              file << " " << (feature + 1) << ":" << featureVector.at(feature);
+              file << " " << (feature + 1) << ":" << feature_vector.at(feature);
             }
             file << std::endl;
           }
@@ -286,15 +272,15 @@ namespace od
       file.close();
     }
 
-    double ODHOGTrainer::trainWithSVMLight(const std::string & svm_model_file, const string & svm_descriptor_file, 
+    double ODHOGTrainer::trainWithSVMLight(const std::string & svm_model_file, const std::string & svm_descriptor_file, 
                                            std::vector<float> & descriptor_vector)
     {
       //training takes featurefile as input, produces hitthreshold and vector as output
-      std:: << "Calling " <<  TRAINHOG_SVM_TO_TRAIN::getInstance()->getSVMName() << std::endl;
+      std::cout << "Calling " <<  TRAINHOG_SVM_TO_TRAIN::getInstance()->getSVMName() << std::endl;
       TRAINHOG_SVM_TO_TRAIN::getInstance()->read_problem(const_cast<char *> (features_file_.c_str()));
       TRAINHOG_SVM_TO_TRAIN::getInstance()->train(); // Call the core libsvm training procedure
       std::cout << "Training done, saving model file!"<< std::endl;
-      TRAINHOG_SVM_TO_TRAIN::getInstance()->saveModelToFile(svmModelFile);
+      TRAINHOG_SVM_TO_TRAIN::getInstance()->saveModelToFile(svm_model_file);
 
       std::cout << "Generating representative single HOG feature vector using svmlight!" << std::endl;
 
@@ -303,10 +289,10 @@ namespace od
       // Generate a single detecting feature vector (v1 | b) from the trained support vectors, for use e.g. with the HOG algorithm
       TRAINHOG_SVM_TO_TRAIN::getInstance()->getSingleDetectingVector(descriptor_vector, descriptor_vector_indices);
       // And save the precious to file system
-      saveDescriptorVectorToFile(descriptor_vector, descriptor_vector_indices, svm_descriptor_file);
+      saveDescriptorVectorToFile(descriptor_vector, svm_descriptor_file);
       // Detector detection tolerance threshold
-      hit_threshold_ = TRAINHOG_SVM_TO_TRAIN::getInstance()->getThreshold()
-      return hit_threshold;
+      hit_threshold_ = TRAINHOG_SVM_TO_TRAIN::getInstance()->getThreshold();
+      return hit_threshold_;
     }
 
     int ODHOGTrainer::train()
@@ -319,8 +305,8 @@ namespace od
       valid_extensions.push_back(".png");
       valid_extensions.push_back(".ppm");
 
-      FileUtils::getFilesInDirectoryRec(pos_samples_dir_, valid_extensions, positive_training_images);
-      FileUtils::getFilesInDirectoryRec(neg_samples_dir_, valid_extensions, negative_training_images);
+      fileutils::getFilesInDirectoryRec(pos_samples_dir_, valid_extensions, positive_training_images);
+      fileutils::getFilesInDirectoryRec(neg_samples_dir_, valid_extensions, negative_training_images);
 
       unsigned int pos_size = positive_training_images.size();
       unsigned int neg_size = negative_training_images.size();
@@ -374,7 +360,7 @@ namespace od
         // Iterate over NEG IMAGES
         for(auto & ni : negative_training_images)
         {
-          handleNegetivefile(ni, hog_, File);
+          handleNegetivefile(ni, hog_, file);
         }
 
         std::cout << std::endl;
@@ -383,14 +369,14 @@ namespace od
 
       } else
       {
-        std::cout << "Error opening file " << features_file;
+        std::cout << "Error opening file " << features_file_;
         return EXIT_FAILURE;
       }
 
 
       //train them with SVM
       std::vector<float> descriptor_vector;
-      hit_threshold_ = trainWithSVMLight(svm_model_file, descriptor_vector_file, descriptor_vector);
+      hit_threshold_ = trainWithSVMLight(svm_model_file_, descriptor_vector_file_, descriptor_vector);
 
       // Pseudo test our custom detecting vector
       hog_.setSVMDetector(descriptor_vector);
@@ -403,10 +389,10 @@ namespace od
         //create hard training examples
         createHardTrainingData(hog_, hit_threshold_, negative_training_images);
         //train again
-        hit_threshold_ = trainWithSVMLight(svm_model_hard, descriptor_vector_hard, descriptor_vector);
+        hit_threshold_ = trainWithSVMLight(svm_model_hard_, descriptor_vector_hard_, descriptor_vector);
 
         // Pseudo test our custom detecting vector
-        hog_.setSVMDetector(descriptorVector);
+        hog_.setSVMDetector(descriptor_vector);
         std::cout << "Testing training phase using training set as test set after HARD EXAMPLES (just to check if training is ok - no detection quality conclusion with this!)" << std::endl;
         detectTrainingSetTest(hog_, hit_threshold_, positive_training_images, negative_training_images);
 
@@ -424,7 +410,7 @@ namespace od
 
       std::ifstream file;
       float percent;
-      file.open(fileName.c_str(), ios::in);
+      file.open(file_name.c_str(), std::ios::in);
       if(file.good() && file.is_open())
       {
 
@@ -442,7 +428,7 @@ namespace od
       
       cv::FileStorage fs(file_name, cv::FileStorage::WRITE);
       fs << "hitThreshold" << hit_threshold_;
-      hog_.write(fs, FileStorage::getDefaultObjectName(file_name));
+      hog_.write(fs, cv::FileStorage::getDefaultObjectName(file_name));
     }
 
   }

@@ -60,14 +60,13 @@ int main(int argc, char *argv[])
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
   while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
-    od::ODSceneImage * scene = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODSceneImage> scene = frameGenerator.getNextFrame();
 
     //Detect
-    boost::shared_ptr<od::ODDetections> detections =  objdetector.detect(scene);
+    boost::shared_ptr<od::ODDetections> detections = objdetector.detect(scene);
     (*detections)[0]->printSelf();
 
     cv::imshow("Overlay", scene->getCVImage());
-    delete scene;
   }
 
   return 0;

@@ -13,7 +13,7 @@
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/ml.hpp>
 #include "od/common/utils/ODFeatureDetector2D.h"
-#include "od/common/utils/utils.h"
+#include "od/common/utils/ODUtils.h"
 #include "od/detectors/local2D/simple_ransac_detection/Model.h"
 #include "od/detectors/local2D/simple_ransac_detection/Utils.h"
 

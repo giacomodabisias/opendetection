@@ -7,6 +7,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <boost/functional/hash.hpp>
 
 #include <fstream>
 #include <iostream>

@@ -285,7 +285,7 @@ namespace od {
         Triangle t(i, V0, V1, V2);
 
         double out;
-        if(intersectMollerTrumbore(r, t, &out))
+        if(intersectMollerTrumbore(r, t, out))
         {
           cv::Point3f tmp_pt = r.getP0() + out*r.getP1(); // P = O + t*D
           intersections_list.push_back(tmp_pt);
@@ -305,7 +305,7 @@ namespace od {
     }
 
     // Möller–Trumbore intersection algorithm
-    bool PnPProblem::intersectMollerTrumbore(Ray & ray, Triangle & triangle, shared_ptr<double> out)
+    bool PnPProblem::intersectMollerTrumbore(Ray & ray, Triangle & triangle, double & out)
     {
       const double EPSILON = 0.000001;
 
@@ -360,7 +360,7 @@ namespace od {
       t = DOT(e2, Q) * inv_det;
 
       if(t > EPSILON) { //ray intersection
-        *out = t;
+        out = t;
         return true;
       }
 

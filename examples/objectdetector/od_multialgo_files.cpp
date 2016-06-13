@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <opencv2/highgui.hpp>
-#include "detectors/misc/detection/ODDetectorMultiAlgo.hpp"
+#include "od/detectors/misc/detection/ODDetectorMultiAlgo.hpp"
 #include "od/common/utils/ODFrameGenerator.h"
 #include <boost/shared_ptr.hpp>
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
   std::string query_images(argv[2]);
 
   //detector
-  od::ODDetectorMultiAlgo2D detector(trained_data_dir);
+  od::ODDetectorMultiAlgo2D<pcl::PointXYZRGBA> detector(trained_data_dir);
   detector.init();
 
   //get scenes
@@ -51,17 +51,15 @@ int main(int argc, char *argv[])
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
   while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
-    od::ODSceneImage * scene = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODSceneImage> scene = frameGenerator.getNextFrame();
 
     //Detect
-    boost::shared_ptr<ODDetections2D> detections =  detector.detectOmni(scene);
+    boost::shared_ptr<od::ODDetections2D> detections = detector.detectOmni(scene);
 
     if(detections->size() > 0)
       cv::imshow("Overlay", detections->renderMetainfo(*scene).getCVImage());
     else
       cv::imshow("Overlay", scene->getCVImage());
-
-    delete scene;
 
   }
 

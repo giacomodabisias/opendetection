@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
   detector.init();
 
   //GUI and feedback
-  od::ODScenePointCloud<pcl::PointXYZRGBA> * frame;
 
   pcl::visualization::PCLVisualizer vis ("kinect");
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_DEVICE> frameGenerator;
@@ -71,7 +70,7 @@ int main(int argc, char *argv[])
   while(frameGenerator.isValid())
   {
 
-    frame = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA>> frame = frameGenerator.getNextFrame();
 
     //remove previous point clouds and text and add new ones in the visualizer
     vis.removeAllPointClouds();
@@ -91,7 +90,7 @@ int main(int argc, char *argv[])
       pos.y = detections->at(i)->getLocation()[1]; 
       pos.z = detections->at(i)->getLocation()[2];
       ss << "cluster_" << i << "_txt";
-      vis.addText3D (detections->at(i)->getId(), pos, 0.015f, 1, 0, 1, ss.str(), 0);
+      vis.addText3D(detections->at(i)->getId(), pos, 0.015f, 1, 0, 1, ss.str(), 0);
       ss.str(std::string());
     }
 

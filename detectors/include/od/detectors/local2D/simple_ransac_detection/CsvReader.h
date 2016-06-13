@@ -21,7 +21,7 @@ namespace od {
       * @param separator - The separator character between words per line
       * @return
       */
-      CsvReader(const std::string & path, const std::string & separator = ' ');
+      CsvReader(const std::string & path, const std::string & separator = std::string(" "));
 
       /**
       * Read a plane text file with .ply format

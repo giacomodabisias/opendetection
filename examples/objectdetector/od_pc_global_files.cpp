@@ -61,13 +61,12 @@ int main(int argc, char *argv[])
   detector.init();
 
   //Get a scene
-  od::ODScenePointCloud<pcl::PointXYZRGBA> * frame;
 
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(pointcloud_file);
   while(frameGenerator.isValid())
   {
     //get frame
-    frame = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA>> frame = frameGenerator.getNextFrame();
 
     boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(frame);
 
@@ -81,8 +80,6 @@ int main(int argc, char *argv[])
 
     //vis.spinOnce (5);
 
-    //free frame
-    delete frame;
   }
 
   return 0;

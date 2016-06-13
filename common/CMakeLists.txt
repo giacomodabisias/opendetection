@@ -20,8 +20,9 @@ if(build)
             "src/pipeline/ODObjectDetector.cpp"
             "src/pipeline/ODScene.cpp"
             "src/pipeline/ODDetection.cpp"
-            "src/utils/utils.cpp"
+            "src/utils/ODUtils.cpp"
             "src/utils/ODFeatureDetector2D.cpp"
+            "src/bindings/svmlight.cpp"
         )
 
     include_directories(${COMMON_INCLUDE_DIR})

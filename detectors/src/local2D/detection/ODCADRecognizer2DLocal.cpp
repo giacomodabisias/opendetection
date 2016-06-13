@@ -319,7 +319,7 @@ namespace od
       if(inliers_idx.rows < min_inliers_) 
         return false;
 
-      std::cout << "RECOGNIZED: " << model.id_ << std::endl;
+      std::cout << "Recognized: " << model.id_ << std::endl;
       //else everything is fine; report the detection
       if(!detection3D)
         detection3D = make_shared<ODDetection3D>();

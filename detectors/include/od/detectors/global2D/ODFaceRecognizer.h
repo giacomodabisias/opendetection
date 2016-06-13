@@ -28,16 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 #pragma once
 #include "od/common/pipeline/ODDetector.h"
-#include "od/common/pipeline/ODTrainer.h"
-#include "od/common/utils/utils.h"
-
-#include <opencv2/core.hpp>
 #include <opencv2/face.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/objdetect.hpp>
-
-#include <string>
 
 namespace od
 {
@@ -72,7 +63,6 @@ namespace od
       int train();
 
       shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
-
 
       const FaceRecogType & getRecogtype() const
       {
@@ -109,15 +99,15 @@ namespace od
       cv::Ptr<cv::face::FaceRecognizer> cv_recognizer_;
       FaceRecogType recog_type_;
 
-      int im_width_;
-      int im_height_;
+      unsigned int im_width_;
+      unsigned int im_height_;
       int num_components_;
       double threshold_;
 
 
     private:
       
-      void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, const std::string & separator = ';');
+      void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, const std::string & separator = std::string(";"));
 
     };
     /** \example objectdetector/od_image_facerecog.cpp

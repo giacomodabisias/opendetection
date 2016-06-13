@@ -26,10 +26,10 @@ namespace od {
             // read header
             if(!end_header)
             {
-                getline(liness, tmp_str, separator_.c_str());
+                getline(liness, tmp_str, *separator_.c_str());
                 if(tmp_str == "element")
                 {
-                    getline(liness, tmp_str, separator_.c_str());
+                    getline(liness, tmp_str, *separator_.c_str());
                     getline(liness, n);
                     if(tmp_str == "vertex") 
                         num_vertex = std::stoi(n);
@@ -47,8 +47,8 @@ namespace od {
                  if(!end_vertex && count < num_vertex)
                  {
                      std::string x, y, z;
-                     getline(liness, x, separator_.c_str());
-                     getline(liness, y, _separator_);
+                     getline(liness, x, *separator_.c_str());
+                     getline(liness, y, *separator_.c_str());
                      getline(liness, z);
 
                      cv::Point3f tmp_p;
@@ -68,9 +68,9 @@ namespace od {
                  else if(end_vertex && count < num_triangles)
                  {
                      std::string num_pts_per_face, id0, id1, id2;
-                     getline(liness, num_pts_per_face, _separator_);
-                     getline(liness, id0, _separator_);
-                     getline(liness, id1, _separator_);
+                     getline(liness, num_pts_per_face, *separator_.c_str());
+                     getline(liness, id0, *separator_.c_str());
+                     getline(liness, id1, *separator_.c_str());
                      getline(liness, id2);
 
                      std::vector<int> tmp_triangle(3);

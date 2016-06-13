@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global2D/detection/ODHOGDetector.h"
 #include "od/common/utils/ODFrameGenerator.h"
+#include "od/common/utils/ODUtils.h"
 #include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
@@ -39,25 +40,25 @@ int main(int argc, char *argv[])
   std::string trained_data_dir(argv[1]), input_video(argv[2]), output_video = "output.avi";
   if (argc > 3) output_video = argv[3];
 
-  cv::Size sizesingle(640, 480);
+  cv::Size size_single(640, 480);
 
   //get 3 detectors of different types
-  std::vector<string> messages; 
+  std::vector<std::string> messages; 
   messages.push_back("Original");
 
-  std::vector<g2d::ODHOGDetector> detectors;
+  std::vector<od::g2d::ODHOGDetector> detectors;
   od::g2d::ODHOGDetector detector1; //
   messages.push_back("OpenCV Default People"); 
   detectors.push_back(detector1);
 
   od::g2d::ODHOGDetector detector2; 
-  detector2->setSvmtype(g2d::ODHOGDetector::OD_DAIMLER_PEOPLE);
+  detector2.setSvmtype(od::g2d::ODHOGDetector::OD_DAIMLER_PEOPLE);
   messages.push_back("OpenCV Daimler People"); 
   detectors.push_back(detector2);
 
-  od::g2d::ODHOGDetector detector3 (trained_data_dir);
+  od::g2d::ODHOGDetector detector(trained_data_dir);
   messages.push_back("Custom HOG from trained data"); 
-  detectors.push_back(detector3);
+  detectors.push_back(detector);
 
   //init all detectors
   for(size_t i = 0; i < detectors.size(); ++i) 
@@ -66,20 +67,20 @@ int main(int argc, char *argv[])
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_DEVICE> frameGenerator(input_video);
   //od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(input_video);
-  cv::VideoWriter videoWriter(output_video, CV_FOURCC('M','J','P','G'), 25, sizesingle * 2, true);
-
+  cv::VideoWriter videoWriter(output_video, CV_FOURCC('M','J','P','G'), 25, size_single * 2, true);
 
   //GUI
   cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
+  cv::Mat multi_image;
   while(frameGenerator.isValid() && cv::waitKey(33) != 27)
   {
-    od::ODSceneImage * scene = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODSceneImage> scene = frameGenerator.getNextFrame();
 
     std::vector<cv::Mat> images_to_show;
     images_to_show.push_back(scene->getCVImage()); //push the first image
 
     //detect 3 times
-    for (size_t i = 0; i < detectors.size(); i++)
+    for(size_t i = 0; i < detectors.size(); i++)
     {
       boost::shared_ptr<od::ODDetections2D> detections =  detectors[i].detectOmni(scene);
       if(detections->size() > 0)
@@ -88,11 +89,10 @@ int main(int argc, char *argv[])
         images_to_show.push_back(scene->getCVImage());
     }
 
-    cv::Mat multiimage = makeCanvasMultiImages(images_to_show, sizesingle, messages);
-    cv::imshow("Overlay", multiimage);
-    videoWriter << multiimage;
+    multi_image = od::makeCanvasMultiImages(images_to_show, size_single, messages);
+    cv::imshow("Overlay", multi_image);
+    videoWriter << multi_image;
 
-    delete scene;
   }
 
   return 0;

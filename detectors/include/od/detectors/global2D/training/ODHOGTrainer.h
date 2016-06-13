@@ -27,9 +27,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 13.08.15.
 //
 #pragma once
-//#include <opencv2/objdetect.hpp>
+#include <opencv2/objdetect.hpp>
+#include <opencv2/opencv.hpp>
+
 #include "od/common/pipeline/ODTrainer.h"
-//#include "od/common/utils/utils.h"
+//#include "od/common/utils/ODUtils.h"
+#include <fstream>
+
+//binding class for svmlight
+#include "od/common/bindings/svmlight.h"
 
 namespace od
 {
@@ -79,12 +85,12 @@ namespace od
 
       int getNOFeaturesNeg() const
       {
-        return nofeatures_neg_;
+        return no_features_neg_;
       }
 
       void setNOFeaturesNeg(int featno)
       {
-       no_features_neg_ = featno;
+        no_features_neg_ = featno;
       }
 
       const cv::Point & getStartHogPos() const
@@ -149,12 +155,12 @@ namespace od
 
       bool isTrainHardNegetive() const
       {
-        return train_hard_negetive_;
+        return train_hard_negative_;
       }
 
-      void setTrainHardNegetive(bool train_hard_negetive)
+      void setTrainHardNegetive(bool train_hard_negative)
       {
-        train_hard_negetive_ = train_hard_negetive;
+        train_hard_negative_ = train_hard_negative;
       }
 
       double getHitThreshold() const
@@ -174,13 +180,13 @@ namespace od
       //algo specific
       cv::Size training_padding_;
       cv::Point start_hog_pos_;
-      int no_features_neg__;
+      int no_features_neg_;
       cv::Size win_stride_;
-      bool train_hard_negetive_;
+      bool train_hard_negative_;
 
       //directories
       std::string pos_samples_dir_;
-      std::string neg_samples_dir__;
+      std::string neg_samples_dir_;
 
       //properties retained
       double hit_threshold_;
@@ -208,8 +214,7 @@ namespace od
 
 
 
-      void saveDescriptorVectorToFile(std::vector<float> & descriptor_vector, std::vector<unsigned int> & vector_indices,
-                                  std::string file_name);
+      void saveDescriptorVectorToFile(const std::vector<float> & descriptor_vector, const std::string & file_name);
 
       void handleNegetivefile(const std::string & image_filename, cv::HOGDescriptor & hog, std::fstream & file);
 

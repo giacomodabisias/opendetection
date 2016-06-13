@@ -75,7 +75,7 @@ namespace od
     void init();
 
   private:
-    std::vector<od::shared_ptr<ODDetector2D> > detectors_2d_;
+    std::vector<shared_ptr<ODDetector2D> > detectors_2d_;
     std::vector<shared_ptr<ODDetector3D<PointT> > > detectors_3d_;
   };
 
@@ -112,8 +112,8 @@ namespace od
   {
     //make a list of different algorithms
     //vector<ODDetector *> detectors = {new ODCascadeDetector(trained_data_location_), new ODHOGDetector(trained_data_location_), new ODCADRecognizer2DLocal(trained_data_location_)};
-    detectors_2d_.push_back(new g2d::ODCascadeDetector(trained_data_location_));
-    detectors_2d_.push_back(new g2d::ODHOGDetector(trained_data_location_));
+    detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(trained_data_location_));
+    detectors_2d_.push_back(make_shared<g2d::ODHOGDetector>(trained_data_location_));
     //  detectors.push_back(new ODCADRecognizer2DLocal(trained_data_location_));
 
     for(size_t i = 0; i < detectors_2d_.size(); ++i)
@@ -127,7 +127,7 @@ namespace od
   void ODDetectorMultiAlgo<PointT>::init()
   {
       //3D
-    detectors_3d_.push_back(new g3d::ODCADDetector3DGlobal<PointT>(trained_data_location_, training_input_location_));
+    detectors_3d_.push_back( make_shared<g3d::ODCADDetector3DGlobal<PointT> >(trained_data_location_, training_input_location_));
     for(size_t i = 0; i < detectors_3d_.size(); ++i)
     {
       detectors_3d_[i]->init();
@@ -150,7 +150,7 @@ namespace od
   template<typename PointT>
   shared_ptr<ODDetections3D> ODDetectorMultiAlgo<PointT>::detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene)
   {
-    shared_ptr<ODDetections3D> detections_all = make_shared<ODDetections3D>;
+    shared_ptr<ODDetections3D> detections_all = make_shared<ODDetections3D>();
     for(size_t i = 0; i < detectors_3d_.size(); i++)
     {
       shared_ptr<ODDetections3D> detections_individual = detectors_3d_[i]->detectOmni(scene);

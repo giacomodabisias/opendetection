@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 12.06.15.
 //
 #pragma once
-#include "od/common/utils/utils.h"
+#include "od/common/utils/ODUtils.h"
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/utils/ODShared_pointers.h"
 

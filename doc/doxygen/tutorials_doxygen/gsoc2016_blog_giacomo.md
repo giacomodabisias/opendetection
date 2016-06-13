@@ -165,3 +165,16 @@ Missing parts and next steps:
 - I have to check that compilation works fine also with svmlight which was disabled till now
 - Use shared pointer where normal pointer are used. We have to decide if we want to use boost or stds shared pointers since pcl is using the first version. The second would be better so we would have everything which is possible using std and then when pcl moves toward std shared pointer we move also the rest of the code to that.
 - Remove where possible the argc,argv parsing methods using standard ones.
+
+##Shared Pointers 10/06/15##
+
+The following step took quite a bit in order to have everything work well. Until now the library was using normal C++ pointer created with new and then deleted when not used anymore. This can lead to bad habits of forgetting to delete pointers, causing memory leaks. To avoid this its always good to use safe pointers which get deallocated as soon as they are not referenced my anyone anymore. Safe pointers are called **shared_ptr** in C++ and were intially implemented in the *Boost* library; then, after C++11, they where also inserted in the standard in the *std::* namespace. Substituting all pointers n the library was quite a complex task for different reasons:
+
+- Opendetection uses quite a lot the *Pcl* library. This library is still using the **boost::shared_ptr** implementation instead of the **std::shared_ptr** implementation. The two **shared_ptr** are not compatible and so a big issue arises. Should we use the first or second implementation? We should use the second solution since it relies on the standard, but we can't since *Pcl* still uses the first implementation. While *Pcl* moves to the *std::* solution we need to use the *boost* namespace, so in order to have the library compatible with both implementations, beeing able to switch from one to the other, I added a simple header file which switches between the two shared pointer types. This way as soon as *Pcl* moves to the *std::* we can also switch by just setting a variable in the cmake. The variable is called **WITH_BOOST_SHARED_PTR** ad is set to on by default so that we use *boost::shared_ptr* for now. 
+
+- Substituting a pointer with a shared pointer requirest also to use another set of functions for the creation and the casting. to create a **shared_ptr** you either pass the pointer to the constructor or use the **make_shared** template passing to the function the constructor arguments and as template argument the pointer type. Also static and dynamic casting have specific template functions which are **dynamic_pointer_cast** and **static_pointer_casto**.
+
+- It is important to remove all delete which are around the code since **shared_ptr* automatically destroy the pointed objects in the destructor if not referenced anymore.
+
+While restructuring the code I also fixed again some coding style issues, but I still have to go through the code a few more times in order to finish fixing everything. The next step is as previously mentioned, to check the compilation with the svmlight option.
+

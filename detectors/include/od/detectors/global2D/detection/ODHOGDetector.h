@@ -29,11 +29,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODScene.h"
-#include "od/common/utils/utils.h"
+#include "od/common/utils/ODUtils.h"
 #include "od/common/utils/ODFeatureDetector2D.h"
+#include "od/common/utils/ODShared_pointers.h"
+#include "od/common/bindings/svmlight.h"
 
 #include <iostream>
-#include <opencv2/opencv.hpp>
+#include <opencv2/objdetect.hpp>
 
 namespace od
 {
@@ -62,12 +64,8 @@ namespace od
 
 
       ODHOGDetector(const std::string & trained_data_location_ = "", const cv::Size & win_size = cv::Size(64,128),
-                    const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8), const cv::Size & cell_size = cv::Size(8,8),
-                    float hit_threshold = 0.0):
-                      ODDetector2D(trained_data_location_),  win_size_(win_size), block_size_(block_size), block_stride_(block_stride),
-                      cell_size_(cell_size), hit_threshold_(hit_threshold), hog_(win_size_, block_size, block_stride, cell_size, 9, 1, -1,
-                      cv::HOGDescriptor::L2Hys, 0.2, false, cv::HOGDescriptor::DEFAULT_NLEVELS){}
-
+                    const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8), 
+                    const cv::Size & cell_size = cv::Size(8,8), float hit_threshold = 0.0);
 
       void init();
       void load(const std::string & file_name);
@@ -113,7 +111,7 @@ namespace od
       float hit_threshold_;
 
       cv::HOGDescriptor hog_;
-      SVMType svmtype_;
+      SVMType svm_type_;
 
     };
 

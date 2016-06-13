@@ -54,10 +54,9 @@ int main(int argc, char *argv[])
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(imagespath);
   //GUI
   //cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  od::ODSceneImage * scene;
   while(frameGenerator.isValid() && cv::waitKey(10) != 27)
   {
-    scene = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODSceneImage> scene = frameGenerator.getNextFrame();
     //cv::imshow("Overlay", scene->getCVImage());
 
     //Detect
@@ -79,8 +78,6 @@ int main(int argc, char *argv[])
     }
     //else
       //cv::imshow("Overlay", scene->getCVImage());
-
-    delete scene;
 
   }
 

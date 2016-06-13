@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 #pragma once
 #include "od/common/pipeline/ODTrainer.h"
-#include "od/common/utils/utils.h"
+#include "od/common/utils/ODUtils.h"
 #include "od/detectors/local2D/ODImageLocalMatching.h"
 
 #include <string>

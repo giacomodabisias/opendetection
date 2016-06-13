@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/misc/detection/ODDetectorMultiAlgo.hpp"
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
-#include "common/utils/ODFrameGenerator.h"
+#include "od/common/utils/ODFrameGenerator.h"
 #include <string>
 #include <boost/shared_ptr.hpp>
 
@@ -49,12 +49,11 @@ int main(int argc, char *argv[])
   std::string trained_data_dir(argv[2]);
 
   //detector
-  od::ODDetectorMultiAlgo detector(trained_data_dir);
+  od::ODDetectorMultiAlgo<pcl::PointXYZRGBA> detector(trained_data_dir);
   detector.setTrainingInputLocation(training_input_dir);
   detector.init();
 
   //GUI and feedback
-  od::ODScenePointCloud<pcl::PointXYZRGBA> * frame;
 
   pcl::visualization::PCLVisualizer vis ("kinect");
   size_t previous_cluster_size = 0;
@@ -65,7 +64,7 @@ int main(int argc, char *argv[])
   while(frameGenerator.isValid())
   {
 
-    frame = frameGenerator.getNextFrame();
+    boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA>> frame = frameGenerator.getNextFrame();
 
     //remove previous point clouds and text and add new ones in the visualizer
     vis.removePointCloud ("frame");
@@ -84,7 +83,7 @@ int main(int argc, char *argv[])
 
     //Detect
 
-    boost::shared_ptr<od::ODDetections3D> detections = detector->detectOmni(frame);
+    boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(frame);
 
     //add all the detections in the visualizer with its id as text
     for(size_t i = 0; i < detections->size (); ++i)

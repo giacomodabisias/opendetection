@@ -135,14 +135,14 @@ namespace od
      * \param[in] scene An instance of 2D scene
      * \return A number of detections as an ODDetections instance.
     */
-    virtual shared_ptr<ODDetections> detect(share_ptd<ODSceneImage> scene) = 0;
+    virtual shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene) = 0;
 
     /** \brief Function for performing detection on an entire scene.
      *  The purpose of this function is to detect an object in an entire scene. Thus, other than the type of detection we also have information about the location of the detection w.r.t. the scene.
      * \param[in] scene An instance of 2D scene
      * \return A number of detections as an ODDetections3D instance containing information about the detection and its pose in 3D.
     */
-    virtual shared_ptr<ODDetections3D> detectOmni(share_ptd<ODSceneImage> scene) = 0;
+    virtual shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODSceneImage> scene) = 0;
   };
 
 }

@@ -60,9 +60,10 @@ int main(int argc, char *argv[])
   detector.init();
 
   //Get a scene
-  od::ODScenePointCloud<pcl::PointXYZRGBA> scene(pointcloud_file);
+  boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA> > scene = boost::make_shared<od::ODScenePointCloud<pcl::PointXYZRGBA>>(pointcloud_file);
 
-  boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(&scene);
+
+  boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(scene);
 
   //feedback
   for(size_t i = 0; i < detections->size(); ++i)

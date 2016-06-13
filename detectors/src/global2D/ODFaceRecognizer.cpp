@@ -105,7 +105,7 @@ namespace od
       im_height_ = images[0].rows;
     }
 
-    shared_ptr<ODDetections> ODFaceRecognizer::detect(ODSceneImage * scene)
+    shared_ptr<ODDetections> ODFaceRecognizer::detect(shared_ptr<ODSceneImage> scene)
     {
       cv::Mat face_edited;
       cv::cvtColor(scene->getCVImage(), face_edited, CV_BGR2GRAY);
@@ -127,7 +127,8 @@ namespace od
     }
 
 
-    void ODFaceRecognizer::read_csv(const std::string & filename, std::vector<cv::Mat> & images, std::vector<int> & labels, const std::string & separator)
+    void ODFaceRecognizer::read_csv(const std::string & filename, std::vector<cv::Mat> & images, std::vector<int> & labels, 
+                                    const std::string & separator)
     {
       std::ifstream file(filename.c_str(), std::ifstream::in);
       if(!file)
@@ -139,7 +140,7 @@ namespace od
       while(getline(file, line))
       {
         std::stringstream liness(line);
-        getline(liness, path, separator.c_str());
+        getline(liness, path, *separator.c_str());
         getline(liness, classlabel);
         if(!path.empty() && !classlabel.empty())
         {

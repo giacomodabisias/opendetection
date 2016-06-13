@@ -1,9 +1,8 @@
 //
 // Created by sarkar on 19.06.15.
 //
-#include "od/common/utils/utils.h"
-#include <opencv2/imgproc/imgproc.hpp>
-#include <boost/functional/hash.hpp>
+#include "od/common/utils/ODUtils.h"
+
 
 namespace od
 {
@@ -179,11 +178,13 @@ namespace od
           std::string extension = strs[strs.size() - 1];
 
           bool flagfound = false;
-          for (int exti = 0; exti < exts.size(); exti ++)
+          for (size_t exti = 0; exti < exts.size(); ++exti)
             if(file.rfind(exts[exti]) != std::string::npos)
-            { flagfound = true; break; }
+            { flagfound = true; 
+              break; 
+            }
 
-          if( flagfound == true )
+          if(flagfound == true)
           {
 #if BOOST_FILESYSTEM_VERSION == 3
             std::string path = rel_path_so_far + (itr->path().filename()).string();

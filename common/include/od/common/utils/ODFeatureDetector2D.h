@@ -8,7 +8,7 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/cudafeatures2d.hpp>
-
+#include <GL/gl.h>
 #include "SiftGPU.h"
 
 

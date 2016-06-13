@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODScene.h"
-#include "od/common/utils/utils.h"
+#include "od/common/utils/ODUtils.h"
 #include "od/common/utils/ODFeatureDetector2D.h"
 
 #include <opencv2/opencv.hpp>

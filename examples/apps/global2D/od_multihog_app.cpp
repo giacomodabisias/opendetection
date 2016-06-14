@@ -56,9 +56,9 @@ int main(int argc, char *argv[])
   messages.push_back("OpenCV Daimler People"); 
   detectors.push_back(detector2);
 
-  od::g2d::ODHOGDetector detector(trained_data_dir);
+  od::g2d::ODHOGDetector detector3(trained_data_dir);
   messages.push_back("Custom HOG from trained data"); 
-  detectors.push_back(detector);
+  detectors.push_back(detector3);
 
   //init all detectors
   for(size_t i = 0; i < detectors.size(); ++i) 

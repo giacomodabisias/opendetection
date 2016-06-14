@@ -216,7 +216,6 @@ namespace od
       std::cout << "Reading descriptor vector from file " << file_name << std::endl;;
 
       std::ifstream file;
-      float percent;
       file.open(file_name.c_str(), std::ios::in);
       if(file.good() && file.is_open()) {
 

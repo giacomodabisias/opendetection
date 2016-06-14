@@ -35,16 +35,6 @@ namespace od
   namespace g2d
   {
 
-    static void storeCursor(void)
-    {
-      printf("\033[s");
-    }
-
-    static void resetCursor(void)
-    {
-      printf("\033[u");
-    }
-
     ODHOGTrainer::ODHOGTrainer(const std::string & training_input_location_, const std::string & trained_data_location_, const cv::Size & win_size, 
                                const cv::Size & block_size, const cv::Size & block_stride, const cv::Size & cell_size, float hit_threshold):
                                ODTrainer(training_input_location_, trained_data_location_),  win_size_(win_size), block_size_(block_size), 
@@ -89,7 +79,6 @@ namespace od
       if(file.good() && file.is_open())
       {
         std::cout << "Saving " << descriptors_num << " descriptor vector features:\t" << std::endl;
-        storeCursor();
         for(size_t feature = 0; feature < descriptors_num; ++feature)
         {
           if((feature % 10 == 0) || (feature == (descriptors_num - 1)))
@@ -322,7 +311,6 @@ namespace od
       setlocale(LC_ALL, "POSIX");
 
       std::cout << "Reading files, generating HOG features and save them to file: " << features_file_ << std::endl;
-      float percent;
 
       std::fstream file;
       file.open(features_file_.c_str(), std::fstream::out);
@@ -404,7 +392,6 @@ namespace od
       std::cout << "Reading descriptor vector from file " << file_name << std::endl;
 
       std::ifstream file;
-      float percent;
       file.open(file_name.c_str(), std::ios::in);
       if(file.good() && file.is_open())
       {

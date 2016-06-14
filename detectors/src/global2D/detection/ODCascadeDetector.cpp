@@ -45,6 +45,12 @@ namespace od
       meta_info_ = true;
     }
 
+    shared_ptr<ODDetections> ODCascadeDetector::detectOmni(shared_ptr<ODScene> scene)
+    {
+      std::cout << "not implemented, use detect()" <<std::endl; 
+      return nullptr;
+    };
+
     void ODCascadeDetector::init()
     {
       haar_cascade_ = make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_));

@@ -53,6 +53,7 @@ namespace od
       std::string desc_name_;
       shared_ptr<ODCADDetectTrainer3DGlobal> trainer_;
       shared_ptr<ODCADDetector3DGlobal<pcl::PointXYZ> > detector_;
+      
     };
   }
 }

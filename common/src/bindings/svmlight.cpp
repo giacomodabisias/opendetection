@@ -96,7 +96,7 @@ SVMlight::~SVMlight() {
         svmlight::kernel_cache_cleanup(kernel_cache_);
     free(alpha_in_);
     free_model(model_, 0);
-    for(size_t i = 0; i < totdoc_; ++i)
+    for(long i = 0; i < totdoc_; ++i)
         free_example(docs_[i], 1);
     free(docs_);
     free(target_);
@@ -128,13 +128,13 @@ void SVMlight::getSingleDetectingVector(std::vector<float> & single_detector_vec
     std::cout << "Resulting vector size " <<  single_detector_vector.size() << std::endl;
     
     // Walk over every support vector
-    for(size_t ssv = 1; ssv < model_->sv_num; ++ssv) { // Don't know what's inside model->supvec[0] ?!
+    for(long ssv = 1; ssv < model_->sv_num; ++ssv) { // Don't know what's inside model->supvec[0] ?!
         // Get a single support vector
         svmlight::DOC * singleSupportVector = supveclist[ssv]; // Get next support vector
         svmlight::SVECTOR * singleSupportVectorValues = singleSupportVector->fvec;
         svmlight::WORD singleSupportVectorComponent;
         // Walk through components of the support vector and populate our detector vector
-        for(unsigned long singleFeature = 0; singleFeature < model_->totwords; ++singleFeature) {
+        for(long singleFeature = 0; singleFeature < model_->totwords; ++singleFeature) {
             singleSupportVectorComponent = singleSupportVectorValues->words[singleFeature];
             single_detector_vector.at(singleSupportVectorComponent.wnum-1) += (singleSupportVectorComponent.weight * model_->alpha[ssv]);
         }

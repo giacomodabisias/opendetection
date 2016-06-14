@@ -253,11 +253,11 @@ namespace od
       //headers
       fout << pairs.size() << endl;
       fout << 3 << " " << descriptors.cols << endl;
-      for(int i = 0; i < pairs.size(); i++)
+      for(size_t i = 0; i < pairs.size(); i++)
       {
         fout << pairs[i].first.x << " " << pairs[i].first.y << " " << pairs[i].first.z << endl;
         fout << pairs[i].second.pt.x << " " << pairs[i].second.pt.y << " " << pairs[i].second.octave << " " << pairs[i].second.angle << " " << pairs[i].second.response << " " << pairs[i].second.size << endl;
-        for(size_t j = 0; j < descriptors.cols; ++j)
+        for(int j = 0; j < descriptors.cols; ++j)
         {
           fout << descriptors.at<float>(i, j) << " ";
         }
@@ -276,7 +276,7 @@ namespace od
       //root.append_attribute("objid") = "1";
 
       pugi::xml_node points_node = root.append_child("Points");
-      for(int i = 0; i < pairs.size(); i++)
+      for(size_t i = 0; i < pairs.size(); i++)
       {
         pugi::xml_node p_node = points_node.append_child("Point");
 

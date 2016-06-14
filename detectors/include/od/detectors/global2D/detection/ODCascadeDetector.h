@@ -56,10 +56,13 @@ namespace od
 
       void init();
 
-      shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
-      shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
+      virtual shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
+      virtual shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
+
+      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
 
     private:
+
       shared_ptr<cv::CascadeClassifier> haar_cascade_;
 
       double scale_factor_;

@@ -97,12 +97,16 @@ namespace od
 
       void init();
 
-      shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
-      shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODSceneImage> scene);
+      virtual shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
+      virtual shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODSceneImage> scene);
+
+      virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
+      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
 
     protected:
 
-      bool detectSingleModel(shared_ptr<ODSceneImage> scene, const Model & model, shared_ptr<ODDetection3D> & detection3D, const cv::Mat & frame_viz);
+      bool detectSingleModel(shared_ptr<ODSceneImage> scene, const Model & model, shared_ptr<ODDetection3D> & detection3D, 
+                             const cv::Mat & frame_viz);
 
       std::string camera_intrinsic_file_;      
 

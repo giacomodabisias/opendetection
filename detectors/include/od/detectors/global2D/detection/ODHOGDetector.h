@@ -64,7 +64,7 @@ namespace od
                     const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8),
                     const cv::Size & cell_size = cv::Size(8,8), float hit_threshold = 0.0);
 
-      OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(SVMType, (OD_CUSTOM)(OD_DEFAULT_PEOPLE)(OD_DAIMLER_PEOPLE)(OD_FILE))
+      OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(SVMType, (OD_DEFAULT_PEOPLE)(OD_DAIMLER_PEOPLE)(OD_FILE))
 
       void init();
       void load(const std::string & file_name);
@@ -99,6 +99,8 @@ namespace od
       void setHitThreshold(float hit_threshold);
 
       void printParameters();
+
+      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene) {return nullptr;};
 
     protected:
       //properteis

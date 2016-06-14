@@ -80,7 +80,9 @@ namespace od
       void setDescName(const std::string & desc_name);
 
     protected:
+
       std::string desc_name_;
+      
     };
   }
 }

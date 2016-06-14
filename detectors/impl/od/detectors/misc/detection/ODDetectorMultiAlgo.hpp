@@ -50,6 +50,8 @@ namespace od
     shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
     shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene);
 
+    virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+    virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
 
     void init();
 
@@ -59,6 +61,7 @@ namespace od
     std::vector<shared_ptr<ODDetector3D<PointT> > > detectors_3d_;
 
   };
+
   template<typename PointT>
   class ODDetectorMultiAlgo : public ODDetector
   {
@@ -73,6 +76,9 @@ namespace od
     shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
     shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene);
 
+    virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+    virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
+
     void init();
 
   private:
@@ -82,6 +88,33 @@ namespace od
 
   };
 
+  template<typename PointT>
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<PointT>::detectOmni(shared_ptr<ODScene> scene)
+  {
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    return nullptr;
+  }
+
+  template<typename PointT>
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<PointT>::detect(shared_ptr<ODScene> scene)
+  {
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    return nullptr;
+  }
+
+  template<typename PointT>
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detectOmni(shared_ptr<ODScene> scene)
+  {
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    return nullptr;
+  }
+
+  template<typename PointT>
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detect(shared_ptr<ODScene> scene)
+  {
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    return nullptr;
+  }
 
   //BASED ON 2D SCENE
   template<typename PointT>

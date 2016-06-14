@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
       logfile << scene->getPath() << endl;
       logfile << detections->size() << endl;
 
-      for (int i = 0; i < detections->size(); i++)
+      for(size_t i = 0; i < detections->size(); i++)
       {
         boost::shared_ptr<od::ODDetection3D> detection = detections->at(i);
         detection->printSelf();

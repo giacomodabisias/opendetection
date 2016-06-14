@@ -256,7 +256,17 @@ namespace od
 
     }
 
+    shared_ptr<ODDetections> ODCADRecognizer2DLocal::detect(shared_ptr<ODScene> scene) 
+    {
+      std::cout << "not implemented, use with shared_ptr<ODScene>" <<std::endl; 
+      return nullptr;
+    };
 
+    shared_ptr<ODDetections> ODCADRecognizer2DLocal::detectOmni(shared_ptr<ODScene> scene)
+    {
+      std::cout << "not implemented, use with shared_ptr<ODScene>" <<std::endl; 
+      return nullptr;
+    };
 
     shared_ptr<ODDetections> ODCADRecognizer2DLocal::detect(shared_ptr<ODSceneImage> scene)
     {

@@ -111,15 +111,12 @@ namespace od
     void setDetectionMethod(const DetectionMethod & detection_method);
 
     bool getAlwaysTrain() const;
-
     void setAlwaysTrain(bool always_train);
 
     std::string getTrainingInputLocation() const;
-
     void setTrainingInputLocation(const std::string & training_input_location);
 
     std::string getTrainingDataLocation() const;
-
     void setTrainingDataLocation(const std::string & training_data_location);
 
     std::string getSpecificTrainingDataLocation();
@@ -131,10 +128,10 @@ namespace od
 
     virtual int train() = 0;
 
-    virtual int detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections) {}
+    virtual int detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections) = 0;
 
-    virtual shared_ptr<ODDetection> detect(shared_ptr<ODScene> scene) {}
-    virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene) {}
+    virtual shared_ptr<ODDetection> detect(shared_ptr<ODScene> scene) = 0;
+    virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene) = 0;
 
   protected:
 

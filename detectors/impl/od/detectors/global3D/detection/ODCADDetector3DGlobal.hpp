@@ -57,12 +57,29 @@ namespace od
         desc_name_ = desc_name;
       }
 
+      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+      virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
+
     protected:
 
       int NN;
       std::string desc_name_;
       shared_ptr<pcl::rec_3d_framework::GlobalClassifier<pcl::PointXYZ> > global_;
 
+    };
+
+    template<typename PointT>
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<PointT>::detect(shared_ptr<ODScene> scene) 
+    {
+      std::cout << "not implemented, use with shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+      return nullptr;
+    };
+
+    template<typename PointT>
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<PointT>::detectOmni(shared_ptr<ODScene> scene)
+    {
+      std::cout << "not implemented, use with shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+      return nullptr;
     };
 
     template<typename PointT>
@@ -157,12 +174,10 @@ namespace od
 
       typename pcl::PointCloud<PointT>::Ptr frame;
       float Z_DIST_ = 1.25f;
-      float text_scale = 0.015f;
 
       frame = scene->getPointCloud();
       pcl::PointCloud<pcl::PointXYZ>::Ptr xyz_points(new pcl::PointCloud<pcl::PointXYZ>);
       pcl::copyPointCloud(*frame, *xyz_points);
-
 
       //Step 1 -> Segment
       pcl::apps::DominantPlaneSegmentation<pcl::PointXYZ> dps;
@@ -179,9 +194,7 @@ namespace od
       dps.compute_fast(clusters);
       dps.getIndicesClusters(indices);
       Eigen::Vector4f table_plane_;
-      Eigen::Vector3f normal_plane_ = Eigen::Vector3f(table_plane_[0], table_plane_[1], table_plane_[2]);
       dps.getTableCoefficients(table_plane_);
-
 
       for(size_t i = 0; i < clusters.size(); ++i)
       {
@@ -219,8 +232,6 @@ namespace od
       shared_ptr<ODDetections> detections = make_shared<ODDetections>();
 
       typename pcl::PointCloud<PointT>::Ptr frame;
-      float Z_DIST_ = 1.25f;
-      float text_scale = 0.015f;
 
       frame = scene->getPointCloud();
       pcl::PointCloud<pcl::PointXYZ>::Ptr xyz_points(new pcl::PointCloud<pcl::PointXYZ>);
@@ -236,10 +247,8 @@ namespace od
       global_->getConfidence(conf);
       //detection done!
 
-      std::string category = categories[0];
-
       //now fill up the detection:
-     shared_ptr<ODDetection> detection = make_shared<ODDetection3D>(ODDetection::OD_DETECTION_CLASS, categories[0], conf[0]);
+      shared_ptr<ODDetection> detection = make_shared<ODDetection3D>(ODDetection::OD_DETECTION_CLASS, categories[0], conf[0]);
       detections->push_back(detection);
 
       return detections;

@@ -180,7 +180,7 @@ namespace od
       //algo specific
       cv::Size training_padding_;
       cv::Point start_hog_pos_;
-      int no_features_neg_;
+      unsigned int no_features_neg_;
       cv::Size win_stride_;
       bool train_hard_negative_;
 

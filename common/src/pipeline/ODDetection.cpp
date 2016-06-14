@@ -167,7 +167,7 @@ namespace od
 	  detections_.resize(0);
 	}
 
-	int ODDetections::size() const 
+	unsigned int ODDetections::size() const 
 	{
 		return detections_.size(); 
 	}

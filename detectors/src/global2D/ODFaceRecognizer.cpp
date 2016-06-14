@@ -41,6 +41,13 @@ namespace od
       TRAINED_DATA_EXT_ = "facerec.xml";
     }
 
+    shared_ptr<ODDetections> ODFaceRecognizer::detectOmni(shared_ptr<ODSceneImage> scene) 
+    {
+      std::cout << "not implemented, use detect()" <<std::endl; 
+      return nullptr;
+    };
+
+
     void ODFaceRecognizer::init()
     {
       switch(recog_type_)
@@ -92,7 +99,7 @@ namespace od
       } catch(cv::Exception & e)
       {
         std::cerr << "Error opening file \"" << training_input_location_ << "\". Reason: " << e.msg << std::endl;
-        exit(1);
+        return -1;
       }
       cv_recognizer_->train(images, labels);
       fileutils::createTrainingDir(getSpecificTrainingDataLocation());
@@ -103,6 +110,26 @@ namespace od
       //the training set has atleast one image
       im_width_ = images[0].cols;
       im_height_ = images[0].rows;
+
+      return 0;
+    }
+
+    shared_ptr<ODDetection> ODFaceRecognizer::detect(shared_ptr<ODScene> scene) 
+    {
+      std::cout << "not implemented, use with shared_ptr<ODSceneImage>" <<std::endl; 
+      return nullptr;
+    };
+
+    shared_ptr<ODDetections> ODFaceRecognizer::detectOmni(shared_ptr<ODScene> scene)
+    {
+      std::cout << "not implemented, use with shared_ptr<ODSceneImage>" <<std::endl; 
+      return nullptr;
+    };
+
+    int ODFaceRecognizer::detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections)
+    {
+      std::cout << "not implemented, use with shared_ptr<ODSceneImage>" <<std::endl; 
+      return -1;
     }
 
     shared_ptr<ODDetections> ODFaceRecognizer::detect(shared_ptr<ODSceneImage> scene)

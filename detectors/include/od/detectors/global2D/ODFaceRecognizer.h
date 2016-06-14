@@ -63,6 +63,12 @@ namespace od
       int train();
 
       shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
+      shared_ptr<ODDetections> detectOmni(shared_ptr<ODSceneImage> scene); 
+
+      virtual shared_ptr<ODDetection> detect(shared_ptr<ODScene> scene);
+      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+
+      virtual int detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections);
 
       const FaceRecogType & getRecogtype() const
       {
@@ -99,12 +105,12 @@ namespace od
       cv::Ptr<cv::face::FaceRecognizer> cv_recognizer_;
       FaceRecogType recog_type_;
 
-      unsigned int im_width_;
-      unsigned int im_height_;
       int num_components_;
       double threshold_;
+      unsigned int im_height_;
+      unsigned int im_width_;
 
-
+      
     private:
       
       void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, const std::string & separator = std::string(";"));

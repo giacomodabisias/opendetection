@@ -176,7 +176,7 @@ namespace od
 
     virtual ~ODDetections();
 
-    int size() const;
+    unsigned int size() const;
 
     void push_back(shared_ptr<ODDetection> detection);
 

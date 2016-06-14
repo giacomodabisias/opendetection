@@ -280,7 +280,8 @@ INCLUDE_FILE_PATTERNS  = *.h
 PREDEFINED =           = "HAVE_QHULL=1" \
                          "HAVE_OPENNI=1" \
                          "HAVE_ENSENSO=1" \
-                         "PCL_DEPRECATED(x)="
+                         "PCL_DEPRECATED(x)=" \
+                         DOXYGEN_SHOULD_SKIP_THIS
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 

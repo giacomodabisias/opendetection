@@ -51,111 +51,107 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 #include "od/common/bindings/svmlight.h"
 
+SVMlight::SVMlight(){
+    // Init variables
+    alpha_in_ = NULL;
+    kernel_cache_ = NULL; // Cache not needed with linear kernel
+    model_ = static_cast<svmlight::MODEL *>(svmlight::my_malloc(sizeof(svmlight::MODEL)));
+    // Init parameters
+    svmlight::verbosity = 1; // Show some messages -v 1
+    learn_parm_.alphafile[0] = ' '; // NULL; // Important, otherwise files with strange/invalid names appear in the working directory
+    //        learn_parm_->alphafile = NULL; // Important, otherwise files with strange/invalid names appear in the working directory
+    learn_parm_.biased_hyperplane = 1;
+    learn_parm_.sharedslack = 0; // 1
+    learn_parm_.skip_final_opt_check = 0;
+    learn_parm_.svm_maxqpsize = 10;
+    learn_parm_.svm_newvarsinqp = 0;
+    learn_parm_.svm_iter_to_shrink = 2; // 2 is for linear;
+    learn_parm_.kernel_cache_size = 40;
+    learn_parm_.maxiter = 100000;
+    learn_parm_.svm_costratio = 1.0;
+    learn_parm_.svm_costratio_unlab = 1.0;
+    learn_parm_.svm_unlabbound = 1E-5;
+    learn_parm_.eps = 0.1;
+    learn_parm_.transduction_posratio = -1.0;
+    learn_parm_.epsilon_crit = 0.001;
+    learn_parm_.epsilon_a = 1E-15;
+    learn_parm_.compute_loo = 0;
+    learn_parm_.rho = 1.0;
+    learn_parm_.xa_depth = 0;
+    // The HOG paper uses a soft classifier (C = 0.01), set to 0.0 to get the default calculation
+    learn_parm_.svm_c = 0.01; // -c 0.01
+    learn_parm_.type = REGRESSION;
+    learn_parm_.remove_inconsistent = 0; // -i 0 - Important
+    kernel_parm_.rbf_gamma = 1.0;
+    kernel_parm_.coef_lin = 1;
+    kernel_parm_.coef_const = 1;
+    kernel_parm_.kernel_type = LINEAR; // -t 0
+    kernel_parm_.poly_degree = 3;
+}
 
-    SVMlight::SVMlight(){
-        // Init variables
-        alpha_in = NULL;
-        kernel_cache = NULL; // Cache not needed with linear kernel
-        model = (MODEL *) my_malloc(sizeof (MODEL));
-        learn_parm = new LEARN_PARM;
-        kernel_parm = new KERNEL_PARM;
-        // Init parameters
-        verbosity = 1; // Show some messages -v 1
-        learn_parm->alphafile[0] = ' '; // NULL; // Important, otherwise files with strange/invalid names appear in the working directory
-        //        learn_parm->alphafile = NULL; // Important, otherwise files with strange/invalid names appear in the working directory
-        learn_parm->biased_hyperplane = 1;
-        learn_parm->sharedslack = 0; // 1
-        learn_parm->skip_final_opt_check = 0;
-        learn_parm->svm_maxqpsize = 10;
-        learn_parm->svm_newvarsinqp = 0;
-        learn_parm->svm_iter_to_shrink = 2; // 2 is for linear;
-        learn_parm->kernel_cache_size = 40;
-        learn_parm->maxiter = 100000;
-        learn_parm->svm_costratio = 1.0;
-        learn_parm->svm_costratio_unlab = 1.0;
-        learn_parm->svm_unlabbound = 1E-5;
-        learn_parm->eps = 0.1;
-        learn_parm->transduction_posratio = -1.0;
-        learn_parm->epsilon_crit = 0.001;
-        learn_parm->epsilon_a = 1E-15;
-        learn_parm->compute_loo = 0;
-        learn_parm->rho = 1.0;
-        learn_parm->xa_depth = 0;
-        // The HOG paper uses a soft classifier (C = 0.01), set to 0.0 to get the default calculation
-        learn_parm->svm_c = 0.01; // -c 0.01
-        learn_parm->type = REGRESSION;
-        learn_parm->remove_inconsistent = 0; // -i 0 - Important
-        kernel_parm->rbf_gamma = 1.0;
-        kernel_parm->coef_lin = 1;
-        kernel_parm->coef_const = 1;
-        kernel_parm->kernel_type = LINEAR; // -t 0
-        kernel_parm->poly_degree = 3;
-    }
+SVMlight::~SVMlight() {
+    // Cleanup area
+    // Free the memory used for the cache
+    if(kernel_cache_)
+        svmlight::kernel_cache_cleanup(kernel_cache_);
+    free(alpha_in_);
+    free_model(model_, 0);
+    for(size_t i = 0; i < totdoc_; ++i)
+        free_example(docs_[i], 1);
+    free(docs_);
+    free(target_);
+}
 
-    SVMlight::~SVMlight() {
-        // Cleanup area
-        // Free the memory used for the cache
-        if (kernel_cache)
-            kernel_cache_cleanup(kernel_cache);
-        free(alpha_in);
-        free_model(model, 0);
-        for (i = 0; i < totdoc; i++)
-            free_example(docs[i], 1);
-        free(docs);
-        free(target);
-    }
+void SVMlight::saveModelToFile(const std::string model_file_name) {
+    write_model(const_cast<char*>(model_file_name.c_str()), model_);
+}
 
-    void SVMlight::saveModelToFile(const std::string _modelFileName) {
-        write_model(const_cast<char*>(_modelFileName.c_str()), model);
-    }
+void SVMlight::loadModelFromFile(const std::string model_file_name) {
+    model_ = svmlight::read_model(const_cast<char*>(model_file_name.c_str()));
+}
 
-    void SVMlight::loadModelFromFile(const std::string _modelFileName) {
-        model = read_model(const_cast<char*>(_modelFileName.c_str()));
-    }
+void SVMlight::read_problem(char * file_name) {
+    read_documents(file_name, &docs_, &target_, &totwords_, &totdoc_);
+}
 
-    void SVMlight::read_problem(char* filename) {
-        read_documents(filename, &docs, &target, &totwords, &totdoc);
-    }
+void SVMlight::train() {
+    svm_learn_regression(docs_, target_, totdoc_, totwords_, &learn_parm_, &kernel_parm_, &kernel_cache_, model_);
+}
 
-    void SVMlight::train() {
-        svm_learn_regression(docs, target, totdoc, totwords, learn_parm, kernel_parm, &kernel_cache, model);
-    }
-
-
-    void SVMlight::getSingleDetectingVector(std::vector<float>& singleDetectorVector, std::vector<unsigned int>& singleDetectorVectorIndices) {
-        // Now we use the trained svm to retrieve the single detector vector
-        DOC** supveclist = model->supvec;
-        printf("Calculating single descriptor vector out of support vectors (may take some time)\n");
-        // Retrieve single detecting vector (v1) from returned ones by calculating vec1 = sum_1_n (alpha_y*x_i). (vec1 is a n x1 column vector. n = feature vector length)
-        singleDetectorVector.clear();
-        singleDetectorVector.resize(model->totwords, 0.);
-        printf("Resulting vector size %lu\n", singleDetectorVector.size());
-        
-        // Walk over every support vector
-        for (long ssv = 1; ssv < model->sv_num; ++ssv) { // Don't know what's inside model->supvec[0] ?!
-            // Get a single support vector
-            DOC* singleSupportVector = supveclist[ssv]; // Get next support vector
-            SVECTOR* singleSupportVectorValues = singleSupportVector->fvec;
-            WORD singleSupportVectorComponent;
-            // Walk through components of the support vector and populate our detector vector
-            for (unsigned long singleFeature = 0; singleFeature < model->totwords; ++singleFeature) {
-                singleSupportVectorComponent = singleSupportVectorValues->words[singleFeature];
-                singleDetectorVector.at(singleSupportVectorComponent.wnum-1) += (singleSupportVectorComponent.weight * model->alpha[ssv]);
-            }
+void SVMlight::getSingleDetectingVector(std::vector<float> & single_detector_vector) {
+    // Now we use the trained svm to retrieve the single detector vector
+    svmlight::DOC ** supveclist = model_->supvec;
+    std::cout << "Calculating single descriptor vector out of support vectors (may take some time)" << std::endl;
+    // Retrieve single detecting vector (v1) from returned ones by calculating vec1 = sum_1_n (alpha_y*x_i). (vec1 is a n x1 column vector. n = feature vector length)
+    single_detector_vector.clear();
+    single_detector_vector.resize(model_->totwords, 0.);
+    std::cout << "Resulting vector size " <<  single_detector_vector.size() << std::endl;
+    
+    // Walk over every support vector
+    for(size_t ssv = 1; ssv < model_->sv_num; ++ssv) { // Don't know what's inside model->supvec[0] ?!
+        // Get a single support vector
+        svmlight::DOC * singleSupportVector = supveclist[ssv]; // Get next support vector
+        svmlight::SVECTOR * singleSupportVectorValues = singleSupportVector->fvec;
+        svmlight::WORD singleSupportVectorComponent;
+        // Walk through components of the support vector and populate our detector vector
+        for(unsigned long singleFeature = 0; singleFeature < model_->totwords; ++singleFeature) {
+            singleSupportVectorComponent = singleSupportVectorValues->words[singleFeature];
+            single_detector_vector.at(singleSupportVectorComponent.wnum-1) += (singleSupportVectorComponent.weight * model_->alpha[ssv]);
         }
     }
-    
-    float SVMlight::getThreshold() const {
-        return model->b;
-    }
-    
-    const char * SVMlight::getSVMName() const {
-        return "SVMlight";
-    }
+}
+
+float SVMlight::getThreshold() const {
+    return model_->b;
+}
+
+std::string SVMlight::getSVMName() const {
+    return std::string("SVMlight");
+}
 
 
-    /// Singleton
-    SVMlight * SVMlight::getInstance() {
-        static SVMlight theInstance;
-        return &theInstance;
-    }
+/// Singleton
+SVMlight * SVMlight::getInstance() {
+    static SVMlight theInstance;
+    return &theInstance;
+}

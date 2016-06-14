@@ -49,10 +49,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
  * 
  */
 #pragma once
-#include <stdio.h>
+#include <iostream>
 #include <vector>
 #include <string>
- 
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 namespace svmlight {
     extern "C" {
@@ -62,33 +62,33 @@ namespace svmlight {
 }
 #endif 
 
-using namespace svmlight;
 
 class SVMlight {
 private:
-    DOC ** docs; // training examples
-    long totwords, totdoc, i; // support vector stuff
-    double * target;
-    double * alpha_in;
-    KERNEL_CACHE * kernel_cache;
-    MODEL * model; // SVM model
+
+    svmlight::DOC ** docs_; // training examples
+    long totwords_, totdoc_; // support vector stuff
+    double * target_;
+    double * alpha_in_;
+    svmlight::KERNEL_CACHE * kernel_cache_;
+    svmlight::MODEL * model_; // SVM model
 
     SVMlight();
     virtual ~SVMlight();
 
 public:
 
-    LEARN_PARM * learn_parm;
-    KERNEL_PARM * kernel_parm;
+    svmlight::LEARN_PARM learn_parm_;
+    svmlight::KERNEL_PARM kernel_parm_;
 
     static SVMlight * getInstance();
 
-    void saveModelToFile(const std::string _modelFileName);
+    void saveModelToFile(const std::string model_file_name);
 
-    void loadModelFromFile(const std::string _modelFileName);
+    void loadModelFromFile(const std::string model_file_name);
 
     // read in a problem (in svmlight format)
-    void read_problem(char* filename);
+    void read_problem(char * filename);
 
     // Calls the actual machine learning algorithm
     void train();
@@ -96,10 +96,9 @@ public:
     /**
      * Generates a single detecting feature vector (vec1) from the trained support vectors, for use e.g. with the HOG algorithm
      * vec1 = sum_1_n (alpha_y*x_i). (vec1 is a 1 x n column vector. n = feature vector length)
-     * @param singleDetectorVector resulting single detector vector for use in openCV HOG
-     * @param singleDetectorVectorIndices dummy vector for this implementation
+     * @param single_detector_vector resulting single detector vector for use in openCV HOG
      */
-    void getSingleDetectingVector(std::vector<float>& singleDetectorVector, std::vector<unsigned int>& singleDetectorVectorIndices);
+    void getSingleDetectingVector(std::vector<float> & single_detector_vector);
     
     /**
      * Return model detection threshold / bias
@@ -107,7 +106,6 @@ public:
      */
     float getThreshold() const;
     
-    const char* getSVMName() const;
-
+    std::string getSVMName() const;
 };
 

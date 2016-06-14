@@ -30,9 +30,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global2D/training/ODHOGTrainer.h"
 
-
-#define TRAINHOG_SVM_TO_TRAIN SVMlight
-
 namespace od
 {
   namespace g2d
@@ -79,7 +76,6 @@ namespace od
       descriptor_vector_file_ = getSpecificTrainingDataLocation() + "/descriptorvector.dat";
       descriptor_vector_file_ = getSpecificTrainingDataLocation() + "/descriptorvectorHard.dat";
 
-
     }
 
     void ODHOGTrainer::saveDescriptorVectorToFile(const std::vector<float> & descriptor_vector, const std::string & file_name)
@@ -115,7 +111,6 @@ namespace od
 
       cv::Mat image_data_orig, image_data;
       image_data_orig = cv::imread(image_file_name, 0);
-
 
       if(image_data_orig.empty())
       {
@@ -275,23 +270,23 @@ namespace od
     double ODHOGTrainer::trainWithSVMLight(const std::string & svm_model_file, const std::string & svm_descriptor_file, 
                                            std::vector<float> & descriptor_vector)
     {
+      SVMlight * svmlight= SVMlight::getInstance();
       //training takes featurefile as input, produces hitthreshold and vector as output
-      std::cout << "Calling " <<  TRAINHOG_SVM_TO_TRAIN::getInstance()->getSVMName() << std::endl;
-      TRAINHOG_SVM_TO_TRAIN::getInstance()->read_problem(const_cast<char *> (features_file_.c_str()));
-      TRAINHOG_SVM_TO_TRAIN::getInstance()->train(); // Call the core libsvm training procedure
+      std::cout << "Calling " <<  svmlight->getSVMName() << std::endl;
+      svmlight->read_problem(const_cast<char *> (features_file_.c_str()));
+      svmlight->train(); // Call the core libsvm training procedure
       std::cout << "Training done, saving model file!"<< std::endl;
-      TRAINHOG_SVM_TO_TRAIN::getInstance()->saveModelToFile(svm_model_file);
+      svmlight->saveModelToFile(svm_model_file);
 
       std::cout << "Generating representative single HOG feature vector using svmlight!" << std::endl;
 
       descriptor_vector.resize(0);
-      std::vector<unsigned int> descriptor_vector_indices;
       // Generate a single detecting feature vector (v1 | b) from the trained support vectors, for use e.g. with the HOG algorithm
-      TRAINHOG_SVM_TO_TRAIN::getInstance()->getSingleDetectingVector(descriptor_vector, descriptor_vector_indices);
+      svmlight->getSingleDetectingVector(descriptor_vector);
       // And save the precious to file system
       saveDescriptorVectorToFile(descriptor_vector, svm_descriptor_file);
       // Detector detection tolerance threshold
-      hit_threshold_ = TRAINHOG_SVM_TO_TRAIN::getInstance()->getThreshold();
+      hit_threshold_ = svmlight->getThreshold();
       return hit_threshold_;
     }
 

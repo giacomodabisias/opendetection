@@ -36,12 +36,12 @@ namespace od
   {
 
     ODCascadeDetector::ODCascadeDetector(const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
-                                         const cv::Size & min_size, const cv::Size & max_size)
-                                        : ODDetector2D(trained_data_location), scale_factor_(scale_factor), min_neighbors_(min_neighbors), 
-                                                      min_size_(min_size), max_size_(max_size)
+                                         const cv::Size & min_size, const cv::Size & max_size): 
+                                         ODDetector2D(trained_data_location), scale_factor_(scale_factor), min_neighbors_(min_neighbors), 
+                                            min_size_(min_size), max_size_(max_size)
     {
-      TRAINED_LOCATION_DENTIFIER_ = "CASCADE";
-      TRAINED_DATA_ID_ = "cascade.xml";
+      trained_location_identifier_ = std::string("CASCADE");
+      trained_data_id_ = std::string("cascade.xml");
       meta_info_ = true;
     }
 
@@ -53,7 +53,7 @@ namespace od
 
     void ODCascadeDetector::init()
     {
-      haar_cascade_ = make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_));
+      haar_cascade_ = make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(), trained_data_id_));
     }
 
     shared_ptr<ODDetections2D> ODCascadeDetector::detectOmni(shared_ptr<ODSceneImage> scene)
@@ -67,19 +67,16 @@ namespace od
       //always create detections
       shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
       cv::Mat viz = scene->getCVImage().clone();
-      cv::Rect face_i;
-      for(size_t i = 0; i < faces.size(); ++i)
+      for(auto & face : faces)
       {
         // Process face by face:
-        face_i = faces[i];
-
         shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>(ODDetection::OD_DETECTION_CLASS, "FACE", 1);
-        detection2D->setBoundingBox(face_i);
+        detection2D->setBoundingBox(face);
         detections->push_back(detection2D);
 
         if(meta_info_)
         {
-          cv::rectangle(viz, face_i, CV_RGB(0, 255, 0), 1);
+          cv::rectangle(viz, face, CV_RGB(0, 255, 0), 1);
         }
       }
       detections->setMetainfoImage(viz);

@@ -97,11 +97,11 @@ namespace od
 
       void init();
 
-      virtual shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
-      virtual shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODSceneImage> scene);
+      shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
+      shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODSceneImage> scene);
 
-      virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
-      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+      shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
+      shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
 
     protected:
 

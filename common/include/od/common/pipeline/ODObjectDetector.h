@@ -93,7 +93,7 @@ namespace od
   protected:
 
     std::string training_input_location_, trained_data_location_;
-    std::string TRAINED_DATA_ID_, TRAINED_LOCATION_DENTIFIER_;
+    std::string trained_data_id_, trained_location_identifier_;
 
   };
 
@@ -139,8 +139,7 @@ namespace od
     bool always_train_;
     bool trained_;
     std::string training_input_location_, training_data_location_;
-
-    std::string TRAINED_DATA_EXT_, TRAINED_DATA_IDENTIFIER_;
+    std::string trained_data_ext_, trained_data_identifier_;
   };
 
 }

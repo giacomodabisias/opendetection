@@ -35,9 +35,9 @@ namespace od {
 	ODDetectorCommon::ODDetectorCommon(const std::string & trained_data_location) : trained_data_location_(trained_data_location)
 	{
 	  std::string classname = typeid(this).name();
-	  TRAINED_DATA_ID_ = classname;
+	  trained_data_id_ = classname;
 	  std::transform(classname.begin(), classname.end(), classname.begin(), ::toupper);
-	  TRAINED_LOCATION_DENTIFIER_  = classname;
+	  trained_location_identifier_  = classname;
 	}
 
 	std::string ODDetectorCommon::getTrainingInputLocation() const
@@ -62,22 +62,22 @@ namespace od {
 
 	std::string ODDetectorCommon::getSpecificTrainingDataLocation()
 	{
-	  return trained_data_location_ + "/" + "TD_" + TRAINED_LOCATION_DENTIFIER_;
+	  return trained_data_location_ + "/" + "TD_" + trained_location_identifier_;
 	}
 
 	std::string ODDetectorCommon::getSpecificTrainingData()
 	{
-	  return getSpecificTrainingDataLocation() + "/" + TRAINED_DATA_ID_;
+	  return getSpecificTrainingDataLocation() + "/" + trained_data_id_;
 	}
 
 	const std::string & ODDetectorCommon::getTrainedDataID() const
 	{
-	  return TRAINED_DATA_ID_;
+	  return trained_data_id_;
 	}
 
 	void ODDetectorCommon::setTrainedDataID(const std::string & trainedDataID)
 	{
-	  ODDetectorCommon::TRAINED_DATA_ID_ = trainedDataID;
+	  trained_data_id_ = trainedDataID;
 	}
 
 
@@ -123,7 +123,7 @@ namespace od {
 
 	std::string ObjectDetector::getSpecificTrainingDataLocation()
 	{
-	  return training_data_location_ + "/" + "TD_" + TRAINED_DATA_IDENTIFIER_;
+	  return training_data_location_ + "/" + "TD_" + trained_data_identifier_;
 	}
 
 }

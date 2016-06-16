@@ -69,14 +69,14 @@ namespace od
     {
 
     public:
-      ODCADDetectTrainer3DGlobal(const std::string & training_input_location_ = "", const std::string & training_data_location_ = "");
+      ODCADDetectTrainer3DGlobal(const std::string & training_input_location_ = std::string(""), 
+                                 const std::string & training_data_location_ = std::string(""));
 
       int train();
 
       void init() {};
 
       const std::string & getDescName() const;
-
       void setDescName(const std::string & desc_name);
 
     protected:

@@ -34,19 +34,13 @@ namespace od
   namespace g2d
   {
 
-    ODFaceRecognizer::ODFaceRecognizer(FaceRecogType recog_type, int num_components, double threshold)
-        : recog_type_(recog_type), num_components_(num_components), threshold_(threshold), im_height_(0), im_width_(0)
+    ODFaceRecognizer::ODFaceRecognizer(FaceRecogType recog_type, int num_components, double threshold): 
+                                       recog_type_(recog_type), num_components_(num_components), threshold_(threshold), 
+                                       im_height_(0), im_width_(0)
     {
-      TRAINED_DATA_IDENTIFIER_ = "FACERECOG";
-      TRAINED_DATA_EXT_ = "facerec.xml";
+      trained_data_identifier_ = std::string("FACERECOG");
+      trained_data_ext_ = std::string("facerec.xml");
     }
-
-    shared_ptr<ODDetections> ODFaceRecognizer::detectOmni(shared_ptr<ODSceneImage> scene) 
-    {
-      std::cout << "not implemented, use detect()" <<std::endl; 
-      return nullptr;
-    };
-
 
     void ODFaceRecognizer::init()
     {
@@ -76,7 +70,7 @@ namespace od
 
         //get models in the directory
         std::vector<std::string> files;
-        fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_EXT_, files);
+        fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), trained_data_ext_, files);
 
         if(files.size() == 0)
         {
@@ -104,7 +98,7 @@ namespace od
       cv_recognizer_->train(images, labels);
       fileutils::createTrainingDir(getSpecificTrainingDataLocation());
 
-      cv_recognizer_->save(getSpecificTrainingDataLocation() + "/trained." + TRAINED_DATA_EXT_);
+      cv_recognizer_->save(getSpecificTrainingDataLocation() + "/trained." + trained_data_ext_);
       trained_ = true;
 
       //the training set has atleast one image
@@ -132,6 +126,13 @@ namespace od
       return -1;
     }
 
+    shared_ptr<ODDetections> ODFaceRecognizer::detectOmni(shared_ptr<ODSceneImage> scene) 
+    {
+      std::cout << "not implemented, use detect()" <<std::endl; 
+      return nullptr;
+    };
+
+
     shared_ptr<ODDetections> ODFaceRecognizer::detect(shared_ptr<ODSceneImage> scene)
     {
       cv::Mat face_edited;
@@ -150,6 +151,7 @@ namespace od
       shared_ptr<ODDetection2D> detection = make_shared<ODDetection2D>(ODDetection::OD_DETECTION_CLASS, std::to_string(label), confidence);
       shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
       detections->push_back(detection);
+      
       return detections;
     }
 

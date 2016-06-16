@@ -38,7 +38,6 @@ namespace od
 
   protected:
 
-    int cameraID_;
     std::vector<std::string> file_list_;
     std::string video_read_path_;
     unsigned int curr_image_;

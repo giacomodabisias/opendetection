@@ -42,7 +42,7 @@ namespace od
   {
   public:
 
-    ODTrainer(const std::string & training_input_location = "", const std::string & training_data_location = "") : 
+    ODTrainer(const std::string & training_input_location = std::string(""), const std::string & training_data_location = std::string("")) : 
               ODDetectorCommon(training_data_location)
     {
       training_input_location_ = training_data_location;

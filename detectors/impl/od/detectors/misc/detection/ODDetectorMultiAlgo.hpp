@@ -27,12 +27,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 06.08.15.
 //
 #pragma once
-#include "od/common/pipeline/ODDetector.h"
 #include "od/detectors/global2D/detection/ODCascadeDetector.h"
 #include "od/detectors/global2D/detection/ODHOGDetector.h"
-#include "od/detectors/global2D/ODFaceRecognizer.h"
-#include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
-//3D detectors
 #include "od/detectors/global3D/detection/ODCADDetector3DGlobal.hpp"
 
 namespace od
@@ -50,8 +46,8 @@ namespace od
     shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
     shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene);
 
-    virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
-    virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
+    shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+    shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
 
     void init();
 
@@ -63,6 +59,62 @@ namespace od
   };
 
   template<typename PointT>
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detectOmni(shared_ptr<ODScene> scene)
+  {
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    return nullptr;
+  }
+
+  template<typename PointT>
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detect(shared_ptr<ODScene> scene)
+  {
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    return nullptr;
+  }
+
+  //BASED ON 2D SCENE
+  template<typename PointT>
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detect(shared_ptr<ODSceneImage> scene)
+  {
+    shared_ptr<ODDetections> detections_all = make_shared<ODDetections>();
+    
+    for(auto & d : detectors_2d_)
+    {
+      detections_all->append(d->detect(scene));
+    }
+
+    return detections_all;
+  }
+
+  template<typename PointT>
+  shared_ptr<ODDetections2D> ODDetectorMultiAlgo2D<PointT>::detectOmni(shared_ptr<ODSceneImage > scene)
+  {
+    shared_ptr<ODDetections2D> detections_all = make_shared<ODDetections2D>();
+    for(auto & d : detectors_2d_)
+    {
+      detections_all->append(d->detectOmni(scene));
+    }
+
+    return detections_all;
+  }
+
+  template<typename PointT>
+  void ODDetectorMultiAlgo2D<PointT>::init()
+  {
+    //make a list of different algorithms
+    //vector<ODDetector *> detectors = {new ODCascadeDetector(trained_data_location_), new ODHOGDetector(trained_data_location_), new ODCADRecognizer2DLocal(trained_data_location_)};
+    detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(trained_data_location_));
+    detectors_2d_.push_back(make_shared<g2d::ODHOGDetector>(trained_data_location_));
+    //  detectors.push_back(new ODCADRecognizer2DLocal(trained_data_location_));
+
+    for(auto & d : detectors_2d_)
+    {
+      d->init();
+    }
+  }
+
+
+  template<typename PointT>
   class ODDetectorMultiAlgo : public ODDetector
   {
 
@@ -70,14 +122,14 @@ namespace od
     
     ODDetectorMultiAlgo(const std::string & training_data_location_) : ODDetector(training_data_location_){}
 
-    shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage > scene) ;
-    shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage > scene);
+    shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene) ;
+    shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
 
     shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
     shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene);
 
-    virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
-    virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
+    shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+    shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
 
     void init();
 
@@ -102,61 +154,6 @@ namespace od
     return nullptr;
   }
 
-  template<typename PointT>
-  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detectOmni(shared_ptr<ODScene> scene)
-  {
-    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
-    return nullptr;
-  }
-
-  template<typename PointT>
-  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detect(shared_ptr<ODScene> scene)
-  {
-    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
-    return nullptr;
-  }
-
-  //BASED ON 2D SCENE
-  template<typename PointT>
-  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detect(shared_ptr<ODSceneImage > scene)
-  {
-    shared_ptr<ODDetections> detections_all = make_shared<ODDetections>();
-    for (size_t i = 0; i < detectors_2d_.size(); ++i)
-    {
-      shared_ptr<ODDetections> detections_individual = detectors_2d_[i]->detect(scene);
-      detections_all->append(detections_individual);
-    }
-
-    return detections_all;
-  }
-
-  template<typename PointT>
-  shared_ptr<ODDetections2D> ODDetectorMultiAlgo2D<PointT>::detectOmni(shared_ptr<ODSceneImage > scene)
-  {
-    shared_ptr<ODDetections2D> detections_all = make_shared<ODDetections2D>();
-    for (size_t i = 0; i < detectors_2d_.size(); ++i)
-    {
-      shared_ptr<ODDetections2D> detections_individual = detectors_2d_[i]->detectOmni(scene);
-      detections_all->append(detections_individual);
-    }
-
-    return detections_all;
-  }
-
-  template<typename PointT>
-  void ODDetectorMultiAlgo2D<PointT>::init()
-  {
-    //make a list of different algorithms
-    //vector<ODDetector *> detectors = {new ODCascadeDetector(trained_data_location_), new ODHOGDetector(trained_data_location_), new ODCADRecognizer2DLocal(trained_data_location_)};
-    detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(trained_data_location_));
-    detectors_2d_.push_back(make_shared<g2d::ODHOGDetector>(trained_data_location_));
-    //  detectors.push_back(new ODCADRecognizer2DLocal(trained_data_location_));
-
-    for(size_t i = 0; i < detectors_2d_.size(); ++i)
-    {
-      detectors_2d_[i]->init();
-    }
-  }
 
   /////############BASED ON 3D SCENE#####################
   template<typename PointT>
@@ -164,9 +161,9 @@ namespace od
   {
       //3D
     detectors_3d_.push_back( make_shared<g3d::ODCADDetector3DGlobal<PointT> >(trained_data_location_, training_input_location_));
-    for(size_t i = 0; i < detectors_3d_.size(); ++i)
+    for(auto & d : detectors_3d_)
     {
-      detectors_3d_[i]->init();
+      d->init();
     }
   }
 
@@ -174,10 +171,9 @@ namespace od
   shared_ptr<ODDetections> ODDetectorMultiAlgo<PointT>::detect(shared_ptr<ODScenePointCloud<PointT> > scene)
   {
     shared_ptr<ODDetections> detections_all = make_shared<ODDetections>();
-    for(size_t i = 0; i < detectors_3d_.size(); ++i)
+    for(auto & d : detectors_3d_)
     {
-      shared_ptr<ODDetections> detections_individual = detectors_3d_[i]->detect(scene);
-      detections_all->append(detections_individual);
+      detections_all->append(d->detect(scene));
     }
 
     return detections_all;
@@ -187,10 +183,9 @@ namespace od
   shared_ptr<ODDetections3D> ODDetectorMultiAlgo<PointT>::detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene)
   {
     shared_ptr<ODDetections3D> detections_all = make_shared<ODDetections3D>();
-    for(size_t i = 0; i < detectors_3d_.size(); i++)
+    for(auto & d : detectors_3d_)
     {
-      shared_ptr<ODDetections3D> detections_individual = detectors_3d_[i]->detectOmni(scene);
-      detections_all->append(detections_individual);
+      detections_all->append(d->detectOmni(scene));
     }
 
     return detections_all;

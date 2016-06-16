@@ -36,56 +36,55 @@ namespace od
   namespace l2d
   {
 
-	   ODImageLocalMatchingTrainer::ODImageLocalMatchingTrainer(const std::string & training_input_location_, 
-	   	                                                        const std::string & training_data_location_) : 
-	   ODTrainer(training_input_location_, training_data_location_)
-	   {
-	     	TRAINED_LOCATION_DENTIFIER_ = "FEATCORR";
-	     	TRAINED_DATA_ID_ = "corr.xml";
-	   }
-
-		ODImageLocalMatchingDetector::ODImageLocalMatchingDetector(const std::string & training_data_location_) : 
-		ODDetector2DComplete(training_data_location_)
+		ODImageLocalMatchingTrainer::ODImageLocalMatchingTrainer(const std::string & training_input_location, 
+			                                                        const std::string & training_data_location) : 
+		ODTrainer(training_input_location, training_data_location)
 		{
-			TRAINED_LOCATION_DENTIFIER_ = "FEATCORR";
-		 	TRAINED_DATA_ID_ = ".xml";
+		 	trained_location_identifier_ = std::string("FEATCORR");
+		 	trained_data_id_ = std::string("corr.xml");
 		}
 
+		ODImageLocalMatchingDetector::ODImageLocalMatchingDetector(const std::string & training_data_location) : 
+																	ODDetector2DComplete(training_data_location)
+		{
+			trained_location_identifier_ = std::string("FEATCORR");
+		 	trained_data_id_ = std::string(".xml");
+		}
 
-	   shared_ptr<ODImageLocalMatchingTrainer> ODImageLocalMatching::getTrainer() const
-	   {
-	     return trainer_;
-	   }
+		shared_ptr<ODImageLocalMatchingTrainer> ODImageLocalMatching::getTrainer() const
+		{
+		 return trainer_;
+		}
 
-	   void ODImageLocalMatching::setTrainer(shared_ptr<ODImageLocalMatchingTrainer> trainer_)
-	   {
-	     ODImageLocalMatching::trainer_ = trainer_;
-	   }
+		void ODImageLocalMatching::setTrainer(shared_ptr<ODImageLocalMatchingTrainer> trainer)
+		{
+		 trainer_ = trainer;
+		}
 
-	   shared_ptr<ODImageLocalMatchingDetector> ODImageLocalMatching::getDetector() const
-	   {
-	     return detector_;
-	   }
+		shared_ptr<ODImageLocalMatchingDetector> ODImageLocalMatching::getDetector() const
+		{
+		 return detector_;
+		}
 
-	   void ODImageLocalMatching:: setDetector(shared_ptr<ODImageLocalMatchingDetector> detector_)
-	   {
-	     ODImageLocalMatching::detector_ = detector_;
-	   }
+		void ODImageLocalMatching:: setDetector(shared_ptr<ODImageLocalMatchingDetector> detector)
+		{
+		 detector_ = detector;
+		}
 
-	   ODImageLocalMatching::ODImageLocalMatching()
-	   {
-	     TRAINED_DATA_EXT_ = "corr.xml";
-	   }
+		ODImageLocalMatching::ODImageLocalMatching()
+		{
+		 trained_data_ext_ = std::string("corr.xml");
+		}
 
-	   int ODImageLocalMatching::train()
-	   {
-	     return trainer_->train();
-	   }
+		int ODImageLocalMatching::train()
+		{
+		 return trainer_->train();
+		}
 
-	   int ODImageLocalMatching::detect(shared_ptr<ODScene> scene, std::vector<shared_ptr<ODDetection> > detections)
-	   {
-	     //detector_->detect(scene, detections);
-	     return 1;
-	   }
+		int ODImageLocalMatching::detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections)
+		{
+		 //detector_->detect(scene, detections);
+		 return 1;
+		}
 	}
 }

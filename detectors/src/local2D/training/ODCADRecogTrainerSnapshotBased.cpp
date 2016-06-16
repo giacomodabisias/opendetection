@@ -31,103 +31,13 @@ namespace od
   namespace l2d
   {
 
-    class vtkTimerCallbackSnapshot : public vtkCommand
-    {
-    public:
-
-      static vtkTimerCallbackSnapshot * New()
-      {
-        vtkTimerCallbackSnapshot * cb = new vtkTimerCallbackSnapshot;
-        cb->snap_count = 0;
-        cb->snap_mode = true;
-        cb->feature_type = "SIFT";
-        return cb;
-      }
-
-      virtual void Execute(vtkObject * caller, unsigned long eventId, void * vtkNotUsed(callData))
-      {
-        vtkRenderWindowInteractor * iren = vtkRenderWindowInteractor::SafeDownCast(caller);
-
-
-        if(!this->snap_mode) return;
-
-        if(vtkCommand::TimerEvent == eventId)
-        {
-          ++this->snap_count;
-        }
-
-        //no need to do extra processing if we have enough snaps
-        if(this->snap_count >= NO_SNAPSHOTS)
-        {
-          this->snap_mode = false;
-          //after getting all snaps, write everything together
-          cout << "Processing finished... Writing the final descriptors" << endl;
-
-          std::string filename = boost::filesystem::path(input_file).filename().replace_extension(feature_type + "." + output_extension).c_str();
-          fileutils::createTrainingDir(output_dir);
-
-          write_pairs(pairs_3d_2d, common_descriptors, output_dir + "/" + filename);
-          write_pairs_xml(pairs_3d_2d, common_descriptors, output_dir + "/" + filename);
-
-          //delete and remove everything
-          iren->TerminateApp();
-          pairs_3d_2d.clear();
-        }
-
-
-
-        //MAIN CALLBACK, take snapshot, find features for the data from current actor
-        process(iren, actor, renderer, snap_count);
-
-        //update data with the actor
-        actor->RotateY(360 / NO_SNAPSHOTS);
-        iren->GetRenderWindow()->Render();
-      }
-
-    private:
-
-      int snap_count;
-
-    public:
-
-      std::string takeSnapshot(vtkRenderWindow *renderWindow, int snap_no);
-
-      void write_pairs(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors, std::string filename);
-
-      void write_pairs_xml(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors, std::string filename);
-
-      void process_image(std::string imgname, vtkRenderer *ren, vtkActor *actor, int ino);
-
-      void process(vtkRenderWindowInteractor *iren, vtkActor *actor, vtkRenderer *renderer, int ino);
-
-
-      //some local variables used
-
-      struct fcomp3d_euclidian
-      {
-        bool operator()(const cv::Point3f & lhs, const cv::Point3f & rhs) const
-        { return lhs.x < rhs.x; }
-      };
-
-      std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs_3d_2d;
-      cv::Mat common_descriptors;
-      std::map<cv::Point3f, cv::KeyPoint, fcomp3d_euclidian> map_3d_2d;
-      std::string feature_type;
-      std::string input_file, input_dir, output_dir, output_extension;
-
-      vtkActor * actor;
-      vtkRenderer * renderer;
-      bool snap_mode;
-
-    };
-
     int ODCADRecogTrainerSnapshotBased::train()
     {
       fileutils::createTrainingDir(trained_data_location_);
 
       //get models in the directory
       std::vector<std::string> files;
-      std::string start = "";
+      std::string start = std::string("");
       std::string ext = std::string("obj");
       boost::filesystem::path dir = training_input_location_;
       fileutils::getFilesInDirectory(dir, start, files, ext);
@@ -136,7 +46,7 @@ namespace od
 
       for(size_t i = 0; i < files.size(); ++i)
       {
-        trainSingleModel(training_input_location_ + "/" + files[i]);
+        trainSingleModel(training_input_location_ + std::string("/") + files[i]);
       }
 
       return 1;
@@ -152,7 +62,7 @@ namespace od
       boost::filesystem::path p(objname);
       cb->input_dir = boost::filesystem::path(objname).parent_path().c_str();
       cb->output_dir = getSpecificTrainingDataLocation();
-      cb->output_extension = TRAINED_DATA_ID_;
+      cb->output_extension = trained_data_id_;
 
       vtkSmartPointer<vtkOBJReader> reader = vtkSmartPointer<vtkOBJReader>::New();
       reader->SetFileName(objname.c_str());
@@ -221,34 +131,35 @@ namespace od
     }
 
 
-    std::string vtkTimerCallbackSnapshot::takeSnapshot(vtkRenderWindow *renderWindow, int snap_no)
+    std::string vtkTimerCallbackSnapshot::takeSnapshot(vtkRenderWindow * render_window, int snap_no)
     {
       // Screenshot
       vtkSmartPointer<vtkWindowToImageFilter> windowToImageFilter = vtkSmartPointer<vtkWindowToImageFilter>::New();
-      windowToImageFilter->SetInput(renderWindow);
+      windowToImageFilter->SetInput(render_window);
       //windowToImageFilter->SetMagnification(3); //set the resolution of the output image (3 times the current resolution of vtk render window)
       //windowToImageFilter->SetInputBufferTypeToRGBA(); //also record the alpha (transparency) channel
       //windowToImageFilter->ReadFrontBufferOff(); // read from the back buffer
       windowToImageFilter->Update();
 
       vtkSmartPointer<vtkJPEGWriter> writer = vtkSmartPointer<vtkJPEGWriter>::New();
-      std::string filename;
+      std::string file_name;
 
-      filename = input_dir + "/" + std::string("snapshot") + std::to_string(snap_no) + ".jpg";
+      file_name = input_dir + std::string("/") + std::string("snapshot") + std::to_string(snap_no) + std::string(".jpg");
 
-      writer->SetFileName(filename.c_str());
+      writer->SetFileName(file_name.c_str());
       writer->SetInputConnection(windowToImageFilter->GetOutputPort());
-      renderWindow->Render();
+      render_window->Render();
       writer->Write();
-      return filename;
+
+      return file_name;
     }
 
 
-    void vtkTimerCallbackSnapshot::write_pairs(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors,
-                                               std::string filename)
+    void vtkTimerCallbackSnapshot::write_pairs(const std::vector<std::pair<cv::Point3f, cv::KeyPoint> > & pairs, const cv::Mat & descriptors,
+                                               const std::string & file_name)
     {
       std::ofstream fout;
-      fout.open(filename.c_str());
+      fout.open(file_name.c_str());
 
       //headers
       fout << pairs.size() << endl;
@@ -266,13 +177,13 @@ namespace od
       fout.close();
     }
 
-    void vtkTimerCallbackSnapshot::write_pairs_xml(std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs, cv::Mat descriptors,
-                                                   std::string filename)
+    void vtkTimerCallbackSnapshot::write_pairs_xml(const std::vector<std::pair<cv::Point3f, cv::KeyPoint> > & pairs, const cv::Mat & descriptors,
+                                                   const std::string & file_name)
     {
 
       pugi::xml_document doc;
       pugi::xml_node root = doc.append_child("Model");
-      root.append_attribute("name") = filename.c_str();
+      root.append_attribute("name") = file_name.c_str();
       //root.append_attribute("objid") = "1";
 
       pugi::xml_node points_node = root.append_child("Points");
@@ -304,7 +215,7 @@ namespace od
         p_node.append_attribute("desc") = ss.str().c_str();
       }
       //save
-      doc.save_file(filename.c_str());
+      doc.save_file(file_name.c_str());
     }
 
     bool valid_3D_point(double *pt)
@@ -316,10 +227,10 @@ namespace od
 
 //1. find interesting 2d points, 2. find their corresponding 3d points corresponding to the transformation defined by the "actor"
 //3. transform the 3d points to the original by using the inverse of the "actor"
-    void vtkTimerCallbackSnapshot::process_image(std::string imgname, vtkRenderer *ren, vtkActor *actor, int ino)
+    void vtkTimerCallbackSnapshot::process_image(const std::string & img_name, vtkRenderer * ren, vtkActor * actor, int ino)
     {
       //1. find interesting 2d location
-      cv::Mat img = cv::imread(imgname);
+      cv::Mat img = cv::imread(img_name);
       std::vector<cv::KeyPoint> kpts;
       cv::Mat descriptors_local, descriptors_local_good;
       cv::Ptr<cv::FeatureDetector> fdetector = cv::xfeatures2d::SIFT::create();
@@ -359,12 +270,12 @@ namespace od
       common_descriptors.push_back(descriptors_local_good);
 
       //writing a local set
-      write_pairs(pairs_local, descriptors_local_good, input_dir + "/" + "local" + std::to_string(ino) + ".pairs");
-      write_pairs_xml(pairs_local, descriptors_local_good, input_dir + "/" + "local" + std::to_string(ino) + ".xml");
+      write_pairs(pairs_local, descriptors_local_good, input_dir + std::string("/local") + std::to_string(ino) + std::string(".pairs"));
+      write_pairs_xml(pairs_local, descriptors_local_good, input_dir + std::string("/local") + std::to_string(ino) + std::string(".xml"));
       std::cout << "Processed view " << ino << std::endl;
     }
 
-    void vtkTimerCallbackSnapshot::process(vtkRenderWindowInteractor *iren, vtkActor *actor, vtkRenderer *renderer, int ino)
+    void vtkTimerCallbackSnapshot::process(vtkRenderWindowInteractor * iren, vtkActor * actor, vtkRenderer * renderer, int ino)
     {
 
       vtkRenderWindow *win = iren->GetRenderWindow();
@@ -424,6 +335,46 @@ namespace od
     };
 
     vtkStandardNewMacro(MouseInteractorStyle2)
+
+    void vtkTimerCallbackSnapshot::Execute(vtkObject * caller, unsigned long eventId, void * vtkNotUsed(callData))
+    {
+      vtkRenderWindowInteractor * iren = vtkRenderWindowInteractor::SafeDownCast(caller);
+
+
+      if(!this->snap_mode) return;
+
+      if(vtkCommand::TimerEvent == eventId)
+      {
+        ++this->snap_count_;
+      }
+
+      //no need to do extra processing if we have enough snaps
+      if(this->snap_count_ >= NO_SNAPSHOTS)
+      {
+        this->snap_mode = false;
+        //after getting all snaps, write everything together
+        cout << "Processing finished... Writing the final descriptors" << endl;
+
+        std::string filename = boost::filesystem::path(input_file).filename().replace_extension(feature_type + "." + output_extension).c_str();
+        fileutils::createTrainingDir(output_dir);
+
+        write_pairs(pairs_3d_2d, common_descriptors, output_dir + "/" + filename);
+        write_pairs_xml(pairs_3d_2d, common_descriptors, output_dir + "/" + filename);
+
+        //delete and remove everything
+        iren->TerminateApp();
+        pairs_3d_2d.clear();
+      }
+
+
+
+      //MAIN CALLBACK, take snapshot, find features for the data from current actor
+      process(iren, actor, renderer, snap_count_);
+
+      //update data with the actor
+      actor->RotateY(360 / NO_SNAPSHOTS);
+      iren->GetRenderWindow()->Render();
+    }
 
 
   }

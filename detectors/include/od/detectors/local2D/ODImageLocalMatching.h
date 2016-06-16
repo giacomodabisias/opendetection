@@ -91,7 +91,7 @@ namespace od
 
       int train();
 
-      int detect(shared_ptr<ODScene> scene, std::vector<shared_ptr<ODDetection> > detections);
+      int detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections);
 
     protected:
 

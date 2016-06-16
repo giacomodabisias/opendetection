@@ -40,12 +40,12 @@ namespace od
                                   cell_size_(cell_size), hit_threshold_(hit_threshold), hog_(win_size, block_size, block_stride, cell_size, 9, 1, -1,
                                   cv::HOGDescriptor::L2Hys, 0.2, false, cv::HOGDescriptor::DEFAULT_NLEVELS)
     {
-      TRAINED_LOCATION_DENTIFIER_ = "HOG";
-      TRAINED_DATA_ID_ = "hog.xml";
+      trained_location_identifier_ = std::string("HOG");
+      trained_data_id_ = std::string("hog.xml");
       meta_info_ = true;
       svm_type_ = OD_DEFAULT_PEOPLE;
 
-      if (trained_data_location_ != "")
+      if(trained_data_location_ != std::string(""))
         svm_type_ = OD_FILE;
     }
 
@@ -67,7 +67,7 @@ namespace od
           //hog_.save(getSpecificTrainingDataLocation() + "/daimlerpeople." + TRAINED_DATA_EXT_);
           break;
         case OD_FILE:
-          std::string hogfile = fileutils::getFirstFile(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_);
+          std::string hogfile = fileutils::getFirstFile(getSpecificTrainingDataLocation(), trained_data_id_);
           load(hogfile);
           std::cout << "HOG TYPE: Custom HOG features loaded from: " << hogfile << std::endl;
           break;
@@ -95,7 +95,7 @@ namespace od
       //always create a detection
       shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
 
-      std::vector<cv::Rect> found, found_filtered;
+      std::vector<cv::Rect> found;
       hog_.detectMultiScale(scene->getCVImage(), found, hit_threshold_, cv::Size(8, 8), cv::Size(32, 32), 1.05, 2);
 
       cv::Mat viz = scene->getCVImage().clone();

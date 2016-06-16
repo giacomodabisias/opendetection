@@ -36,8 +36,8 @@ namespace od {
     ODCADDetectTrainer3DGlobal::ODCADDetectTrainer3DGlobal(const std::string & training_input_location_, const std::string & training_data_location_): 
                                                            ODTrainer(training_input_location_, training_data_location_)
     {
-      desc_name_ = "esf";
-      TRAINED_LOCATION_DENTIFIER_ = "GLOBAL3DVFH";
+      desc_name_ = std::string("esf");
+      trained_location_identifier_ = std::string("GLOBAL3DVFH");
     }
 
 

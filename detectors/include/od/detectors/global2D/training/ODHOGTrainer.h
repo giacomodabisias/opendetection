@@ -29,12 +29,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <opencv2/objdetect.hpp>
 #include <opencv2/opencv.hpp>
-
-#include "od/common/pipeline/ODTrainer.h"
-//#include "od/common/utils/ODUtils.h"
 #include <fstream>
-
-//binding class for svmlight
+#include "od/common/pipeline/ODTrainer.h"
 #include "od/common/bindings/svmlight.h"
 
 namespace od

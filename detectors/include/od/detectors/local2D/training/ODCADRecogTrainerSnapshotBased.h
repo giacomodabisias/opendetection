@@ -28,69 +28,28 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 17.03.15.
 //
 #pragma once
-#include "od/common/pipeline/ODTrainer.h"
-#include "od/common/utils/ODUtils.h"
 #include "od/detectors/local2D/ODImageLocalMatching.h"
+#include "pugixml.hpp"
 
-#include <string>
-#include <stdlib.h>
-
-#include <vtkSmartPointer.h>
 #include <vtkSphereSource.h>
-#include <vtkPolyData.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkActor.h>
 #include <vtkCamera.h>
 #include <vtkMatrix4x4.h>
-#include <vtkRendererCollection.h>
 #include <vtkCommand.h>
-#include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkOBJReader.h>
-#include <vtkUnstructuredGrid.h>
-#include <vtkCell.h>
-#include <vtkCellArray.h>
-#include <vtkIdList.h>
-#include <vtkUnsignedCharArray.h>
-#include <vtkPointData.h>
-#include <string>
 #include <vtkRendererCollection.h>
-#include <vtkCellArray.h>
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkObjectFactory.h>
-#include <vtkPlaneSource.h>
-#include <vtkPoints.h>
-#include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkPropPicker.h>
-#include <vtkPointPicker.h>
-
+#include <vtkJPEGWriter.h>
 #include <vtkImageReader2Factory.h>
 #include <vtkImageReader.h>
-#include <vtkTexture.h>
-#include <vtkAxesActor.h>
 #include <vtkWindowToImageFilter.h>
-#include <vtkPNGWriter.h>
 
-#include <sstream>
-#include <opencv2/core/types.hpp>
-#include <map>
-
-#include <boost/filesystem.hpp>
-
-//opencv
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/core/utility.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/video/tracking.hpp>
 #include <opencv2/xfeatures2d.hpp>
-#include <vtkJPEGWriter.h>
 
-#include "pugixml.hpp"
 
 #define VIEW_ANGLE 30
 #define NO_SNAPSHOTS 30
@@ -110,7 +69,8 @@ namespace od
 
     public:
 
-      ODCADRecogTrainerSnapshotBased(const std::string & training_input_location_ = "", const std::string & training_data_location_ = "") : 
+      ODCADRecogTrainerSnapshotBased(const std::string & training_input_location_ = std::string(""),
+                                     const std::string & training_data_location_ = std::string("")) : 
                                      ODImageLocalMatchingTrainer(training_input_location_, training_data_location_){}
 
       int train();
@@ -123,8 +83,60 @@ namespace od
       float view_angle_;
       int no_snapshot_per_ring_;
 
+    };
+
+    class vtkTimerCallbackSnapshot : public vtkCommand
+    {
+    public:
+
+      static vtkTimerCallbackSnapshot * New()
+      {
+        vtkTimerCallbackSnapshot * cb = new vtkTimerCallbackSnapshot;
+        cb->snap_count_ = 0;
+        cb->snap_mode = true;
+        cb->feature_type = std::string("SIFT");
+        return cb;
+      }
+
+      virtual void Execute(vtkObject * caller, unsigned long eventId, void * vtkNotUsed(callData));
+
+    private:
+
+      int snap_count_;
+
+    public:
+
+      std::string takeSnapshot(vtkRenderWindow * render_window, int snap_no);
+
+      void write_pairs(const std::vector<std::pair<cv::Point3f, cv::KeyPoint> > & pairs, const cv::Mat & descriptors, const std::string & file_name);
+
+      void write_pairs_xml(const std::vector<std::pair<cv::Point3f, cv::KeyPoint> > & pairs, const cv::Mat & descriptors, const std::string & file_name);
+
+      void process_image(const std::string & img_name, vtkRenderer * ren, vtkActor * actor, int ino);
+
+      void process(vtkRenderWindowInteractor * iren, vtkActor * actor, vtkRenderer * renderer, int ino);
+
+      //some local variables used
+
+      struct fcomp3d_euclidian
+      {
+        bool operator()(const cv::Point3f & lhs, const cv::Point3f & rhs) const
+        { return lhs.x < rhs.x; }
+      };
+
+      std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs_3d_2d;
+      cv::Mat common_descriptors;
+      std::map<cv::Point3f, cv::KeyPoint, fcomp3d_euclidian> map_3d_2d;
+      std::string feature_type;
+      std::string input_file, input_dir, output_dir, output_extension;
+
+      vtkActor * actor;
+      vtkRenderer * renderer;
+      bool snap_mode;
 
     };
+
+
   }
 }
 

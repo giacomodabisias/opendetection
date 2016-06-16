@@ -40,7 +40,7 @@ namespace od
     {
       meta_info_ = true;
 
-      camera_intrinsic_file_ = "Data/out_camera_data_lion_old.yml";         // mesh
+      camera_intrinsic_file_ = std::string("Data/out_camera_data_lion_old.yml");         // mesh
 
       red_ = cv::Scalar(0, 0, 255);
       green_ = cv::Scalar(0, 255, 0);
@@ -60,7 +60,7 @@ namespace od
       min_inliers_ = 30;    // Kalman threshold updating
 
       pnp_method_ = cv::SOLVEPNP_EPNP;
-      f_type_default_ = "SIFT";
+      f_type_default_ = std::string("SIFT");
       feature_detector_ = make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
     }
 
@@ -241,7 +241,7 @@ namespace od
       pnp_detection_ = PnPProblem(cam_man, dist_coeff);
 
       // get all trained models
-      fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), TRAINED_DATA_ID_, model_names_);
+      fileutils::getFilesInDirectoryRec(getSpecificTrainingDataLocation(), trained_data_id_, model_names_);
 
       for(size_t i = 0; i < model_names_.size(); ++i)
       {
@@ -303,24 +303,19 @@ namespace od
         return false;
 
       std::vector<cv::Point3f> list_points3d_model_match; // container for the model 3D coordinates found in the scene
-      std::vector<cv::KeyPoint> list_keypoints_model_match; // container for the model 2D coordinates in the textured image of the corresponding 3D coordinates
       std::vector<cv::Point2f> list_points2d_scene_match; // container for the model 2D coordinates found in the scene
 
       for(size_t match_index = 0; match_index < good_matches.size(); ++match_index)
       {
         cv::Point3f point3d_model = list_points3d_model[good_matches[match_index].trainIdx];  // 3D point from model
-        cv::KeyPoint kp_model = list_keypoints_model[good_matches[match_index].trainIdx];  // 2D point from model
         cv::Point2f point2d_scene = keypoints_scene[good_matches[match_index].queryIdx].pt; // 2D point from the scene
 
         list_points3d_model_match.push_back(point3d_model);         // add 3D point
-        list_keypoints_model_match.push_back(kp_model);
         list_points2d_scene_match.push_back(point2d_scene);         // add 2D point
       }
 
 
       cv::Mat inliers_idx;
-      std::vector<cv::Point2f> list_points2d_inliers;
-
 
       // -- Step 3: Estimate the pose using RANSAC approach
       pnp_detection_.estimatePoseRANSAC(list_points3d_model_match, list_points2d_scene_match, pnp_method_, inliers_idx,

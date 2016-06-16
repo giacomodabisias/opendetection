@@ -41,8 +41,8 @@ namespace od
                                block_stride_(block_stride), cell_size_(cell_size), hog_(win_size, block_size, block_stride, cell_size, 9)
     {
 
-      TRAINED_LOCATION_DENTIFIER_ = "HOG";
-      TRAINED_DATA_ID_ = "hog.xml";
+      trained_location_identifier_ = std::string("HOG");
+      trained_data_id_ = std::string("hog.xml");
 
       //algo parameter init
       training_padding_ = cv::Size(0, 0);
@@ -51,20 +51,20 @@ namespace od
       win_stride_ = cv::Size();
       train_hard_negative_ = false;
 
-      if(trained_data_location_ != "")
+      if(trained_data_location_ != std::string(""))
       {
-        pos_samples_dir_ = training_input_location_ + "/pos";
-        neg_samples_dir_ = training_input_location_ + "/neg";
+        pos_samples_dir_ = training_input_location_ + std::string("/pos");
+        neg_samples_dir_ = training_input_location_ + std::string("/neg");
       }
 
 
       //internal data
       fileutils::createTrainingDir(getSpecificTrainingDataLocation());
-      features_file_ = getSpecificTrainingDataLocation() + "/features.dat";
-      svm_model_file_ = getSpecificTrainingDataLocation() + "/svmlightmodel.dat";
-      svm_model_hard_ = getSpecificTrainingDataLocation() + "/svmlightmodelhard.dat";
-      descriptor_vector_file_ = getSpecificTrainingDataLocation() + "/descriptorvector.dat";
-      descriptor_vector_file_ = getSpecificTrainingDataLocation() + "/descriptorvectorHard.dat";
+      features_file_ = getSpecificTrainingDataLocation() + std::string("/features.dat");
+      svm_model_file_ = getSpecificTrainingDataLocation() + std::string("/svmlightmodel.dat");
+      svm_model_hard_ = getSpecificTrainingDataLocation() + std::string("/svmlightmodelhard.dat");
+      descriptor_vector_file_ = getSpecificTrainingDataLocation() + std::string("/descriptorvector.dat");
+      descriptor_vector_file_ = getSpecificTrainingDataLocation() + std::string("/descriptorvectorHard.dat");
 
     }
 
@@ -88,7 +88,7 @@ namespace od
           }
           file << descriptor_vector[feature] << " ";
         }
-        printf("\n");
+        std::cout << std::endl;
         file << std::endl;
         file.flush();
         file.close();
@@ -98,8 +98,7 @@ namespace od
     void ODHOGTrainer::calculateFeaturesFromInput(const std::string & image_file_name, std::vector<float> & feature_vector, cv::HOGDescriptor & hog)
     {
 
-      cv::Mat image_data_orig, image_data;
-      image_data_orig = cv::imread(image_file_name, 0);
+      cv::Mat image_data_orig = cv::imread(image_file_name, 0);
 
       if(image_data_orig.empty())
       {
@@ -113,7 +112,6 @@ namespace od
       hog.compute(image_data_orig, feature_vector, win_stride_, training_padding_, locations);
       //cout << "Desc size :" << featureVector.size();
       //cout << ": Expected size :" << hog.getDescriptorSize() << endl;
-      image_data_orig.release(); // Release the image again after features are extracted
     }
 
     void ODHOGTrainer::detectTrainingSetTest(const cv::HOGDescriptor & hog, double hit_threshold, const std::vector<std::string> & pos_file_names, 
@@ -123,6 +121,7 @@ namespace od
       unsigned int true_negatives = 0;
       unsigned int false_positives = 0;
       unsigned int false_negatives = 0;
+
       std::vector<cv::Point> found_detection;
       cv::Mat image_data;
       // Walk over positive training samples, generate images and detect
@@ -216,13 +215,10 @@ namespace od
       int counter = 0;
       for(auto & nf :  neg_file_names)
       {
-
         const cv::Mat image_data = cv::imread(nf, 0);
-
 
         std::vector<cv::Rect> found_locations;
         hog.detectMultiScale(image_data, found_locations, hit_threshold);
-
 
         for(size_t i = 0; i < found_locations.size(); ++i)
         {
@@ -261,14 +257,14 @@ namespace od
     {
       SVMlight * svmlight= SVMlight::getInstance();
       //training takes featurefile as input, produces hitthreshold and vector as output
-      std::cout << "Calling " <<  svmlight->getSVMName() << std::endl;
+      std::cout << "Calling " << svmlight->getSVMName() << std::endl;
       svmlight->read_problem(const_cast<char *> (features_file_.c_str()));
       svmlight->train(); // Call the core libsvm training procedure
+
       std::cout << "Training done, saving model file!"<< std::endl;
       svmlight->saveModelToFile(svm_model_file);
 
       std::cout << "Generating representative single HOG feature vector using svmlight!" << std::endl;
-
       descriptor_vector.resize(0);
       // Generate a single detecting feature vector (v1 | b) from the trained support vectors, for use e.g. with the HOG algorithm
       svmlight->getSingleDetectingVector(descriptor_vector);
@@ -285,6 +281,7 @@ namespace od
       std::vector<std::string> positive_training_images;
       std::vector<std::string> negative_training_images;
       std::vector<std::string> valid_extensions;
+
       valid_extensions.push_back(".jpg");
       valid_extensions.push_back(".png");
       valid_extensions.push_back(".ppm");
@@ -297,11 +294,10 @@ namespace od
       std::cout << "No of positive Training Files: " << pos_size << std::endl;
       std::cout << "No of neg Training Files: "<< neg_size << std::endl;
 
-
       if(pos_size + neg_size == 0)
       {
         std::cout << "No training sample files found, nothing to do!" << std::endl;
-        return EXIT_SUCCESS;
+        return 0;
       }
 
       /// @WARNING: This is really important, some libraries (e.g. ROS) seems to set the system locale 
@@ -353,7 +349,7 @@ namespace od
       } else
       {
         std::cout << "Error opening file " << features_file_;
-        return EXIT_FAILURE;
+        return -1;
       }
 
 
@@ -378,12 +374,11 @@ namespace od
         hog_.setSVMDetector(descriptor_vector);
         std::cout << "Testing training phase using training set as test set after HARD EXAMPLES (just to check if training is ok - no detection quality conclusion with this!)" << std::endl;
         detectTrainingSetTest(hog_, hit_threshold_, positive_training_images, negative_training_images);
-
       }
 
-      save(getSpecificTrainingDataLocation() + "/odtrained." + TRAINED_DATA_ID_);
+      save(getSpecificTrainingDataLocation() + "/odtrained." + trained_data_id_);
 
-      return EXIT_SUCCESS;
+      return 0;
     }
 
 
@@ -395,7 +390,6 @@ namespace od
       file.open(file_name.c_str(), std::ios::in);
       if(file.good() && file.is_open())
       {
-
         double d;
         while(file >> d)
         {
@@ -407,7 +401,6 @@ namespace od
 
     void ODHOGTrainer::save(const std::string & file_name)
     {
-      
       cv::FileStorage fs(file_name, cv::FileStorage::WRITE);
       fs << "hitThreshold" << hit_threshold_;
       hog_.write(fs, cv::FileStorage::getDefaultObjectName(file_name));

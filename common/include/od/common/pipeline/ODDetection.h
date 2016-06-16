@@ -141,8 +141,8 @@ namespace od
     const cv::Mat & getMetainfoImage() const;
     void setMetainfoImage(const cv::Mat & metainfo_image);
 
-    const pcl::PointCloud<pcl::PointXYZ>::Ptr & getMetainfoCluster() const;
-    void setMetainfoCluster(const pcl::PointCloud<pcl::PointXYZ>::Ptr & metainfo_cluster);
+    const shared_ptr<pcl::PointCloud<pcl::PointXYZ> > & getMetainfoCluster() const;
+    void setMetainfoCluster(const shared_ptr<pcl::PointCloud<pcl::PointXYZ> > & metainfo_cluster);
 
     void printSelf();
 
@@ -150,7 +150,7 @@ namespace od
     Eigen::Matrix3Xd orientation_;
     double scale_;
     cv::Mat metainfo_image_;
-    pcl::PointCloud<pcl::PointXYZ>::Ptr metainfo_cluster_;
+    shared_ptr<pcl::PointCloud<pcl::PointXYZ>> metainfo_cluster_;
 
   };
 
@@ -188,14 +188,14 @@ namespace od
     const cv::Mat & getMetainfoImage() const;
     void setMetainfoImage(const cv::Mat & metainfo_image_);
 
-    const pcl::PointCloud<pcl::PointXYZ>::Ptr & getMetainfoCluster() const;
-    void setMetainfoCluster(const pcl::PointCloud<pcl::PointXYZ>::Ptr & metainfo_cluster);
+    const shared_ptr<pcl::PointCloud<pcl::PointXYZ> > & getMetainfoCluster() const;
+    void setMetainfoCluster(const shared_ptr<pcl::PointCloud<pcl::PointXYZ> > & metainfo_cluster);
 
   protected:
 
     std::vector<shared_ptr<ODDetection>> detections_;
     cv::Mat metainfo_image_;
-    typename pcl::PointCloud<pcl::PointXYZ>::Ptr metainfo_cluster_;
+    shared_ptr<pcl::PointCloud<pcl::PointXYZ> > metainfo_cluster_;
 
   };
 

@@ -60,12 +60,7 @@ namespace od {
       /** The list of 2D points descriptors */
       cv::Mat descriptors_;
 
-      int getDescriptorSize()
-      {
-        //if (f_type == "SIFT") 
-          //return 128;
-        return 128;
-      }
+      unsigned int getDescriptorSize();
     };
 
   }

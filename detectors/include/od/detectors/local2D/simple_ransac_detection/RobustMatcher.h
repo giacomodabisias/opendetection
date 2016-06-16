@@ -45,7 +45,7 @@ namespace od {
       void computeDescriptors( const cv::Mat & image, std::vector<cv::KeyPoint> & keypoints, cv::Mat & descriptors);
 
       // Set ratio parameter for the ratio test
-      void setRatio( float rat) { ratio_ = rat; }
+      void setRatio(float rat);
 
       // Clear matches for which NN ratio is > than threshold
       // return the number of removed points

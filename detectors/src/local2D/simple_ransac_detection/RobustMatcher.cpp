@@ -11,9 +11,9 @@ namespace od {
   
   namespace l2d {
 
+/*
     void convertToUnsignedSiftGPU(const cv::Mat & cv_des, std::vector<unsigned char> & siftgpu_des)
     {
-      int totdes = cv_des.rows * 128;
       siftgpu_des.resize(cv_des.rows * 128);
 
       int desi = 0;
@@ -24,7 +24,7 @@ namespace od {
       }
     }
 
-    void convertToDmatch(int siftgpu_matches[][2], int num_match, std::vector<cv::DMatch> & cv_matches)
+    void convertToDmatch(int siftgpu_matches[][2], unsigned int num_match, std::vector<cv::DMatch> & cv_matches)
     {
       cv_matches.resize(num_match);
       for(size_t i  = 0; i < num_match; ++i)
@@ -38,6 +38,19 @@ namespace od {
       }
     }
 
+    void getGoodMatches(const std::vector<std::vector<cv::DMatch> > & matches, std::vector<cv::DMatch> & goodMatches)
+    {
+      for (std::vector<std::vector<cv::DMatch> >::const_iterator
+               matchIterator1 = matches.begin(); matchIterator1 != matches.end(); ++matchIterator1)
+      {
+        // ignore deleted matches
+        if (matchIterator1->empty() || matchIterator1->size() < 2)
+          continue;
+        if ((*matchIterator1)[0].distance < (*matchIterator1)[1].distance)
+          goodMatches.push_back((*matchIterator1)[0]);
+      }
+    }
+*/
 
     void RobustMatcher::instantiateMatcher(const Model & model, bool use_gpu)
     {
@@ -64,14 +77,10 @@ namespace od {
 
       use_gpu_ = use_gpu_match;
 
-
-
       // ORB is the default feature
-      ratio_ =0.8f;
+      ratio_ = 0.8f;
       detector_ = cv::ORB::create();
       extractor_ = cv::ORB::create();
-
-
 
       instantiateMatcher(model, use_gpu_match);
 
@@ -106,14 +115,14 @@ namespace od {
       extractor_->compute(image, keypoints, descriptors);
     }
 
-    int RobustMatcher::ratioTest(std::vector<std::vector<cv::DMatch> > &matches)
+    int RobustMatcher::ratioTest(std::vector<std::vector<cv::DMatch> > & matches)
     {
       int removed = 0;
       // for all matches
       for(std::vector<std::vector<cv::DMatch> >::iterator
             matchIterator= matches.begin(); matchIterator!= matches.end(); ++matchIterator)
       {
-        // if 2 NN has been identified
+        // if 2 NN have been identified
         if(matchIterator->size() > 1)
         {
           // check distance ratio
@@ -132,18 +141,9 @@ namespace od {
       return removed;
     }
 
-    void getGoodMatches(const std::vector<std::vector<cv::DMatch> > & matches, std::vector<cv::DMatch> & goodMatches)
-    {
-      for (std::vector<std::vector<cv::DMatch> >::const_iterator
-               matchIterator1 = matches.begin(); matchIterator1 != matches.end(); ++matchIterator1)
-      {
-        // ignore deleted matches
-        if (matchIterator1->empty() || matchIterator1->size() < 2)
-          continue;
-        if ((*matchIterator1)[0].distance < (*matchIterator1)[1].distance)
-          goodMatches.push_back((*matchIterator1)[0]);
-      }
-
+    void RobustMatcher::setRatio(float rat) 
+    { 
+      ratio_ = rat; 
     }
 
     void RobustMatcher::symmetryTest(const std::vector<std::vector<cv::DMatch> > & matches1,
@@ -190,33 +190,26 @@ namespace od {
     {
       std::vector<std::vector<cv::DMatch> > matches;
 
-      if (use_gpu_)
+      if(use_gpu_)
       {
         matcher_gpu_->knnMatch(cv::cuda::GpuMat(descriptors_frame), matches, 2); // return 2 nearest neighbours
-        ratioTest(matches);
-        for ( std::vector<std::vector<cv::DMatch> >::iterator
-                  matchIterator= matches.begin(); matchIterator!= matches.end(); ++matchIterator)
-        {
-          if (!matchIterator->empty()) good_matches.push_back((*matchIterator)[0]);
-        }
-      }
-      else
-      {
+      }else{
         matcher_->knnMatch(descriptors_frame, descriptors_model, matches, 2); // return 2 nearest neighbours
-        ratioTest(matches);
-        // 4. Fill good matches container
-        for ( std::vector<std::vector<cv::DMatch> >::iterator
-                  matchIterator= matches.begin(); matchIterator!= matches.end(); ++matchIterator)
-        {
-          if (!matchIterator->empty()) good_matches.push_back((*matchIterator)[0]);
-        }
-
       }
+
+      ratioTest(matches);
+      // 4. Fill good matches container
+      for(auto & match : matches)
+      {
+        good_matches.push_back(match[0]);
+      }
+
     }
 
     void RobustMatcher::matchNormalized(cv::Mat & descriptors_frame, cv::Mat & descriptors_model, std::vector<cv::DMatch> & good_matches)
     {
-      od::normL2(descriptors_frame); od::normL2(descriptors_model);
+      od::normL2(descriptors_frame); 
+      od::normL2(descriptors_model);
       match(descriptors_frame, descriptors_model, good_matches);
     }
 
@@ -240,7 +233,6 @@ namespace od {
 
       // 2b. From image 2 to image 1
       matcher_->knnMatch(descriptors_model, descriptors_frame, matches21, 2); // return 2 nearest neighbours
-
 
       // 3. Remove matches for which NN ratio is > than threshold
       // clean image 1 -> image 2 matches
@@ -310,12 +302,10 @@ namespace od {
       ratioTest(matches);
 
       // 4. Fill good matches container
-      for(std::vector<std::vector<cv::DMatch> >::iterator
-             matchIterator= matches.begin(); matchIterator!= matches.end(); ++matchIterator)
+      for(auto & match : matches)
       {
-        if (!matchIterator->empty()) good_matches.push_back((*matchIterator)[0]);
+        good_matches.push_back(match[0]);
       }
-
     }
 
   }

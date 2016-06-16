@@ -206,7 +206,7 @@ namespace od {
     std::vector<cv::Point2f> PnPProblem::verifyPoints(shared_ptr<Mesh> mesh)
     {
       std::vector<cv::Point2f> verified_points_2d;
-      for(size_t i = 0; i < mesh->getNumVertices(); ++i)
+      for(int i = 0; i < mesh->getNumVertices(); ++i)
       {
         cv::Point3f point3d = mesh->getVertex(i);
         cv::Point2f point2d = backproject3DPoint(point3d);

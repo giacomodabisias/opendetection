@@ -119,7 +119,7 @@ namespace od {
         return ;
 
       }
-      int nop, desc_size, point_size;
+      unsigned int nop, desc_size, point_size;
       infile >> nop;
       infile >> point_size >> desc_size;
 
@@ -143,6 +143,13 @@ namespace od {
         }
       }
       id_ = path;
+    }
+
+    unsigned int Model::getDescriptorSize()
+    {
+      //if (f_type == "SIFT") 
+        //return 128;
+      return 128;
     }
 
     void Model::loadNewXml(const std::string & path)

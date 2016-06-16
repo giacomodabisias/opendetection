@@ -21,15 +21,15 @@ namespace od
 
   void normL2(cv::Mat & descriptors)
   {
-    for (int r = 0; r < descriptors.rows; r++)
+    for(int r = 0; r < descriptors.rows; r++)
     {
       float norm = 0;
-      for (size_t c = 0; c < descriptors.cols; c++) 
+      for(int c = 0; c < descriptors.cols; c++) 
         norm += (descriptors.at<float>(r, c)*descriptors.at<float>(r, c));
 
       norm = 1.0/sqrt(norm);
 
-      for (size_t c = 0; c < descriptors.cols; c++) 
+      for(int c = 0; c < descriptors.cols; c++) 
         descriptors.at<float>(r, c) *= norm;
     }
   }
@@ -47,8 +47,8 @@ namespace od
       printmssg = true;
 
     const float n_imgs = imgs.size();
-    const int imgs_in_row = ceil(sqrt(n_imgs));     
-    const int imgs_in_col = ceil(n_imgs/imgs_in_row); 
+    const unsigned int imgs_in_row = ceil(sqrt(n_imgs));     
+    const unsigned int imgs_in_col = ceil(n_imgs/imgs_in_row); 
 
     const unsigned int cell_width = cell_size.width;
     const unsigned int cell_height = cell_size.height;

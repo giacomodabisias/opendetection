@@ -357,7 +357,7 @@ namespace od
           detections->push_back(detection);
 
           if(meta_info_)
-            drawModel(viz, &models_[i], pnp_detection_.getRVect(), pnp_detection_.getTMatrix(), pnp_detection_.getAMatrix(), 
+            drawModel(viz, models_[i], pnp_detection_.getRVect(), pnp_detection_.getTMatrix(), pnp_detection_.getAMatrix(), 
                       pnp_detection_.getDistCoef(),  yellow_);
         }
       }

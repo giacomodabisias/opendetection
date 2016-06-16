@@ -168,7 +168,7 @@ namespace od
   {
     sift_gpu_->RunSIFT(image_name.c_str());
 
-    int nFeat = sift_gpu_->GetFeatureNum();//get feature count
+    unsigned int nFeat = sift_gpu_->GetFeatureNum();//get feature count
     //allocate memory for readback
     std::vector<SiftGPU::SiftKeypoint> keys(nFeat);
     //read back keypoints and normalized descritpros

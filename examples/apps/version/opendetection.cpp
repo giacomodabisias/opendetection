@@ -2,7 +2,7 @@
 // Created by sarkar on 03.06.15.
 //
 
-#include "od_config.h"
+#include "od_version.h"
 #include <iostream>
 
 int main (int argc, char *argv[])

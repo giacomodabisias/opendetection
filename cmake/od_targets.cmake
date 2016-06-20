@@ -23,12 +23,20 @@ if(NOT OD_INSTALL_DOC_DIR)
   set(OD_INSTALL_DOC_DIR share/doc/od-${OD_VERSION})
 endif()
 
+if(NOT OD_CMAKE_INSTALL_DIR)
+  set(OD_CMAKE_INSTALL_DIR lib/cmake)
+endif()
+
 if(NOT OD_INSTALL_PACKAGE_DIR)
-  set(OD_INSTALL_PACKAGE_DIR "lib/cmake/od-${OD_VERSION}")
+  set(OD_INSTALL_PACKAGE_DIR lib/cmake/od-${OD_VERSION})
 endif()
 
 if(NOT OD_INSTALL_DOXYGEN_DIR)
   set(OD_INSTALL_DOXYGEN_DIR ${OD_INSTALL_DOC_DIR}/doxygen)
+endif()
+
+if(NOT OD_INSTALLED_LIBRARIES)
+	set_property(GLOBAL PROPERTY OD_INSTALLED_LIBRARIES "")
 endif()
 
 

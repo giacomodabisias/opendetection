@@ -5,9 +5,6 @@ set(SUBSYS_DESC "global feature based detection in 2D images")
 set(SUBSYS_DEPS od_common ${OpenCV_LIBS} svmlight)
 
 set(build TRUE)
-#PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
-#PCL_SUBSYS_DEPEND(build "${SUBSYS_NAME}" DEPS ${SUBSYS_DEPS})
-
 
 if(build)
 
@@ -23,8 +20,5 @@ if(build)
     include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
 
     OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
-
-    #PCL_MAKE_PKGCONFIG("${LIB_NAME}" "${SUBSYS_NAME}" "${SUBSYS_DESC}" "${SUBSYS_DEPS}" "" "" "" "")
-
 
 endif(build)

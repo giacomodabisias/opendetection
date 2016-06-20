@@ -4,14 +4,9 @@ set(SUBSYS_DESC "The local feature matching based detector")
 set(SUBSYS_DEPS od_common ${PCL_LIBRARIES} ${VTK_LIBRARIES} ${OpenCV_LIBS} pugixml)
 
 set(build TRUE)
-#PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
-#PCL_SUBSYS_DEPEND(build "${SUBSYS_NAME}" DEPS ${SUBSYS_DEPS})
-
 
 if(build)
     
-    set(IMPL_INCLUDES "")
-
     set(SOURCES
         "ODImageLocalMatching.cpp"
         "training/ODCADRecogTrainerSnapshotBased.cpp"
@@ -31,7 +26,5 @@ if(build)
     include_directories(${COMMON_INCLUDE_DIR})
 
     OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
-
-    #PCL_MAKE_PKGCONFIG("${LIB_NAME}" "${SUBSYS_NAME}" "${SUBSYS_DESC}" "${SUBSYS_DEPS}" "" "" "" "")
 
 endif(build)

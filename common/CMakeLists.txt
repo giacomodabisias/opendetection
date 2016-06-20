@@ -22,7 +22,7 @@ if(build)
             "src/pipeline/ODDetection.cpp"
             "src/utils/ODUtils.cpp"
             "src/utils/ODFeatureDetector2D.cpp"
-            "src/bindings/svmlight.cpp"
+            "src/bindings/ODSvmlight.cpp"
         )
 
     include_directories(${COMMON_INCLUDE_DIR})
@@ -30,6 +30,6 @@ if(build)
 
     OD_ADD_LIBRARY(${SUBSYS_NAME} SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
     install(DIRECTORY ${COMMON_INCLUDE_DIR}/od DESTINATION ${OD_INSTALL_INCLUDE_DIR} COMPONENT ${LIB_NAME})
-    
+
 
 endif(build)

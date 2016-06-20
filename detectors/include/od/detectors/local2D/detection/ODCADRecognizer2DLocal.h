@@ -141,9 +141,7 @@ namespace od
       shared_ptr<ODFeatureDetector2D> feature_detector_;
 
     };
-    /** \example objectdetector/od_image_cadrecog_camera.cpp
-     * \example objectdetector/od_image_cadrecog_files.cpp
-     */
+
   }
 }
 

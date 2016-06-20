@@ -31,7 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/opencv.hpp>
 #include <fstream>
 #include "od/common/pipeline/ODTrainer.h"
-#include "od/common/bindings/svmlight.h"
+#include "od/common/bindings/ODSvmlight.h"
 
 namespace od
 {
@@ -223,7 +223,7 @@ namespace od
       std::string descriptor_vector_hard_;
       
     };
-    /** \example objectdetector/od_hog_train.cpp
-     */
+
   }
+  
 }

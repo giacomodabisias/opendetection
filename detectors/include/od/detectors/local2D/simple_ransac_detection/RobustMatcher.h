@@ -30,13 +30,13 @@ namespace od {
       virtual ~RobustMatcher();
 
       // Set the feature detector
-      void setFeatureDetector(const cv::Ptr<cv::FeatureDetector> & detect) {  detector_ = detect; }
+      void setFeatureDetector(const cv::Ptr<cv::FeatureDetector> & detect);
 
       // Set the descriptor extractor
-      void setDescriptorExtractor(const cv::Ptr<cv::DescriptorExtractor> & desc) { extractor_ = desc; }
+      void setDescriptorExtractor(const cv::Ptr<cv::DescriptorExtractor> & desc);
 
       // Set the matcher
-      void setDescriptorMatcher(const cv::Ptr<cv::DescriptorMatcher> & match) {  matcher_ = match; }
+      void setDescriptorMatcher(const cv::Ptr<cv::DescriptorMatcher> & match);
 
       // Compute the keypoints of an image
       void computeKeyPoints( const cv::Mat & image, std::vector<cv::KeyPoint> & keypoints);

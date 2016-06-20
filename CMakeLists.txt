@@ -11,18 +11,20 @@ set(CMAKE_MODULE_PATH ${OD_CMAKE_DIR}/modules)
 set(CMAKE_3RDPARTY_DIR ${OD_SOURCE_DIR}/3rdparty)
 
 # Initialize versioning
-include(${OD_CMAKE_DIR}/od_version.cmake)
+include(${OD_CMAKE_DIR}/ODVersion.cmake)
 set(OD_VERSION ${OD_MAJOR_VERSION}.${OD_MINOR_VERSION})
 set(OD_VERSION_DETAILED ${OD_MAJOR_VERSION}.${OD_MINOR_VERSION}.${OD_BUILD_VERSION})
 
-# Prepare configuration files
-configure_file(${OD_CMAKE_DIR}/od_version.h.in ${OD_BINARY_DIR}/generated/od_version.h)
-configure_file(${OD_CMAKE_DIR}/ODConfig.cmake.in ${OD_BINARY_DIR}/FindOD.cmake)
-
 # Set up macros and configurations
-include(${OD_CMAKE_DIR}/od_targets.cmake)
-include(${OD_CMAKE_DIR}/od_dependency.cmake)
-include(${OD_CMAKE_DIR}/od_macros.cmake)
+include(${OD_CMAKE_DIR}/ODTargets.cmake)
+include(${OD_CMAKE_DIR}/ODDependency.cmake)
+include(${OD_CMAKE_DIR}/ODMacros.cmake)
+include(${OD_CMAKE_DIR}/ODDeb.cmake)
+
+# Prepare configuration files
+configure_file(${OD_CMAKE_DIR}/ODVersion.h.in ${OD_BINARY_DIR}/generated/od_version.h)
+install(FILES ${OD_BINARY_DIR}/generated/od_version.h DESTINATION ${OD_INSTALL_INCLUDE_DIR})
+configure_file(${OD_CMAKE_DIR}/ODConfig.cmake.in ${OD_BINARY_DIR}/FindOD.cmake)
 
 # Optional parameters
 option(WITH_DOCUMENTATION "Build the OD documentation" ON)
@@ -49,9 +51,8 @@ install(FILES ${OD_BINARY_DIR}/FindOD.cmake DESTINATION ${OD_CMAKE_INSTALL_DIR})
 
 # uninstall target
 configure_file(
-    "${OD_CMAKE_DIR}/cmake_uninstall.cmake.in"
+    "${OD_CMAKE_DIR}/ODUninstall.cmake.in"
     "${OD_BINARY_DIR}/cmake_uninstall.cmake"
     IMMEDIATE @ONLY)
 
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

@@ -116,7 +116,7 @@ namespace od
       void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, const std::string & separator = std::string(";"));
 
     };
-    /** \example objectdetector/od_image_facerecog.cpp
-      */
+
   }
+  
 }

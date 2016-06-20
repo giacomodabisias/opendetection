@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/utils/ODUtils.h"
 #include "od/common/utils/ODFeatureDetector2D.h"
 #include "od/common/utils/ODShared_pointers.h"
-#include "od/common/bindings/svmlight.h"
+#include "od/common/bindings/ODSvmlight.h"
 
 #include <iostream>
 #include <opencv2/objdetect.hpp>

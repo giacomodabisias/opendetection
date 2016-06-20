@@ -49,7 +49,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
  * 
  */
 
-#include "od/common/bindings/svmlight.h"
+#include "od/common/bindings/ODSvmlight.h"
 
 SVMlight::SVMlight(){
     // Init variables

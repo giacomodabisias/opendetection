@@ -52,6 +52,24 @@ namespace od {
     }
 */
 
+    // Set the feature detector
+    void RobustMatcher::setFeatureDetector(const cv::Ptr<cv::FeatureDetector> & detect)
+    { 
+      detector_ = detect; 
+    }
+
+    // Set the descriptor extractor
+    void RobustMatcher::setDescriptorExtractor(const cv::Ptr<cv::DescriptorExtractor> & desc) 
+    { 
+      extractor_ = desc; 
+    }
+
+    // Set the matcher
+    void RobustMatcher::setDescriptorMatcher(const cv::Ptr<cv::DescriptorMatcher> & match) 
+    { 
+      matcher_ = match; 
+    }
+
     void RobustMatcher::instantiateMatcher(const Model & model, bool use_gpu)
     {
 

@@ -5,7 +5,7 @@
  *      Author: Edgar Riba
  */
 
-#include "od/detectors/local2D/simple_ransac_detection/PnPProblem.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODPnPProblem.h"
 
 namespace od {
   

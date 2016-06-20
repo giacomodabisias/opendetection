@@ -178,3 +178,27 @@ The following step took quite a bit in order to have everything work well. Until
 
 While restructuring the code I also fixed again some coding style issues, but I still have to go through the code a few more times in order to finish fixing everything. The next step is as previously mentioned, to check the compilation with the svmlight option.
 
+##Cmake improvments 20/06/15##
+
+I created a **FindOD.cmake** which can be used by other libraries to find the include directories path, the library path and the library names. The variables which get set are:
+
+- OD_INCLUDE_DIRS 
+- OD_LIBRARY_PATH 
+- OD_LIBRARIES 
+
+There variables can be used in any project by using:
+
+@code
+find_package(OD REQUIRED)
+include_directories(${OD_INCLUDE_DIRS})
+link_directories(${OD_LIBRARY_PATH})
+target_link_libraries(example_target ${OD_LIBRARIES})
+@endcode
+
+The **FindOD.cmake** is generated automatically starting from the **${CMAKE_INSTALL_PREFIX}** variable so there is no absolute path and it is installed in ****${CMAKE_INSTALL_PREFIX}/lib/cmake/** .
+
+I added then an **uninstall** target to delete all the installed files if necessary. This custom target is standard and can be found easily on the internet.
+
+Another important missing thing was the creation of a .deb package which can be useful to install the library on other systems. This package has been created using the **Cpack** utility provided by cmake. By just setting some basic variables it is possible to create e complete .deb file which can then be installed using the usual *dpkg -i package.deb* command.
+
+All files in the library have been renamed according to a common scheme which consists in a Prefix "OD" followed by the first charachter of the file name uppercase.

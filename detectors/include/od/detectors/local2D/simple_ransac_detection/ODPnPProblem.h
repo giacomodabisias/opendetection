@@ -10,8 +10,8 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <iostream>
 #include <sstream>
-#include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
-#include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODMesh.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODModelRegistration.h"
 #include "od/common/utils/ODShared_pointers.h"
 
 class Mesh;

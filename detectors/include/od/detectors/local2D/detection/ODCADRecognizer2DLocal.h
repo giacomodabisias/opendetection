@@ -30,8 +30,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "od/detectors/local2D/ODImageLocalMatching.h"
 #include "od/common/pipeline/ODScene.h"
-#include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
-#include "od/detectors/local2D/simple_ransac_detection/RobustMatcher.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODMesh.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODRobustMatcher.h"
 
 #include <iostream>
 

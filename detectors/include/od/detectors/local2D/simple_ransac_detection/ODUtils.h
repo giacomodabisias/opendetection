@@ -6,11 +6,10 @@
  */
 #pragma once
 #include <iostream>
-#include <sys/time.h>
-#include "od/detectors/local2D/simple_ransac_detection/PnPProblem.h"
-#include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
-#include "od/detectors/local2D/simple_ransac_detection/Model.h"
-#include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODPnPProblem.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODModelRegistration.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODModel.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODMesh.h"
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 

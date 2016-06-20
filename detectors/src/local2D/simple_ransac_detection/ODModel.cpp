@@ -6,7 +6,7 @@
  */
 
 
-#include "od/detectors/local2D/simple_ransac_detection/Model.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODModel.h"
 
 namespace od {
   

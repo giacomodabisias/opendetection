@@ -5,7 +5,7 @@
  *      Author: edgar
  */
 
-#include "od/detectors/local2D/simple_ransac_detection/Mesh.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODMesh.h"
 
 namespace od {
   

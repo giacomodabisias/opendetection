@@ -5,7 +5,7 @@
  *      Author: eriba
  */
 
-#include "od/detectors/local2D/simple_ransac_detection/RobustMatcher.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODRobustMatcher.h"
 
 namespace od {
   

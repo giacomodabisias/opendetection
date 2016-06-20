@@ -5,7 +5,7 @@
  *      Author: edgar
  */
 
-#include "od/detectors/local2D/simple_ransac_detection/ModelRegistration.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODModelRegistration.h"
 
 namespace od {
   

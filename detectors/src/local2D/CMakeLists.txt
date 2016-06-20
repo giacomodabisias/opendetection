@@ -11,14 +11,14 @@ if(build)
         "ODImageLocalMatching.cpp"
         "training/ODCADRecogTrainerSnapshotBased.cpp"
         "detection/ODCADRecognizer2DLocal.cpp"
-        "simple_ransac_detection/CsvReader.cpp"
-        "simple_ransac_detection/CsvWriter.cpp"
-        "simple_ransac_detection/ModelRegistration.cpp"
-        "simple_ransac_detection/Mesh.cpp"
-        "simple_ransac_detection/Model.cpp"
-        "simple_ransac_detection/PnPProblem.cpp"
-        "simple_ransac_detection/Utils.cpp"
-        "simple_ransac_detection/RobustMatcher.cpp"
+        "simple_ransac_detection/ODCsvReader.cpp"
+        "simple_ransac_detection/ODCsvWriter.cpp"
+        "simple_ransac_detection/ODModelRegistration.cpp"
+        "simple_ransac_detection/ODMesh.cpp"
+        "simple_ransac_detection/ODModel.cpp"
+        "simple_ransac_detection/ODPnPProblem.cpp"
+        "simple_ransac_detection/ODUtils.cpp"
+        "simple_ransac_detection/ODRobustMatcher.cpp"
         )
 
     include_directories(${DETECTORS_INCLUDE_DIR})

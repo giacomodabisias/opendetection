@@ -14,8 +14,8 @@
 #include <opencv2/ml.hpp>
 #include "od/common/utils/ODFeatureDetector2D.h"
 #include "od/common/utils/ODUtils.h"
-#include "od/detectors/local2D/simple_ransac_detection/Model.h"
-#include "od/detectors/local2D/simple_ransac_detection/Utils.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODModel.h"
+#include "od/detectors/local2D/simple_ransac_detection/ODUtils.h"
 
 
 namespace od {

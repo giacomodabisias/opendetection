@@ -41,7 +41,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
  */
 
 /**
- * @file:   svmlight.h
+ * @file:   ODSvmlight.h
  * @author: Jan Hendriks (dahoc3150 [at] gmail.com)
  * @date:   Created on 11. Mai 2011
  * @brief:  Wrapper interface for SVMlight, 

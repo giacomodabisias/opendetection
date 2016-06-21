@@ -59,7 +59,7 @@ namespace od {
 		void drawObjectMesh(cv::Mat & image, const Mesh & mesh, PnPProblem & pnpProblem, const cv::Scalar & color);
 		void drawModel(cv::Mat & image, const Model & model,  PnPProblem & pnpProblem, const cv::Scalar color);
 		void drawModel(cv::Mat & image, const Model & model, cv::Mat r_vect,  cv::Mat t_mat, cv::Mat a_mat, 
-			            cv::Mat dist, const cv::Scalar & color);
+			           cv::Mat dist, const cv::Scalar & color);
 
 		// Computes the norm of the translation error
 		double getTranslationError(const cv::Mat & t_true, const cv::Mat & t);

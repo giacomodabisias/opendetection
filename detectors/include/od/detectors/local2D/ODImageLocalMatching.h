@@ -47,7 +47,7 @@ namespace od
 
     public:
 
-      ODImageLocalMatchingTrainer(const std::string & training_input_location_, const std::string & training_data_location_);
+      ODImageLocalMatchingTrainer(const std::string & training_input_location, const std::string & training_data_location);
 
     };
 
@@ -61,7 +61,7 @@ namespace od
 
     public:
       
-      ODImageLocalMatchingDetector(const std::string & training_data_location_);
+      ODImageLocalMatchingDetector(const std::string & training_data_location);
 
     };
 
@@ -77,11 +77,11 @@ namespace od
 
       shared_ptr<ODImageLocalMatchingTrainer> getTrainer() const;
 
-      void setTrainer(shared_ptr<ODImageLocalMatchingTrainer> trainer_);
+      void setTrainer(shared_ptr<ODImageLocalMatchingTrainer> trainer);
 
       shared_ptr<ODImageLocalMatchingDetector> getDetector() const;
 
-      void setDetector(shared_ptr<ODImageLocalMatchingDetector> detector_);
+      void setDetector(shared_ptr<ODImageLocalMatchingDetector> detector);
 
 
       ODImageLocalMatching();

@@ -68,14 +68,14 @@ namespace od
     template<typename PointT>
     shared_ptr<ODDetections> ODCADDetector3DGlobal<PointT>::detect(shared_ptr<ODScene> scene) 
     {
-      std::cout << "not implemented, use with shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+      std::cout << "not implemented, use with shared_ptr<ODScenePointCloud<PointT>>" << std::endl; 
       return nullptr;
     };
 
     template<typename PointT>
     shared_ptr<ODDetections> ODCADDetector3DGlobal<PointT>::detectOmni(shared_ptr<ODScene> scene)
     {
-      std::cout << "not implemented, use with shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+      std::cout << "not implemented, use with shared_ptr<ODScenePointCloud<PointT>>" << std::endl; 
       return nullptr;
     };
 
@@ -158,7 +158,7 @@ namespace od
         global_ = global;
       } else
       {
-        std::cout << "FATAL: descriptor type not available.";
+        std::cout << "FATAL: descriptor type not available." << std::endl;
       }
 
     }
@@ -168,18 +168,14 @@ namespace od
     {
       shared_ptr<ODDetections3D> detections = make_shared<ODDetections3D>();
 
-
-      typename pcl::PointCloud<PointT>::Ptr frame;
-      float Z_DIST_ = 1.25f;
-
-      frame = scene->getPointCloud();
+      typename pcl::PointCloud<PointT>::Ptr frame = scene->getPointCloud();
       pcl::PointCloud<pcl::PointXYZ>::Ptr xyz_points(new pcl::PointCloud<pcl::PointXYZ>);
       pcl::copyPointCloud(*frame, *xyz_points);
 
       //Step 1 -> Segment
       pcl::apps::DominantPlaneSegmentation<pcl::PointXYZ> dps;
       dps.setInputCloud(xyz_points);
-      dps.setMaxZBounds(Z_DIST_);
+      dps.setMaxZBounds(1.25f);
       dps.setObjectMinHeight(0.005);
       dps.setMinClusterSize(1000);
       dps.setWSize(9);
@@ -228,9 +224,7 @@ namespace od
     {
       shared_ptr<ODDetections> detections = make_shared<ODDetections>();
 
-      typename pcl::PointCloud<PointT>::Ptr frame;
-
-      frame = scene->getPointCloud();
+      typename pcl::PointCloud<PointT>::Ptr frame = scene->getPointCloud();
       pcl::PointCloud<pcl::PointXYZ>::Ptr xyz_points(new pcl::PointCloud<pcl::PointXYZ>);
       pcl::copyPointCloud(*frame, *xyz_points);
 

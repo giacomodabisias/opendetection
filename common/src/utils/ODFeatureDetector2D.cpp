@@ -12,10 +12,10 @@ namespace od
     mode_ = SIFT;
 
     if(use_gpu) {
-      if(feature_type == "ORB") {
+      if(feature_type.compare("ORB") == 0) {
         mode_ = ORB_GPU;
         feature_detector_ = cv::cuda::ORB::create();
-      }else if(feature_type == "SIFT") {
+      }else if(feature_type.compare("SIFT") == 0) {
         mode_ = SIFT_GPU;
         sift_gpu_ = new SiftGPU();
         char *argv[] = {(char *) "-fo", (char *) "-1", (char *) "-v", (char *) "1"};
@@ -25,13 +25,13 @@ namespace od
           std::cout << "FATAL ERROR cannot create SIFTGPU context" << std::endl;
       }
     } else {
-      if(feature_type == "SIFT") {
+      if(feature_type.compare("SIFT") == 0) {
         mode_ = SIFT;
         feature_detector_ = cv::xfeatures2d::SIFT::create();
-      } else if(feature_type == "ORB") {
+      } else if(feature_type.compare("ORB") == 0) {
         mode_ = ORB;
         feature_detector_ = cv::ORB::create();
-      } else if(feature_type == "SURF") {
+      } else if(feature_type.compare("SURF") == 0) {
         mode_ = SURF;
         feature_detector_ = cv::xfeatures2d::SURF::create();
       }
@@ -66,7 +66,7 @@ namespace od
         int argc = sizeof(argv) / sizeof(char *);
         sift_gpu_->ParseParam(argc, argv);
         if(sift_gpu_->CreateContextGL() != SiftGPU::SIFTGPU_FULL_SUPPORTED)
-          std::cout << "FATAL ERROR cannot create SIFTGPU context";
+          std::cout << "FATAL ERROR cannot create SIFTGPU context" << std::endl;
         break;
       
     }
@@ -201,7 +201,6 @@ namespace od
       sift_gpu_->SaveSIFT(path.c_str());
     } else {
       //DO NOTHING! IMPLEMENT LATER
-
     }
   }
 }

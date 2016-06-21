@@ -35,8 +35,8 @@ namespace od
   namespace l2d
   {
 
-    ODCADRecognizer2DLocal::ODCADRecognizer2DLocal(const std::string & trained_data_location_): 
-                                                   ODImageLocalMatchingDetector(trained_data_location_)
+    ODCADRecognizer2DLocal::ODCADRecognizer2DLocal(const std::string & trained_data_location): 
+                                                   ODImageLocalMatchingDetector(trained_data_location)
     {
       meta_info_ = true;
 

@@ -239,5 +239,10 @@ namespace od
       std::cout << "cellSize: " << cell_size_ << std::endl;
       std::cout << "hitThreshold: " << hit_threshold_ << std::endl;
     }
+
+    shared_ptr<ODDetections> ODHOGDetector::detectOmni(shared_ptr<ODScene> scene) 
+    {
+      return nullptr;
+    }
   }
 }

@@ -40,7 +40,7 @@ namespace od
   public:
     ODDetectorMultiAlgo2D(const std::string & training_data_location_) : ODDetector2D(training_data_location_){}
 
-    shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene) ;
+    shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
     shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
 
     shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
@@ -61,14 +61,14 @@ namespace od
   template<typename PointT>
   shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detectOmni(shared_ptr<ODScene> scene)
   {
-    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" << std::endl; 
     return nullptr;
   }
 
   template<typename PointT>
   shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detect(shared_ptr<ODScene> scene)
   {
-    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" << std::endl; 
     return nullptr;
   }
 
@@ -77,7 +77,6 @@ namespace od
   shared_ptr<ODDetections> ODDetectorMultiAlgo2D<PointT>::detect(shared_ptr<ODSceneImage> scene)
   {
     shared_ptr<ODDetections> detections_all = make_shared<ODDetections>();
-    
     for(auto & d : detectors_2d_)
     {
       detections_all->append(d->detect(scene));
@@ -122,7 +121,7 @@ namespace od
     
     ODDetectorMultiAlgo(const std::string & training_data_location_) : ODDetector(training_data_location_){}
 
-    shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene) ;
+    shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
     shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
 
     shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
@@ -143,14 +142,14 @@ namespace od
   template<typename PointT>
   shared_ptr<ODDetections> ODDetectorMultiAlgo<PointT>::detectOmni(shared_ptr<ODScene> scene)
   {
-    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" << std::endl; 
     return nullptr;
   }
 
   template<typename PointT>
   shared_ptr<ODDetections> ODDetectorMultiAlgo<PointT>::detect(shared_ptr<ODScene> scene)
   {
-    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" <<std::endl; 
+    std::cout << "not implemented, use with shared_ptr<ODSceneImage> or shared_ptr<ODScenePointCloud<PointT>>" << std::endl; 
     return nullptr;
   }
 

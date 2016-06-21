@@ -56,7 +56,7 @@ namespace od
 
     virtual ~ODDetection() {}
 
-    ODDetection(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1.0);
+    ODDetection(const DetectionType & type = OD_DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
     void printSelf();
 
@@ -93,7 +93,7 @@ namespace od
 
     virtual ~ODDetection2D(){}
 
-    ODDetection2D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1.0);
+    ODDetection2D(const DetectionType & type = OD_DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
     const Eigen::Vector3d & getLocation() const;
 
@@ -123,7 +123,7 @@ namespace od
 
     virtual ~ODDetection3D(){}
 
-    ODDetection3D(const DetectionType & type_ = OD_DETECTION_NULL, const std::string & id_ = "", double confidence_ = 1.0);
+    ODDetection3D(const DetectionType & type = OD_DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
     const Eigen::Vector4d & getLocation() const;
 

@@ -54,7 +54,7 @@ namespace od
     {
     public:
 
-      ODCADRecognizer2DLocal(const std::string & trained_data_location_ = 0);
+      ODCADRecognizer2DLocal(const std::string & trained_data_location_ = std::string());
 
       const std::string & getCameraIntrinsicFile() const;
 

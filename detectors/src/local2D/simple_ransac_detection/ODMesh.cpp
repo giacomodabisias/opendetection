@@ -21,11 +21,16 @@ namespace od {
       id_ = id; v0_ = V0; v1_ = V1; v2_ = V2;
     }
 
-    /**  The default destructor of the Class */
-    Triangle::~Triangle()
-    {
-      // TODO Auto-generated destructor stub
+    cv::Point3f Triangle::getV0() const {
+     return v0_; 
     }
+    cv::Point3f Triangle::getV1() const { 
+     return v1_; 
+    }
+    cv::Point3f Triangle::getV2() const {
+     return v2_; 
+    }
+
 
 
     // --------------------------------------------------- //
@@ -37,11 +42,15 @@ namespace od {
       p0_ = P0; p1_ = P1;
     }
 
-    /**  The default destructor of the Class */
-    Ray::~Ray()
-    {
-      // TODO Auto-generated destructor stub
+    cv::Point3f Ray::getP0()
+    { 
+      return p0_; 
     }
+    cv::Point3f Ray::getP1()
+    {
+     return p1_; 
+    }
+
 
 
     // --------------------------------------------------- //
@@ -56,12 +65,27 @@ namespace od {
       num_triangles_ = 0;
     }
 
-    /** The default destructor of the ObjectMesh Class */
-    Mesh::~Mesh()
-    {
-      // TODO Auto-generated destructor stub
+
+
+    std::vector<std::vector<int> > Mesh::getTrianglesList() const 
+    { 
+      return list_triangles_; 
     }
 
+    std::vector<cv::Point3f> Mesh::getVertices()  
+    { 
+      return list_vertex_; 
+    }
+
+    cv::Point3f Mesh::getVertex(int pos) const 
+    { 
+      return list_vertex_[pos]; 
+    }
+
+    int Mesh::getNumVertices() const 
+    {
+     return num_vertexs_; 
+    }
 
     /** Load a CSV with *.ply format **/
     void Mesh::load(const std::string & path)

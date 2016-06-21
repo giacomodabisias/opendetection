@@ -51,15 +51,15 @@ namespace od
     {
     public:
 
-      ODCascadeDetector(const std::string & trained_data_location = "", double scale_factor = 1.1, int min_neighbors = 3, 
+      ODCascadeDetector(const std::string & trained_data_location = std::string(""), double scale_factor = 1.1, int min_neighbors = 3, 
                         int flags = 0, const cv::Size & min_size = cv::Size(), const cv::Size & max_size = cv::Size());
 
       void init();
 
-      virtual shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
-      virtual shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
+      shared_ptr<ODDetections2D> detectOmni(shared_ptr<ODSceneImage> scene);
+      shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
 
-      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+      shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
 
     private:
 

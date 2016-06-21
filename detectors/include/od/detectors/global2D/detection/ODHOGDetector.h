@@ -60,7 +60,7 @@ namespace od
     {
     public:
 
-      ODHOGDetector(const std::string & trained_data_location_ = "", const cv::Size & win_size = cv::Size(64,128),
+      ODHOGDetector(const std::string & trained_data_location_ = std::string(""), const cv::Size & win_size = cv::Size(64,128),
                     const cv::Size & block_size = cv::Size(16,16), const cv::Size & block_stride = cv::Size(8,8),
                     const cv::Size & cell_size = cv::Size(8,8), float hit_threshold = 0.0);
 
@@ -81,7 +81,7 @@ namespace od
       void setTrainedDataLocation(const std::string & trained_data_location);
 
       const SVMType & getSvmtype() const;
-      void setSvmtype(const SVMType & svm_type_);
+      void setSvmtype(const SVMType & svm_type);
 
       const cv::Size & getWinSize() const;
       void setWinSize(const cv::Size & win_size);
@@ -100,7 +100,7 @@ namespace od
 
       void printParameters();
 
-      virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene) {return nullptr;};
+      shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
 
     protected:
       //properteis

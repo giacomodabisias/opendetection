@@ -51,7 +51,7 @@ namespace od
 
     public:
 
-      ODHOGTrainer(const std::string & training_input_location_ = "", const std::string & trained_data_location_ = "", 
+      ODHOGTrainer(const std::string & training_input_location_ = std::string(""), const std::string & trained_data_location_ = std::string(""), 
                    const cv::Size & win_size = cv::Size(64,128), const cv::Size & block_size = cv::Size(16,16), 
                    const cv::Size & block_stride = cv::Size(8,8), const cv::Size & cell_size = cv::Size(8,8), float hits_threshold = 0.0);
 
@@ -225,5 +225,5 @@ namespace od
     };
 
   }
-  
+
 }

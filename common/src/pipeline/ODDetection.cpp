@@ -3,8 +3,8 @@
 namespace od
 {
 
-	ODDetection::ODDetection(const DetectionType & type_, const std::string & id_, double confidence_) : 
-	            type_(type_), id_(id_), confidence_(confidence_) {}
+	ODDetection::ODDetection(const DetectionType & type, const std::string & id, double confidence) : 
+	            type_(type), id_(id), confidence_(confidence) {}
 	
 	void ODDetection::printSelf()
 	{
@@ -47,8 +47,8 @@ namespace od
 
 
 
-	ODDetection2D::ODDetection2D(const DetectionType & type_, const std::string & id_ , double confidence_ ) : 
-	              ODDetection(type_, id_, confidence_)
+	ODDetection2D::ODDetection2D(const DetectionType & type, const std::string & id , double confidence) : 
+	              ODDetection(type, id, confidence)
 	{
 	  location_2d_ = Eigen::Vector3d::UnitZ();
 	}
@@ -85,8 +85,8 @@ namespace od
 
 
 
-	ODDetection3D::ODDetection3D(const DetectionType & type_, const std::string & id_, double confidence_) : 
-	              ODDetection(type_, id_, confidence_)
+	ODDetection3D::ODDetection3D(const DetectionType & type, const std::string & id, double confidence) : 
+	              ODDetection(type, id, confidence)
 	{
 	  location_3d_ = Eigen::Vector4d::UnitW();
 	  orientation_.setIdentity();

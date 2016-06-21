@@ -21,11 +21,10 @@ namespace od {
     public:
 
       explicit Triangle(int id, const cv::Point3f & V0, const cv::Point3f & V1, const cv::Point3f & V2);
-      virtual ~Triangle();
 
-      cv::Point3f getV0() const { return v0_; }
-      cv::Point3f getV1() const { return v1_; }
-      cv::Point3f getV2() const { return v2_; }
+      cv::Point3f getV0() const;
+      cv::Point3f getV1() const;
+      cv::Point3f getV2() const;
 
     private:
       /** The identifier number of the triangle */
@@ -43,12 +42,9 @@ namespace od {
     public:
 
       explicit Ray(const cv::Point3f & P0, const cv::Point3f & P1);
-      virtual ~Ray();
 
-      cv::Point3f getP0()
-      { return p0_; }
-      cv::Point3f getP1()
-      { return p1_; }
+      cv::Point3f getP0();
+      cv::Point3f getP1();
 
     private:
       /** The two points that defines the ray */
@@ -65,12 +61,11 @@ namespace od {
     public:
 
       Mesh();
-      virtual ~Mesh();
 
-      std::vector<std::vector<int> > getTrianglesList() const { return list_triangles_; }
-      std::vector<cv::Point3f> getVertices() const { return list_vertex_; }
-      cv::Point3f getVertex(int pos) const { return list_vertex_[pos]; }
-      int getNumVertices() const { return num_vertexs_; }
+      std::vector<std::vector<int> > getTrianglesList() const;
+      std::vector<cv::Point3f> getVertices();
+      cv::Point3f getVertex(int pos) const;
+      int getNumVertices() const;
 
       void load(const std::string & path_file);
 

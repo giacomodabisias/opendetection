@@ -94,7 +94,7 @@ namespace od
       std::istringstream iss(line);
       std::string tok1;
       iss >> tok1;
-      if(tok1 == "mtllib")
+      if(tok1.compare(std::string("mtllib")) == 0)
       {
         std::string tok2;
 
@@ -106,15 +106,15 @@ namespace od
         {
           std::istringstream issmtl(linemtl);
           issmtl >> tok1;
-          if(tok1 == "map_Kd")
+          if(tok1.compare(std::string("map_Kd")) == 0)
           {
             issmtl >> tok2;
-            return input_dir + "/" + tok2;
+            return input_dir + std::string("/") + tok2;
           }
         }
       }
     }
-    return "";
+    return std::string("");
   }
 
   cv::Scalar getHashedColor(const std::string & name, int offset)
@@ -158,9 +158,9 @@ namespace od
         //check if its a directory, then get models in it
         if(boost::filesystem::is_directory(*itr)) {
 #if BOOST_FILESYSTEM_VERSION == 3
-          std::string so_far = rel_path_so_far + (itr->path().filename()).string() + "/";
+          std::string so_far = rel_path_so_far + (itr->path().filename()).string() + std::string("/");
 #else
-          std::string so_far = rel_path_so_far + (itr->path ()).filename () + "/";
+          std::string so_far = rel_path_so_far + (itr->path ()).filename () + std::string("/");
 #endif
 
           boost::filesystem::path curr_path = itr->path();
@@ -205,9 +205,9 @@ namespace od
         //check if its a directory, then get models in it
         if(boost::filesystem::is_directory(*itr)) {
 #if BOOST_FILESYSTEM_VERSION == 3
-          std::string so_far = rel_path_so_far + (itr->path().filename()).string() + "/";
+          std::string so_far = rel_path_so_far + (itr->path().filename()).string() + std::string("/");
 #else
-          std::string so_far = rel_path_so_far + (itr->path ()).filename () + "/";
+          std::string so_far = rel_path_so_far + (itr->path ()).filename () + std::string("/");
 #endif
 
           boost::filesystem::path curr_path = itr->path();
@@ -245,9 +245,9 @@ namespace od
         //check if its a directory, then get models in it
         if(boost::filesystem::is_directory(*itr)) {
 #if BOOST_FILESYSTEM_VERSION == 3
-          std::string so_far = rel_path_so_far + (itr->path().filename()).string() + "/";
+          std::string so_far = rel_path_so_far + (itr->path().filename()).string() + std::string("/");
 #else
-            std::string so_far = rel_path_so_far + (itr->path ()).filename () + "/";
+            std::string so_far = rel_path_so_far + (itr->path ()).filename () + std::string("/");
 #endif
 
           boost::filesystem::path curr_path = itr->path();

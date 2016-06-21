@@ -69,9 +69,9 @@ namespace od
 
     public:
 
-      ODCADRecogTrainerSnapshotBased(const std::string & training_input_location_ = std::string(""),
-                                     const std::string & training_data_location_ = std::string("")) : 
-                                     ODImageLocalMatchingTrainer(training_input_location_, training_data_location_){}
+      ODCADRecogTrainerSnapshotBased(const std::string & training_input_location = std::string(""),
+                                     const std::string & training_data_location = std::string("")) : 
+                                     ODImageLocalMatchingTrainer(training_input_location, training_data_location){}
 
       int train();
       void init() {}
@@ -83,6 +83,14 @@ namespace od
       float view_angle_;
       int no_snapshot_per_ring_;
 
+    };
+
+    struct fcomp3d_euclidian
+    {
+      bool operator()(const cv::Point3f & lhs, const cv::Point3f & rhs) const
+      { 
+        return lhs.x < rhs.x; 
+      }
     };
 
     class vtkTimerCallbackSnapshot : public vtkCommand
@@ -117,12 +125,6 @@ namespace od
       void process(vtkRenderWindowInteractor * iren, vtkActor * actor, vtkRenderer * renderer, int ino);
 
       //some local variables used
-
-      struct fcomp3d_euclidian
-      {
-        bool operator()(const cv::Point3f & lhs, const cv::Point3f & rhs) const
-        { return lhs.x < rhs.x; }
-      };
 
       std::vector<std::pair<cv::Point3f, cv::KeyPoint> > pairs_3d_2d;
       cv::Mat common_descriptors;

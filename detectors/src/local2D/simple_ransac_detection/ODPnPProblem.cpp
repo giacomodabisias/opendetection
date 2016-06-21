@@ -241,7 +241,7 @@ namespace od {
     }
 
     // Back project a 2D point to 3D and returns if it's on the object surface
-    bool PnPProblem::backproject2DPoint(const Mesh * mesh, const cv::Point2f & point2d, cv::Point3f & point3d)
+    bool PnPProblem::backproject2DPoint(shared_ptr<Mesh> mesh, const cv::Point2f & point2d, cv::Point3f & point3d)
     {
       // Triangles list of the object mesh
       std::vector<std::vector<int> > triangles_list = mesh->getTrianglesList();

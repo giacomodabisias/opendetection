@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <opencv2/highgui/highgui.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/io/pcd_io.h>
+#include "od/common/utils/ODShared_pointers.h"
 
 namespace od
 {
@@ -47,7 +48,7 @@ namespace od
 
     virtual void * getData() = 0;
 
-    std::string const & getPath() const;
+    const std::string & getPath() const;
 
   protected:
 
@@ -98,24 +99,24 @@ namespace od
 
   public:
 
-    ODScenePointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud);
+    ODScenePointCloud(const shared_ptr<pcl::PointCloud<PointType> >  point_cloud);
     ODScenePointCloud(const std::string & point_cloud_file);
-    ODScenePointCloud(): point_cloud_(new typename pcl::PointCloud<PointType>()){}
+    ODScenePointCloud(): point_cloud_(new pcl::PointCloud<PointType>()){}
 
-    const typename pcl::PointCloud<PointType>::Ptr & getPointCloud() const;
-    typename pcl::PointCloud<PointType>::Ptr & getPointCloudRef() const;
-    void setPointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud_);
+    shared_ptr<pcl::PointCloud<PointType> > getPointCloud() const;
+    shared_ptr<pcl::PointCloud<PointType> > getPointCloudRef() const;
+    void setPointCloud(const shared_ptr<pcl::PointCloud<PointType> > point_cloud_);
 
     void * getData();
 
   protected:
 
-    typename pcl::PointCloud<PointType>::Ptr point_cloud_;
+    shared_ptr<pcl::PointCloud<PointType> > point_cloud_;
 
   };
 
   template <typename PointType>
-  ODScenePointCloud<PointType>::ODScenePointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud)
+  ODScenePointCloud<PointType>::ODScenePointCloud(const shared_ptr<pcl::PointCloud<PointType> > point_cloud)
   {
     point_cloud_ = point_cloud;
   }
@@ -132,19 +133,19 @@ namespace od
   }
 
   template <typename PointType>
-  const typename pcl::PointCloud<PointType>::Ptr & ODScenePointCloud<PointType>::getPointCloud() const
+  shared_ptr<pcl::PointCloud<PointType> >  ODScenePointCloud<PointType>::getPointCloud() const
   {
     return point_cloud_;
   }
 
   template <typename PointType>
-  typename pcl::PointCloud<PointType>::Ptr & ODScenePointCloud<PointType>::getPointCloudRef() const
+  shared_ptr<pcl::PointCloud<PointType> > ODScenePointCloud<PointType>::getPointCloudRef() const
   {
     return point_cloud_;
   }
 
   template <typename PointType>
-  void ODScenePointCloud<PointType>::setPointCloud(const typename pcl::PointCloud<PointType>::Ptr & point_cloud)
+  void ODScenePointCloud<PointType>::setPointCloud(const shared_ptr<pcl::PointCloud<PointType> > point_cloud)
   {
     point_cloud_ = point_cloud;
   }

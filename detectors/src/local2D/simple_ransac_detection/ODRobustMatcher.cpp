@@ -53,19 +53,19 @@ namespace od {
 */
 
     // Set the feature detector
-    void RobustMatcher::setFeatureDetector(const cv::Ptr<cv::FeatureDetector> & detect)
+    void RobustMatcher::setFeatureDetector(shared_ptr<cv::FeatureDetector> detect)
     { 
       detector_ = detect; 
     }
 
     // Set the descriptor extractor
-    void RobustMatcher::setDescriptorExtractor(const cv::Ptr<cv::DescriptorExtractor> & desc) 
+    void RobustMatcher::setDescriptorExtractor(shared_ptr<cv::DescriptorExtractor> desc) 
     { 
       extractor_ = desc; 
     }
 
     // Set the matcher
-    void RobustMatcher::setDescriptorMatcher(const cv::Ptr<cv::DescriptorMatcher> & match) 
+    void RobustMatcher::setDescriptorMatcher(shared_ptr<cv::DescriptorMatcher> match) 
     { 
       matcher_ = match; 
     }
@@ -86,7 +86,7 @@ namespace od {
       }
       else
       {
-        matcher_ =  cv::makePtr<cv::FlannBasedMatcher>();
+        matcher_ = make_shared<cv::FlannBasedMatcher>();
       }
     }
 
@@ -97,8 +97,8 @@ namespace od {
 
       // ORB is the default feature
       ratio_ = 0.8f;
-      detector_ = cv::ORB::create();
-      extractor_ = cv::ORB::create();
+      detector_ = shared_ptr<cv::FeatureDetector>(cv::ORB::create().get());
+      extractor_ = shared_ptr<cv::DescriptorExtractor>(cv::ORB::create().get());
 
       instantiateMatcher(model, use_gpu_match);
 
@@ -137,22 +137,21 @@ namespace od {
     {
       int removed = 0;
       // for all matches
-      for(std::vector<std::vector<cv::DMatch> >::iterator
-            matchIterator= matches.begin(); matchIterator!= matches.end(); ++matchIterator)
+      for(auto & match : matches)
       {
         // if 2 NN have been identified
-        if(matchIterator->size() > 1)
+        if(match.size() > 1)
         {
           // check distance ratio
-          if((*matchIterator)[0].distance / (*matchIterator)[1].distance > ratio_)
+          if(match[0].distance / match[1].distance > ratio_)
           {
-            matchIterator->clear(); // remove match
+            match.clear(); // remove match
             removed++;
           }
         }
         else
         { // does not have 2 neighbours
-          matchIterator->clear(); // remove match
+          match.clear(); // remove match
           removed++;
         }
       }
@@ -166,37 +165,28 @@ namespace od {
 
     void RobustMatcher::symmetryTest(const std::vector<std::vector<cv::DMatch> > & matches1,
                          const std::vector<std::vector<cv::DMatch> >& matches2,
-                         std::vector<cv::DMatch>& symMatches )
+                         std::vector<cv::DMatch> & symMatches )
     {
 
       // for all matches image 1 -> image 2
-       for(std::vector<std::vector<cv::DMatch> >::const_iterator
-           matchIterator1 = matches1.begin(); matchIterator1 != matches1.end(); ++matchIterator1)
+       for(auto & match1 : matches1)
        {
-
           // ignore deleted matches
-          if(matchIterator1->empty() || matchIterator1->size() < 2)
+          if(match1.empty() || match1.size() < 2)
              continue;
 
           // for all matches image 2 -> image 1
-          for(std::vector<std::vector<cv::DMatch> >::const_iterator
-              matchIterator2 = matches2.begin(); matchIterator2 != matches2.end(); ++matchIterator2)
+          for(auto & match2 :  matches2)
           {
             // ignore deleted matches
-            if(matchIterator2->empty() || matchIterator2->size() < 2)
+            if(match2.empty() || match2.size() < 2)
                continue;
 
             // Match symmetry test
-            if((*matchIterator1)[0].queryIdx ==
-                (*matchIterator2)[0].trainIdx &&
-                (*matchIterator2)[0].queryIdx ==
-                (*matchIterator1)[0].trainIdx)
+            if(match1[0].queryIdx == match2[0].trainIdx && match2[0].queryIdx == match1[0].trainIdx)
             {
                 // add symmetrical match
-                symMatches.push_back(
-                  cv::DMatch((*matchIterator1)[0].queryIdx,
-                             (*matchIterator1)[0].trainIdx,
-                             (*matchIterator1)[0].distance));
+                symMatches.push_back(cv::DMatch(match1[0].queryIdx, match1[0].trainIdx, match1[0].distance));
                 break; // next match in image 1 -> image 2
             }
           }

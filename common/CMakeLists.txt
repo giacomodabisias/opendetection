@@ -23,6 +23,7 @@ if(build)
             "src/utils/ODUtils.cpp"
             "src/utils/ODFeatureDetector2D.cpp"
             "src/bindings/ODSvmlight.cpp"
+            "src/utils/ODViewer.cpp"
         )
 
     include_directories(${COMMON_INCLUDE_DIR})

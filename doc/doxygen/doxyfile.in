@@ -116,12 +116,11 @@ FILE_PATTERNS          = *.h \
                          *.md
 RECURSIVE              = YES
 EXCLUDE                = "@OD_SOURCE_DIR@/cmake" \
+                         "@OD_SOURCE_DIR@/build" \
+                         "@OD_SOURCE_DIR@/3rdparty"
 
 EXCLUDE_SYMLINKS       = YES
-EXCLUDE_PATTERNS       = "@OD_SOURCE_DIR@/detectors/*/detection/*/*" \
-                         "@OD_SOURCE_DIR@/detectors/*/training/*/*" \
-                         "@OD_SOURCE_DIR@/3rdparty/*" \
-                         "@OD_SOURCE_DIR@/README.md"
+EXCLUDE_PATTERNS       = "@OD_SOURCE_DIR@/README.md"
 EXCLUDE_SYMBOLS        = 
 EXAMPLE_PATH           = "@OD_SOURCE_DIR@/examples"
 EXAMPLE_PATTERNS       = *

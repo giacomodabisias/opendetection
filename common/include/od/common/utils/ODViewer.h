@@ -14,53 +14,61 @@
 
 namespace od {
 
-		enum odViewType {
-			UNDEFINED,
-			POINTCLOUD,
-			CVMAT
-		};
+	enum odViewType {
+		UNDEFINED,
+		POINTCLOUD,
+		CVMAT
+	};
 
-		/** \brief The viewer class.
-		 *
-		 * This class is used to visualize all types handled by the OpenDetection Library. For now it is possible to display cv::Mat and pcl::PointCloud<PointT> >.
-		 *
-		 * \author Giacomo Dabisias
-		 *
-		 */
-		class ODViewer {
+	/** \brief The viewer class.
+	 *
+	 * This class is used to visualize all types handled by the OpenDetection Library. For now it is possible to display cv::Mat and pcl::PointCloud<PointT> >.
+	 *
+	 * \author Giacomo Dabisias
+	 *
+	 */
+	class ODViewer {
 
-		public:
+	public:
 
-			ODViewer();
+		ODViewer();
 
-			template<typename PointT>
-			void render(shared_ptr<pcl::PointCloud<PointT>> to_display, const std::string & cloud_name);
+		template<typename PointT>
+		void render(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored = true);
 
-			void render(const cv::Mat & to_display, const std::string & window_name);
+		void render(const cv::Mat & to_display, const std::string & window_name);
 
-			template<typename PointT>
-			void render(pcl::PointCloud<PointT> & to_display, const std::string & cloud_name);
+		template<typename PointT>
+		void update(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored = true);
 
-			template<typename PointT>
-			void update(shared_ptr<pcl::PointCloud<PointT>> to_display, const std::string & cloud_name);
+		void update(const cv::Mat & to_display, const std::string & window_name);
 
-			void update(const cv::Mat & to_display, const std::string & window_name);
+		void setBackGround(const cv::Scalar & color);
+		void setBackGround(unsigned int r, unsigned int g, unsigned int b);
 
-			template<typename PointT>
-			void update(pcl::PointCloud<PointT> & to_display, const std::string & cloud_name);
+		void registerCallback(void(*callback)(const pcl::visualization::KeyboardEvent &, void *), void * data = nullptr);
+		void registerCallback(const std::string & window_name, CvMouseCallback on_mouse, void * data = nullptr);
 
-			void setColorHandler(const std::string & cloud_name);
-			void setBackGround(const cv::Scalar & color);
-			void setBackGround(unsigned int r, unsigned int g, unsigned int b);
+		void spin();
+		bool toStop();
 
-			void registerCallback(void(*callback)(const pcl::visualization::KeyboardEvent &, void *), void * data = nullptr);
-			void registerCallback(const std::string & window_name, CvMouseCallback on_mouse, void * data = nullptr);
+	private:
 
-		private:
+		odViewType status_;
+		shared_ptr<pcl::visualization::PCLVisualizer> viewer_;
+		std::string mat_window_name_, pcl_window_name_;
+		shared_ptr<cv::Mat> mat_;
 
-			odViewType status_;
-			shared_ptr<pcl::visualization::PCLVisualizer> viewer_;
+	};
 
-		};
+	extern template void ODViewer::render<pcl::PointXYZ>(shared_ptr<pcl::PointCloud<pcl::PointXYZ> >, const std::string &, bool);
+	extern template void ODViewer::render<pcl::PointXYZRGB>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> >, const std::string &, bool);
+	extern template void ODViewer::render<pcl::PointXYZRGBA>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGBA> >, const std::string &, bool);
+
+	extern template void ODViewer::update<pcl::PointXYZ>(shared_ptr<pcl::PointCloud<pcl::PointXYZ> >, const std::string &, bool);
+	extern template void ODViewer::update<pcl::PointXYZRGB>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> >, const std::string &, bool);
+	extern template void ODViewer::update<pcl::PointXYZRGBA>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGBA> >, const std::string &, bool);
 
 }
+
+#include "od/common/utils/ODViewer.hpp"

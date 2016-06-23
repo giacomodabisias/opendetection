@@ -1,7 +1,16 @@
 cmake_minimum_required(VERSION 2.8)
 project(OpenDetection)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+ # Set correct flags depending on the OS and compiler
+if(WIN32) 
+  if(MSVC) 
+    set(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /SUBSYSTEM:WINDOWS /DNOMINMAX") 
+  elseif(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows -std=c++11 -Wall") 
+  endif()
+elseif(UNIX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+endif()
 
 # Initialize variables
 set(OD_SOURCE_DIR ${OpenDetection_SOURCE_DIR})

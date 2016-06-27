@@ -174,7 +174,7 @@ The following step took quite a bit in order to have everything work well. Until
 
 - Substituting a pointer with a shared pointer requirest also to use another set of functions for the creation and the casting. to create a **shared_ptr** you either pass the pointer to the constructor or use the **make_shared** template passing to the function the constructor arguments and as template argument the pointer type. Also static and dynamic casting have specific template functions which are **dynamic_pointer_cast** and **static_pointer_casto**.
 
-- It is important to remove all delete which are around the code since **shared_ptr* automatically destroy the pointed objects in the destructor if not referenced anymore.
+- It is important to remove all delete which are around the code since **shared_ptr** automatically destroy the pointed objects in the destructor if not referenced anymore.
 
 While restructuring the code I also fixed again some coding style issues, but I still have to go through the code a few more times in order to finish fixing everything. The next step is as previously mentioned, to check the compilation with the svmlight option.
 
@@ -195,10 +195,26 @@ link_directories(${OD_LIBRARY_PATH})
 target_link_libraries(example_target ${OD_LIBRARIES})
 @endcode
 
-The **FindOD.cmake** is generated automatically starting from the **${CMAKE_INSTALL_PREFIX}** variable so there is no absolute path and it is installed in ****${CMAKE_INSTALL_PREFIX}/lib/cmake/** .
+The **FindOD.cmake** is generated automatically starting from the **${CMAKE_INSTALL_PREFIX}** variable so there is no absolute path and it is installed in **${CMAKE_INSTALL_PREFIX}/lib/cmake/** .
 
 I added then an **uninstall** target to delete all the installed files if necessary. This custom target is standard and can be found easily on the internet.
 
 Another important missing thing was the creation of a .deb package which can be useful to install the library on other systems. This package has been created using the **Cpack** utility provided by cmake. By just setting some basic variables it is possible to create e complete .deb file which can then be installed using the usual *dpkg -i package.deb* command.
 
 All files in the library have been renamed according to a common scheme which consists in a Prefix "OD" followed by the first charachter of the file name uppercase.
+
+##Templates and Windows compilation##
+
+To improve compilation time of projects using the **OpenDetection** library I decided to precompile all the templates for the most common types. In this case almost all templates depend on *pcl* point types. The most commonly used point type for which I precompiled the library are:
+
+- *pcl::PointXYZ*
+- *pcl::PointXYZRGB*
+- *pcl::PointXYZRGBA*
+
+It is important to create for each .hpp header file containing the templates a .cpp file in which templates are instantiated with the different types. Explicit template instantiation is done by just writing *template* followed by the template declaration with the instantiated type.
+The most important part is to insert in the header file the same declaration with the *extern* keyword at the beginning. This informs the compiler that the defined symbol is already present in another compilation unit and that it can be found at linking time. Without this the compiler will just reinstantiate the templates and recompile them since it has no knowledge about templates instantiated and compiled in other compilation units.
+
+I then fixed all the linking in the whole library since there where some useless linked libraries in order to speed up even more the compilation. 
+
+After that I tested compilation of the library under Windows, but without success. There have been several issues which are ut of the Open Deteciton library. I tested compilation using **Visual Studio 2015** and **MinGW**. Pcl has been installed by using the prebuilt version while opencv has to be built manually since *opencv_contrib* is necessary while not present in the prebuilt binaries. Building opencv3 with visual studio and cuda is not possible at the moment since cuda 7.5 is not compatible with visual studio 2015, so version 8 is necessary which will be available soon. MinGW is also not usable since compilation of opencv3 with cuda is disabled as flagged as incompatible by opencv.
+

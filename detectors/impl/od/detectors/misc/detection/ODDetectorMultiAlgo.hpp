@@ -112,6 +112,59 @@ namespace od
     }
   }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZ>::detectOmni(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZ>::detect(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZ>::detect(shared_ptr<ODSceneImage> scene);
+
+  extern template
+  shared_ptr<ODDetections2D> ODDetectorMultiAlgo2D<pcl::PointXYZ>::detectOmni(shared_ptr<ODSceneImage > scene);
+
+  extern template
+  void ODDetectorMultiAlgo2D<pcl::PointXYZ>::init();
+
+
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZRGB>::detectOmni(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZRGB>::detect(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZRGB>::detect(shared_ptr<ODSceneImage> scene);
+
+  extern template
+  shared_ptr<ODDetections2D> ODDetectorMultiAlgo2D<pcl::PointXYZRGB>::detectOmni(shared_ptr<ODSceneImage > scene);
+
+  extern template
+  void ODDetectorMultiAlgo2D<pcl::PointXYZRGB>::init();
+
+
+
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZRGBA>::detectOmni(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZRGBA>::detect(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo2D<pcl::PointXYZRGBA>::detect(shared_ptr<ODSceneImage> scene);
+
+  extern template
+  shared_ptr<ODDetections2D> ODDetectorMultiAlgo2D<pcl::PointXYZRGBA>::detectOmni(shared_ptr<ODSceneImage > scene);
+
+  extern template
+  void ODDetectorMultiAlgo2D<pcl::PointXYZRGBA>::init();
+
+#endif
 
   template<typename PointT>
   class ODDetectorMultiAlgo : public ODDetector
@@ -189,5 +242,61 @@ namespace od
 
     return detections_all;
   }
+
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZ>::detectOmni(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZ>::detect(shared_ptr<ODScene> scene);
+
+  extern template
+  void ODDetectorMultiAlgo<pcl::PointXYZ>::init();
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZ>::detect(shared_ptr<ODScenePointCloud<pcl::PointXYZ> > scene);
+
+  extern template
+  shared_ptr<ODDetections3D> ODDetectorMultiAlgo<pcl::PointXYZ>::detectOmni(shared_ptr<ODScenePointCloud<pcl::PointXYZ> > scene);
+
+
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZRGB>::detectOmni(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZRGB>::detect(shared_ptr<ODScene> scene);
+
+  extern template
+  void ODDetectorMultiAlgo<pcl::PointXYZRGB>::init();
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZRGB>::detect(shared_ptr<ODScenePointCloud<pcl::PointXYZRGB> > scene);
+
+  extern template
+  shared_ptr<ODDetections3D> ODDetectorMultiAlgo<pcl::PointXYZRGB>::detectOmni(shared_ptr<ODScenePointCloud<pcl::PointXYZRGB> > scene);
+
+
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZRGBA>::detectOmni(shared_ptr<ODScene> scene);
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZRGBA>::detect(shared_ptr<ODScene> scene);
+
+  extern template
+  void ODDetectorMultiAlgo<pcl::PointXYZRGBA>::init();
+
+  extern template
+  shared_ptr<ODDetections> ODDetectorMultiAlgo<pcl::PointXYZRGBA>::detect(shared_ptr<ODScenePointCloud<pcl::PointXYZRGBA> > scene);
+
+  extern template
+  shared_ptr<ODDetections3D> ODDetectorMultiAlgo<pcl::PointXYZRGBA>::detectOmni(shared_ptr<ODScenePointCloud<pcl::PointXYZRGBA> > scene);
+
+
+#endif
 
 }

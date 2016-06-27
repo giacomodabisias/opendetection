@@ -9,16 +9,13 @@
 #include <iostream>
 #include <string>
 
+
+#include <vtkRenderWindow.h>
+
 #include "od/common/utils/ODShared_pointers.h"
 
 
 namespace od {
-
-	enum odViewType {
-		UNDEFINED,
-		POINTCLOUD,
-		CVMAT
-	};
 
 	/** \brief The viewer class.
 	 *
@@ -28,6 +25,12 @@ namespace od {
 	 *
 	 */
 	class ODViewer {
+
+		enum odViewType {
+			UNDEFINED,
+			POINTCLOUD,
+			CVMAT
+		};
 
 	public:
 
@@ -58,7 +61,7 @@ namespace od {
 		shared_ptr<pcl::visualization::PCLVisualizer> viewer_;
 		std::string mat_window_name_, pcl_window_name_;
 		shared_ptr<cv::Mat> mat_;
-
+		
 	};
 
 	extern template void ODViewer::render<pcl::PointXYZ>(shared_ptr<pcl::PointCloud<pcl::PointXYZ> >, const std::string &, bool);

@@ -1,4 +1,7 @@
 #include "od/common/utils/ODViewer.h"
+#if(WIN32)
+	#include <Windows.h>
+#endif
 
 namespace od {
 
@@ -10,12 +13,23 @@ namespace od {
 			if(status_ == POINTCLOUD){
 				//BUGGED IN PCL, its not closing https://github.com/PointCloudLibrary/pcl/issues/172
 				//viewer_->close();
+				//Alternative solution
+#if(WIN32)
+				HWND hWnd = (HWND)viewer3d->getRenderWindow()->GetGenericWindowId(); 
+				viewer_.reset();
+				DestroyWindow(hWnd); 
+#else
+				auto p = viewer_->getRenderWindow(); 
+				viewer_.reset();
+				p->Finalize();
+#endif
 			}
 		}
 		status_ = CVMAT;
 		mat_window_name_ = window_name;
 		mat_ = make_shared<cv::Mat>(to_display);
-
+		cvStartWindowThread();
+		cvNamedWindow(mat_window_name_.c_str(), CV_WINDOW_AUTOSIZE);
 	}
 
 	void ODViewer::update(const cv::Mat & to_display, const std::string & window_name){
@@ -53,8 +67,8 @@ namespace od {
 			case POINTCLOUD : 
 				return(viewer_->wasStopped());
 				break;
-			case CVMAT : 
-				return (cv::waitKey(10) == 'q');
+			case CVMAT :
+				return (cv::waitKey(50) == 27 || cv::waitKey(50) == 'q');
 				break;
 			case UNDEFINED : 
 				break;

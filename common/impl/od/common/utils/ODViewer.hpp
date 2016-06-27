@@ -8,7 +8,7 @@ namespace od {
 		if(status_ != POINTCLOUD){
 			std::cout << "Switching viewer to PointCloud mode" << std::endl;
 			if(status_ == CVMAT){
-				cv::destroyWindow(mat_window_name_);
+				cv::destroyWindow(mat_window_name_.c_str());
 			}
 		}
 

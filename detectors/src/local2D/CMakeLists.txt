@@ -1,7 +1,7 @@
 set(SUBSYS_NAME local_image_detector)
 set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "The local feature matching based detector")
-set(SUBSYS_DEPS od_common ${PCL_LIBRARIES} ${VTK_LIBRARIES} ${OpenCV_LIBS} pugixml)
+set(SUBSYS_DEPS od_common pugixml)
 
 set(build TRUE)
 

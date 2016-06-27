@@ -1,7 +1,7 @@
 set(SUBSYS_NAME pointcloud_global_detector)
 set(LIB_NAME od_${SUBSYS_NAME})
-set(SUBSYS_DESC "The global detector for point cloouds")
-set(SUBSYS_DEPS od_common ${PCL_LIBRARIES} ${VTK_LIBRARIES} ${OpenCV_LIBS} siftgpu)
+set(SUBSYS_DESC "The global detector for point clouds")
+set(SUBSYS_DEPS od_common siftgpu)
 
 set(build TRUE)
 
@@ -10,6 +10,7 @@ if(build)
     set(SOURCES
             "ODPointCloudGlobalMatching.cpp"
             "training/ODCADDetectTrainer3DGlobal.cpp"
+            "detection/ODCADDetector3DGlobal.cpp"
     )
 
     include_directories(${DETECTORS_INCLUDE_DIR})

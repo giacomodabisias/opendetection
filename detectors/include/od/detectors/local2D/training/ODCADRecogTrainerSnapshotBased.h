@@ -50,7 +50,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <opencv2/xfeatures2d.hpp>
 
-
 #define VIEW_ANGLE 30
 #define NO_SNAPSHOTS 30
 

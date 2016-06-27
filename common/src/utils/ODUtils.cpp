@@ -7,6 +7,25 @@
 namespace od
 {
 
+#ifdef WIN32
+
+std::vector<std::string> myglob(const std::string & pat)
+  {
+    HANDLE hFind;
+    WIN32_FIND_DATA data;
+    std::vector<std::string> ret;
+
+    hFind = FindFirstFile(pat.c_str(), &data);
+    if (hFind != INVALID_HANDLE_VALUE) {
+      do {
+      ret.push_back(data.cFileName);
+      } while (FindNextFile(hFind, &data));
+    FindClose(hFind);
+    }
+
+    return ret;
+  }
+#else
   std::vector<std::string> myglob(const std::string & pat)
   {
     glob_t glob_result;
@@ -18,6 +37,8 @@ namespace od
     globfree(&glob_result);
     return ret;
   }
+#endif
+  
 
   void normL2(cv::Mat & descriptors)
   {

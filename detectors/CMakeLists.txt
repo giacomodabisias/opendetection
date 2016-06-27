@@ -9,6 +9,8 @@ set(DETECTORS_IMPL_DIR ${DETECTORS_DIR}/impl PARENT_SCOPE)
 add_subdirectory("src/local2D")
 add_subdirectory("src/global2D")
 add_subdirectory("src/global3D")
+add_subdirectory("src/misc")
+
 
 install(DIRECTORY ${DETECTORS_INCLUDE_DIR}/od DESTINATION ${OD_INSTALL_INCLUDE_DIR})
 set(${OD_INSTALLED_LIBRARIES} PARENT_SCOPE)

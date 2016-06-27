@@ -54,6 +54,7 @@ namespace od
 
       shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene);
       shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+
       shared_ptr<ODDetections> detect(shared_ptr<ODScenePointCloud<PointT> > scene);
       shared_ptr<ODDetections3D> detectOmni(shared_ptr<ODScenePointCloud<PointT> > scene);
 
@@ -245,5 +246,75 @@ namespace od
       return detections;
     }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZ>::detect(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZ>::detectOmni(shared_ptr<ODScene> scene);
+
+    extern template
+    void ODCADDetector3DGlobal<pcl::PointXYZ>::init();
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZ>::detect(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZ>::detectOmni(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections3D> ODCADDetector3DGlobal<pcl::PointXYZ>::detectOmni(shared_ptr<ODScenePointCloud<pcl::PointXYZ> > scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZ>::detect(shared_ptr<ODScenePointCloud<pcl::PointXYZ> > scene);
+
+
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGB>::detect(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGB>::detectOmni(shared_ptr<ODScene> scene);
+
+    extern template
+    void ODCADDetector3DGlobal<pcl::PointXYZRGB>::init();
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGB>::detect(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGB>::detectOmni(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections3D> ODCADDetector3DGlobal<pcl::PointXYZRGB>::detectOmni(shared_ptr<ODScenePointCloud<pcl::PointXYZRGB> > scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGB>::detect(shared_ptr<ODScenePointCloud<pcl::PointXYZRGB> > scene);
+
+
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGBA>::detect(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGBA>::detectOmni(shared_ptr<ODScene> scene);
+
+    extern template
+    void ODCADDetector3DGlobal<pcl::PointXYZRGBA>::init();
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGBA>::detect(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGBA>::detectOmni(shared_ptr<ODScene> scene);
+
+    extern template
+    shared_ptr<ODDetections3D> ODCADDetector3DGlobal<pcl::PointXYZRGBA>::detectOmni(shared_ptr<ODScenePointCloud<pcl::PointXYZRGBA> > scene);
+
+    extern template
+    shared_ptr<ODDetections> ODCADDetector3DGlobal<pcl::PointXYZRGBA>::detect(shared_ptr<ODScenePointCloud<pcl::PointXYZRGBA> > scene);
+
+#endif
   }
 }

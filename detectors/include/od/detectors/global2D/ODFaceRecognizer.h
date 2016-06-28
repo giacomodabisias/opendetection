@@ -70,35 +70,14 @@ namespace od
 
       virtual int detect(shared_ptr<ODScene> scene, const std::vector<shared_ptr<ODDetection> > & detections);
 
-      const FaceRecogType & getRecogtype() const
-      {
-        return recog_type_;
-      }
+      const FaceRecogType & getRecogtype() const;
+      void setRecogtype(const FaceRecogType & recog_type);
 
-      void setRecogtype(const FaceRecogType & recog_type)
-      {
-        recog_type_ = recog_type;
-      }
+      int getThreshold() const;
+      void setThreshold(int threshold);
 
-      int getThreshold() const
-      {
-        return threshold_;
-      }
-
-      void setThreshold(int threshold)
-      {
-        threshold_ = threshold;
-      }
-
-      int getNumComponents() const
-      {
-        return num_components_;
-      }
-
-      void setNumComponents(int num_components)
-      {
-        num_components_ = num_components;
-      }
+      int getNumComponents() const;
+      void setNumComponents(int num_components);
 
     protected:
 
@@ -110,10 +89,10 @@ namespace od
       unsigned int im_height_;
       unsigned int im_width_;
 
-      
     private:
       
-      void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, const std::string & separator = std::string(";"));
+      void read_csv(const std::string & file_name, std::vector<cv::Mat> & images, std::vector<int> & labels, 
+                    const std::string & separator = std::string(";"));
 
     };
 

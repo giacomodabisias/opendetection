@@ -59,110 +59,37 @@ namespace od
 
       void init(){}
 
-      const std::string & getPosSamplesDir() const
-      {
-        return pos_samples_dir_;
-      }
+      const std::string & getPosSamplesDir() const;
+      void setPosSamplesDir(const std::string & pos_samples_dir);
 
-      void setPosSamplesDir(const std::string & pos_samples_dir)
-      {
-        pos_samples_dir_ = pos_samples_dir;
-      }
+      const std::string & getNegSamplesDir() const;
+      void setNegSamplesDir(const std::string & neg_samples_dir);
 
-      const std::string & getNegSamplesDir() const
-      {
-        return neg_samples_dir_;
-      }
+      int getNOFeaturesNeg() const;
+      void setNOFeaturesNeg(int featno);
 
-      void setNegSamplesDir(const std::string & neg_samples_dir)
-      {
-        neg_samples_dir_ = neg_samples_dir;
-      }
+      const cv::Point & getStartHogPos() const;
+      void setStartHogPos(const cv::Point & start_hog_pos);
 
-      int getNOFeaturesNeg() const
-      {
-        return no_features_neg_;
-      }
+      const cv::Size & getWinSize() const;
+      void setWinSize(const cv::Size & win_size);
 
-      void setNOFeaturesNeg(int featno)
-      {
-        no_features_neg_ = featno;
-      }
+      const cv::Size & getBlockSize() const;
+      void setBlockSize(const cv::Size & block_size);
 
-      const cv::Point & getStartHogPos() const
-      {
-        return start_hog_pos_;
-      }
+      const cv::Size & getBlockStride() const;
+      void setBlockStride(const cv::Size & block_stride);
 
-      void setStartHogPos(const cv::Point & start_hog_pos)
-      {
-        start_hog_pos_ = start_hog_pos;
-      }
+      const cv::Size & getCellSize() const;
+      void setCellSize(const cv::Size & cell_size);
 
-      const cv::Size & getWinSize() const
-      {
-        return win_size_;
-      }
+      const cv::Size & getTrainingPadding() const;
+      void setTrainingPadding(const cv::Size & training_padding);
 
-      void setWinSize(const cv::Size & win_size)
-      {
-        win_size_ = win_size;
-      }
+      bool isTrainHardNegetive() const;
+      void setTrainHardNegetive(bool train_hard_negative);
 
-      const cv::Size & getBlockSize() const
-      {
-        return block_size_;
-      }
-
-      void setBlockSize(const cv::Size & block_size)
-      {
-        block_size_ = block_size;
-      }
-
-      const cv::Size & getBlockStride() const
-      {
-        return block_stride_;
-      }
-
-      void setBlockStride(const cv::Size & block_stride)
-      {
-        block_stride_ = block_stride;
-      }
-
-      const cv::Size & getCellSize() const
-      {
-        return cell_size_;
-      }
-
-      void setCellSize(const cv::Size & cell_size)
-      {
-        cell_size_ = cell_size;
-      }
-
-      const cv::Size & getTrainingPadding() const
-      {
-        return training_padding_;
-      }
-
-      void setTrainingPadding(const cv::Size & training_padding)
-      {
-        training_padding_ = training_padding;
-      }
-
-      bool isTrainHardNegetive() const
-      {
-        return train_hard_negative_;
-      }
-
-      void setTrainHardNegetive(bool train_hard_negative)
-      {
-        train_hard_negative_ = train_hard_negative;
-      }
-
-      double getHitThreshold() const
-      {
-        return hit_threshold_;
-      }
+      double getHitThreshold() const;
 
     protected:
       //hog specific
@@ -170,19 +97,18 @@ namespace od
       cv::Size block_size_;
       cv::Size block_stride_;
       cv::Size cell_size_;
+      cv::Size win_stride_;
+      cv::Size training_padding_;
 
       cv::HOGDescriptor hog_;
 
       //algo specific
-      cv::Size training_padding_;
       cv::Point start_hog_pos_;
       unsigned int no_features_neg_;
-      cv::Size win_stride_;
       bool train_hard_negative_;
 
       //directories
-      std::string pos_samples_dir_;
-      std::string neg_samples_dir_;
+      std::string pos_samples_dir_, neg_samples_dir_;
 
       //properties retained
       double hit_threshold_;

@@ -406,5 +406,110 @@ namespace od
       hog_.write(fs, cv::FileStorage::getDefaultObjectName(file_name));
     }
 
+    const std::string & ODHOGTrainer::getPosSamplesDir() const
+    {
+      return pos_samples_dir_;
+    }
+
+    void ODHOGTrainer::setPosSamplesDir(const std::string & pos_samples_dir)
+    {
+      pos_samples_dir_ = pos_samples_dir;
+    }
+
+    const std::string & ODHOGTrainer::getNegSamplesDir() const
+    {
+      return neg_samples_dir_;
+    }
+
+    void ODHOGTrainer::setNegSamplesDir(const std::string & neg_samples_dir)
+    {
+      neg_samples_dir_ = neg_samples_dir;
+    }
+
+    int ODHOGTrainer::getNOFeaturesNeg() const
+    {
+      return no_features_neg_;
+    }
+
+    void ODHOGTrainer::setNOFeaturesNeg(int featno)
+    {
+      no_features_neg_ = featno;
+    }
+
+    const cv::Point & ODHOGTrainer::getStartHogPos() const
+    {
+      return start_hog_pos_;
+    }
+
+    void ODHOGTrainer::setStartHogPos(const cv::Point & start_hog_pos)
+    {
+      start_hog_pos_ = start_hog_pos;
+    }
+
+    const cv::Size & ODHOGTrainer::getWinSize() const
+    {
+      return win_size_;
+    }
+
+    void ODHOGTrainer::setWinSize(const cv::Size & win_size)
+    {
+      win_size_ = win_size;
+    }
+
+    const cv::Size & ODHOGTrainer::getBlockSize() const
+    {
+      return block_size_;
+    }
+
+    void ODHOGTrainer::setBlockSize(const cv::Size & block_size)
+    {
+      block_size_ = block_size;
+    }
+
+    const cv::Size & ODHOGTrainer::getBlockStride() const
+    {
+      return block_stride_;
+    }
+
+    void ODHOGTrainer::setBlockStride(const cv::Size & block_stride)
+    {
+      block_stride_ = block_stride;
+    }
+
+    const cv::Size & ODHOGTrainer::getCellSize() const
+    {
+      return cell_size_;
+    }
+
+    void ODHOGTrainer::setCellSize(const cv::Size & cell_size)
+    {
+      cell_size_ = cell_size;
+    }
+
+    const cv::Size & ODHOGTrainer::getTrainingPadding() const
+    {
+      return training_padding_;
+    }
+
+    void ODHOGTrainer::setTrainingPadding(const cv::Size & training_padding)
+    {
+      training_padding_ = training_padding;
+    }
+
+    bool ODHOGTrainer::isTrainHardNegetive() const
+    {
+      return train_hard_negative_;
+    }
+
+    void ODHOGTrainer::setTrainHardNegetive(bool train_hard_negative)
+    {
+      train_hard_negative_ = train_hard_negative;
+    }
+
+    double ODHOGTrainer::getHitThreshold() const
+    {
+      return hit_threshold_;
+    }
+
   }
 }

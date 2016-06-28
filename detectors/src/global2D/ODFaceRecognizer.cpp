@@ -178,6 +178,36 @@ namespace od
         }
       }
     }
+
+    const ODFaceRecognizer::FaceRecogType & ODFaceRecognizer::getRecogtype() const
+    {
+      return recog_type_;
+    }
+
+    void ODFaceRecognizer::setRecogtype(const ODFaceRecognizer::FaceRecogType & recog_type)
+    {
+      recog_type_ = recog_type;
+    }
+
+    int ODFaceRecognizer::getThreshold() const
+    {
+      return threshold_;
+    }
+
+    void ODFaceRecognizer::setThreshold(int threshold)
+    {
+      threshold_ = threshold;
+    }
+
+    int ODFaceRecognizer::getNumComponents() const
+    {
+      return num_components_;
+    }
+
+    void ODFaceRecognizer::setNumComponents(int num_components)
+    {
+      num_components_ = num_components;
+    }
     
   }
 }

@@ -56,6 +56,7 @@ namespace od
   public:
 
     ODDetectorCommon(const std::string & trained_data_location);
+    ODDetectorCommon() {}
 
     virtual void init() = 0;
 

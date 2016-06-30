@@ -83,7 +83,6 @@ namespace od
 
       void setDetector(shared_ptr<ODImageLocalMatchingDetector> detector);
 
-
       ODImageLocalMatching();
 
       void init() {}

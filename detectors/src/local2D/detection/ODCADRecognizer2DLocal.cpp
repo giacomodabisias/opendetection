@@ -330,7 +330,7 @@ namespace od
         detection3D = make_shared<ODDetection3D>();
       detection3D->setLocation(pnp_detection_.getTMatrix());
       detection3D->setPose(pnp_detection_.getRMatrix());
-      detection3D->setType(ODDetection::OD_DETECTION_RECOG);
+      detection3D->setType(ODDetection::OD_RECOGNITION);
       detection3D->setId(model.id_);
 
       return true;

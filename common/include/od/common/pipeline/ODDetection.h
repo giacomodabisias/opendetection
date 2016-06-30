@@ -41,8 +41,8 @@ namespace od
 
   /** \brief The base class of all the detection.
    *
-   * This is the base class of all the detection classes containing the detection information. All the ODDetector s return a collection of this class (in the form of ODDetections).
-   * Supports two modes: recognition (with type OD_DETECTION_RECOG) and classification (with type OD_DETECTION_CLASS). Along with the type, ODDetector sets an ID to identify what class or what instance of recognition is detected/recognied.
+   * This is the base class of all the detection classes containing the detection information. All the ODDetectors return a collection of this class (in the form of ODDetections).
+   * Supports three modes: recognition (with type OD_RECOGNITION) and classification (with type OD_CLASSIFICATION) and detection (with type OD_DETECTION). Along with the type, ODDetector sets an ID to identify what class or what instance of recognition is detected/recognied.
    *
    * \author Kripasindhu Sarkar
    *
@@ -52,7 +52,7 @@ namespace od
   public:
 
 
-    OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(DetectionType, (OD_DETECTION_RECOG)(OD_DETECTION_CLASS)(OD_DETECTION_NULL))
+    OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(DetectionType, (OD_RECOGNITION)(OD_CLASSIFICATION)(OD_DETECTION)(OD_DETECTION_NULL))
 
     virtual ~ODDetection() {}
 
@@ -104,7 +104,6 @@ namespace od
 
     const cv::Mat & getMetainfoImage() const;
     void setMetainfoImage(const cv::Mat & metainfo_image);
-
 
     Eigen::Vector3d location_2d_;
     cv::Rect bounding_box_2d_;

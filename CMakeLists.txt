@@ -45,6 +45,10 @@ if(WITH_BOOST_SHARED_PTR)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_BOOST_SHARED_PTR")
 endif()
 
+if(WITH_GPU)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_GPU")
+endif()
+
 # Set modules
 set(OD_MODULES_NAMES 3rdparty common detectors doc examples)
 set(OD_MODULES_DIRS ${OD_MODULES_NAMES})

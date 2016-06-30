@@ -46,8 +46,8 @@ namespace od
   {
   public:
 
-    ODDetector(const std::string & training_data_location) : ODDetectorCommon(training_data_location)
-    {}
+    ODDetector(const std::string & training_data_location) : ODDetectorCommon(training_data_location) {}
+    ODDetector() {}
 
     virtual shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene) = 0;
     virtual shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene) = 0;
@@ -67,6 +67,7 @@ namespace od
   {
   public:
     ODDetector2D(const std::string & trained_data_location) : ODDetector(trained_data_location) {}
+    ODDetector2D() {}
 
     shared_ptr<ODDetections> detect(shared_ptr<ODScene> scene)
     {

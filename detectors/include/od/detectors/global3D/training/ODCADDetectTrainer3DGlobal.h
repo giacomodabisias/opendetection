@@ -28,7 +28,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 #pragma once
 #include <pcl/apps/3d_rec_framework/pc_source/mesh_source.h>
-#include <pcl/console/parse.h>
 #include "od/common/pipeline/ODTrainer.h"
 
 namespace od

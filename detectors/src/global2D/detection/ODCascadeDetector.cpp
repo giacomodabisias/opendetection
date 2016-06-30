@@ -70,7 +70,7 @@ namespace od
       for(auto & face : faces)
       {
         // Process face by face:
-        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>(ODDetection::OD_DETECTION_CLASS, "FACE", 1);
+        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>(ODDetection::OD_CLASSIFICATION, "FACE", 1);
         detection2D->setBoundingBox(face);
         detections->push_back(detection2D);
 
@@ -100,7 +100,7 @@ namespace od
       haar_cascade_->detectMultiScale(gray, faces, 5, min_neighbors_, 0, gray.size(), gray.size());
       if(faces.size() > 0)
       {
-        detections->push_back(make_shared<ODDetection>(ODDetection::OD_DETECTION_CLASS, "FACE", 1));
+        detections->push_back(make_shared<ODDetection>(ODDetection::OD_CLASSIFICATION, "FACE", 1));
       }
       return detections;
     }

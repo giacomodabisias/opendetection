@@ -99,6 +99,7 @@ namespace od
 
     ODFrameGenerator(const std::string & input = std::string(""))
     {
+      std::cout << "Opening :" << input << std::endl;
       input_capture_.open(input);
       if(!input_capture_.isOpened()) 
         {std::cout << "FATAL: Cannot open video capture!" << std::endl;}
@@ -106,6 +107,7 @@ namespace od
 
     ODFrameGenerator(int input = 0)
     {
+      std::cout << "Opening cam :" << input << std::endl;
       input_capture_.open(input);
       if(!input_capture_.isOpened()) 
         {std::cout << "FATAL: Cannot open video capture!" << std::endl;}

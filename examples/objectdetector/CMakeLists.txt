@@ -34,6 +34,20 @@ if(image_hog_files_example)
                        LINK_WITH od_global_image_detector)
 endif()
 
+option(face_detection_files_example "Build the face detection example" ON)
+if(face_detection_files_example)
+        OD_ADD_EXAMPLE(od_face_detection_files 
+                       FILES od_face_detector_files.cpp
+                       LINK_WITH od_global_image_detector)
+endif()
+
+option(face_detection_cam_example "Build the face detection example" ON)
+if(face_detection_cam_example)
+        OD_ADD_EXAMPLE(od_face_detection_cam 
+                       FILES od_face_detector_cam.cpp
+                       LINK_WITH od_global_image_detector)
+endif()
+
 option(image_customhog_example "Build the custom hog example" ON)
 if(image_customhog_example)
         OD_ADD_EXAMPLE(od_image_customhog 

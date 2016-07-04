@@ -234,6 +234,27 @@ namespace od
 	  return ODSceneImage(image);
 	}
 
+	ODSceneImage ODDetections2D::renderMetainfo(shared_ptr<ODSceneImage> input)
+	{
+
+	  //picking up random colors for different detection algorithm, if exist
+	  /*std::map<std::string, cv::Scalar> color_map;
+	  for(int i = 0; i < detections_.size(); i++)
+	  {
+	    if(color_map.find(detections_[i]->getId()) == color_map.end())
+	     color_map[detections_[i]->getId()] = CV_RGB(rand()%255, rand()%255, rand()%255);
+	  }*/
+
+	  cv::Mat image = input->getCVImage().clone();
+	  for(size_t i = 0; i < detections_.size(); ++i)
+	  {
+	    shared_ptr<ODDetection2D> detection = dynamic_pointer_cast<ODDetection2D>(detections_[i]);
+	    if(detection)
+	    	cv::rectangle(image, detection->bounding_box_2d_, getHashedColor(detections_[i]->getId(), 100), 2);
+	  }
+	  return ODSceneImage(image);
+	}
+
 
 	shared_ptr<ODDetection2D> ODDetections2D::operator[](unsigned int i)
 	{

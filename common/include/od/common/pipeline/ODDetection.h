@@ -171,7 +171,7 @@ namespace od
   {
   public:
 
-    ODDetections (unsigned int n = 0);
+    ODDetections(unsigned int n = 0);
 
     virtual ~ODDetections();
 
@@ -213,6 +213,7 @@ namespace od
     /** \brief Draws rectangles over the input image using the bounding box information present in all the 2D detections. This is a quick function to render and verify the detections made.
       */
     ODSceneImage renderMetainfo(ODSceneImage & input);
+    ODSceneImage renderMetainfo(shared_ptr<ODSceneImage> input);
 
     shared_ptr<ODDetection2D> operator[](unsigned int i);
     shared_ptr<ODDetection2D> at(unsigned int i);
@@ -261,7 +262,7 @@ namespace od
   {
   public:
 
-    shared_ptr<ODDetectionComplete>  operator[](unsigned int i);
+    shared_ptr<ODDetectionComplete> operator[](unsigned int i);
     shared_ptr<ODDetectionComplete> at(unsigned int i);
   };
 

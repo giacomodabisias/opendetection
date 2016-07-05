@@ -12,7 +12,6 @@ if(build)
             "ODFaceRecognizer.cpp"
             "detection/ODCascadeDetector.cpp"
             "detection/ODHOGDetector.cpp"
-            "detection/ODFaceDetector.cpp"
             "training/ODHOGTrainer.cpp"
     )
     

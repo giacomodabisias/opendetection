@@ -1,4 +1,8 @@
-#include "od/detectors/global2D/detection/ODFaceDetector.h"
+#include "od/detectors/global2D/detection/ODCascadeDetector.h"
+#ifdef WITH_GPU
+	#include "od/gpu/detectors/global2D/detection/ODCascadeDetector.h"
+#endif
+
 #include "od/common/utils/ODFrameGenerator.h"
 #include "od/common/utils/ODViewer.h"
 
@@ -27,17 +31,27 @@ int main(int argc, char * argv[])
 	od::ODViewer viewer;
 	viewer.initCVWindow(std::string("Faces"));
 	
+	boost::shared_ptr<od::ODDetector2D> detector;
+
+	if(gpu)
+	{
 #ifdef WITH_GPU
-	od::g2d::ODFaceDetector2D detector(gpu ? od::g2d::ODFaceDetector2D::GPU : od::g2d::ODFaceDetector2D::CPU, argv[1]);
+		detector = boost::make_shared<od::gpu::g2d::ODCascadeDetector>(argv[1]);
 #else
-	od::g2d::ODFaceDetector2D detector(od::g2d::ODFaceDetector2D::CPU, argv[1]);
+		std::cout << "Compiled without gpu support. Recompile to use gpu support" << std::endl;
+		return -1;
 #endif
+	}else{
+		detector = boost::make_shared<od::g2d::ODCascadeDetector>(argv[1]);
+	}
+	
+	detector->init();
 
 	while(frame_generator->isValid() && viewer.wait(50) != 27)
 	{
 	  boost::shared_ptr<od::ODSceneImage> scene = frame_generator->getNextFrame();
 
-	  boost::shared_ptr<od::ODDetections2D> detections = detector.detectOmni(scene);
+	  boost::shared_ptr<od::ODDetections2D> detections = detector->detectOmni(scene);
 
 	  if(detections->size() > 0)
 	  	viewer.update(detections->renderMetainfo(scene), std::string("Faces"));

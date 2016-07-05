@@ -35,13 +35,13 @@ namespace od
   namespace g2d
   {
 
-    ODCascadeDetector::ODCascadeDetector(const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
+    ODCascadeDetector::ODCascadeDetector(const std::string & trainer, const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
                                          const cv::Size & min_size, const cv::Size & max_size): 
                                          ODDetector2D(trained_data_location), scale_factor_(scale_factor), min_neighbors_(min_neighbors), 
                                             min_size_(min_size), max_size_(max_size)
     {
       trained_location_identifier_ = std::string("CASCADE");
-      trained_data_id_ = std::string("cascade.xml");
+      trained_data_id_ = trainer;
       meta_info_ = true;
     }
 
@@ -58,25 +58,31 @@ namespace od
 
     shared_ptr<ODDetections2D> ODCascadeDetector::detectOmni(shared_ptr<ODSceneImage> scene)
     {
+
+      if(!haar_cascade_){
+        std::cout << "Call init() first!" << std::endl;
+        return nullptr;
+      }
+
       cv::Mat gray;
       cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
-      // Find the faces in the frame:
-      std::vector<cv::Rect_<int> > faces;
-      haar_cascade_->detectMultiScale(gray, faces, scale_factor_, min_neighbors_, 0, min_size_, max_size_);
+
+      std::vector<cv::Rect_<int> > objects;
+      haar_cascade_->detectMultiScale(gray, objects, scale_factor_, min_neighbors_, 0, min_size_, max_size_);
 
       //always create detections
       shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
-      cv::Mat viz = scene->getCVImage().clone();
-      for(auto & face : faces)
+      cv::Mat viz = scene->getCVImage();
+      for(auto & o : objects)
       {
-        // Process face by face:
-        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>(ODDetection::OD_CLASSIFICATION, "FACE", 1);
-        detection2D->setBoundingBox(face);
+        // Process object by object:
+        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>(ODDetection::OD_CLASSIFICATION, "OBJ", 1);
+        detection2D->setBoundingBox(o);
         detections->push_back(detection2D);
 
         if(meta_info_)
         {
-          cv::rectangle(viz, face, CV_RGB(0, 255, 0), 1);
+          cv::rectangle(viz, o, CV_RGB(0, 255, 0), 1);
         }
       }
       detections->setMetainfoImage(viz);
@@ -86,23 +92,69 @@ namespace od
 
     shared_ptr<ODDetections> ODCascadeDetector::detect(shared_ptr<ODSceneImage> scene)
     {
+
+      if(!haar_cascade_){
+        std::cout << "Call init() first!" << std::endl;
+        return nullptr;
+      }
+
       //always create detections
       shared_ptr<ODDetections> detections = make_shared<ODDetections>();
 
       cv::Mat gray;
       cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
-      // Find the faces in the frame:
-      std::vector<cv::Rect_<int> > faces;
+      // Find the objects in the frame:
+      std::vector<cv::Rect_<int> > objects;
 
       //hack for single detection,
       //note: maxsize = minsize = size of input image for single window detection
       //todo: implement in some other way of fast single detection; currently this will work, but maynot be fast
-      haar_cascade_->detectMultiScale(gray, faces, 5, min_neighbors_, 0, gray.size(), gray.size());
-      if(faces.size() > 0)
+      haar_cascade_->detectMultiScale(gray, objects, 5, min_neighbors_, 0, gray.size(), gray.size());
+      if(objects.size() > 0)
       {
-        detections->push_back(make_shared<ODDetection>(ODDetection::OD_CLASSIFICATION, "FACE", 1));
+        detections->push_back(make_shared<ODDetection>(ODDetection::OD_CLASSIFICATION, "OBJ", 1));
       }
       return detections;
+    }
+
+    void ODCascadeDetector::setScale(const float scale)
+    {
+      scale_factor_ = scale;
+    }
+
+    float ODCascadeDetector::getScale() const
+    {
+      return scale_factor_;
+    }
+
+    void ODCascadeDetector::setMinNeighbors(const unsigned int min_neighbors)
+    {
+      min_neighbors_ = min_neighbors;
+    }
+
+    unsigned int ODCascadeDetector::getMinNeighbors() const
+    {
+      return min_neighbors_;
+    }
+
+    void ODCascadeDetector::setMinSize(const cv::Size & size)
+    {
+      min_size_ = size;
+    }
+
+    cv::Size ODCascadeDetector::getMinSize() const
+    {
+      return min_size_;
+    }
+
+    void ODCascadeDetector::setMaxSize(const cv::Size & size)
+    {
+      max_size_ = size;
+    }
+
+    cv::Size ODCascadeDetector::getMaxSize() const
+    {
+      return max_size_;
     }
 
   }

@@ -50,7 +50,7 @@ if(WITH_GPU)
 endif()
 
 # Set modules
-set(OD_MODULES_NAMES 3rdparty common detectors doc examples)
+set(OD_MODULES_NAMES 3rdparty common detectors "gpu/detectors" doc examples )
 set(OD_MODULES_DIRS ${OD_MODULES_NAMES})
 
 # Add modules

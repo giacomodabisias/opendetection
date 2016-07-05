@@ -51,7 +51,7 @@ namespace od
     {
     public:
 
-      ODCascadeDetector(const std::string & trained_data_location = std::string(""), double scale_factor = 1.1, int min_neighbors = 3, 
+      ODCascadeDetector(const std::string & trainer = std::string("cascade.xml"), const std::string & trained_data_location = std::string(""), double scale_factor = 1.1, int min_neighbors = 3, 
                         int flags = 0, const cv::Size & min_size = cv::Size(), const cv::Size & max_size = cv::Size());
 
       void init();
@@ -60,6 +60,18 @@ namespace od
       shared_ptr<ODDetections> detect(shared_ptr<ODSceneImage> scene);
 
       shared_ptr<ODDetections> detectOmni(shared_ptr<ODScene> scene);
+
+      void setScale(const float scale);
+      float getScale() const;
+
+      void setMinNeighbors(const unsigned int min_neighbors);
+      unsigned int getMinNeighbors() const;
+
+      void setMinSize(const cv::Size & size);
+      cv::Size getMinSize() const;
+
+      void setMaxSize(const cv::Size & size);
+      cv::Size getMaxSize() const;
 
     private:
 

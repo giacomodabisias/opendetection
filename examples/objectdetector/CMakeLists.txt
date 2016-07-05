@@ -1,5 +1,8 @@
 
 include_directories(${DETECTORS_INCLUDE_DIR})
+if(WITH_GPU)
+  include_directories(${GPU_DETECTORS_INCLUDE_DIR})
+endif()
 include_directories(${COMMON_INCLUDE_DIR})
 include_directories(${COMMON_IMPL_DIR})
 include_directories(${SIMPLE_RANSAC_INCLUDE_DIR})
@@ -39,14 +42,14 @@ option(face_detection_files_example "Build the face detection example" ON)
 if(face_detection_files_example)
         OD_ADD_EXAMPLE(od_face_detection_files 
                        FILES od_face_detector_files.cpp
-                       LINK_WITH od_global_image_detector)
+                       LINK_WITH od_global_image_detector od_gpu_global_image_detector)
 endif()
 
 option(face_detection_cam_example "Build the face detection example" ON)
 if(face_detection_cam_example)
         OD_ADD_EXAMPLE(od_face_detection_cam 
                        FILES od_face_detector_cam.cpp
-                       LINK_WITH od_global_image_detector)
+                       LINK_WITH od_global_image_detector od_gpu_global_image_detector)
 endif()
 
 option(image_customhog_example "Build the custom hog example" ON)

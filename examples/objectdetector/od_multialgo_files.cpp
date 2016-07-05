@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/misc/detection/ODDetectorMultiAlgo.hpp"
 #include "od/common/utils/ODFrameGenerator.h"
-#include <opencv2/highgui.hpp>
+#include "od/common/utils/ODViewer.h"
 #include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
@@ -47,9 +47,11 @@ int main(int argc, char *argv[])
 
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(query_images);
-  //GUI
-  cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  while(frameGenerator.isValid() && cv::waitKey(10) != 27)
+  
+  od::ODViewer viewer;
+  viewer.initCVWindow(std::string("Overlay"));
+
+  while(frameGenerator.isValid() && viewer.wait(10) != 27)
   {
     boost::shared_ptr<od::ODSceneImage> scene = frameGenerator.getNextFrame();
 
@@ -57,9 +59,9 @@ int main(int argc, char *argv[])
     boost::shared_ptr<od::ODDetections2D> detections = detector.detectOmni(scene);
 
     if(detections->size() > 0)
-      cv::imshow("Overlay", detections->renderMetainfo(*scene).getCVImage());
+      viewer.render(detections->renderMetainfo(*scene), "Overlay");
     else
-      cv::imshow("Overlay", scene->getCVImage());
+      viewer.render(scene, "Overlay");
 
   }
 

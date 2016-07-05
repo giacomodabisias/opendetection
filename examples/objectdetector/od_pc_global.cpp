@@ -33,9 +33,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    *
    */
 
-#include <iostream>
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
+#include "od/common/utils/ODViewer.h"
 #include <boost/shared_ptr.hpp>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
@@ -61,8 +62,7 @@ int main(int argc, char *argv[])
 
   //Get a scene
   boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA> > scene = boost::make_shared<od::ODScenePointCloud<pcl::PointXYZRGBA>>(pointcloud_file);
-
-
+  
   boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(scene);
 
   //feedback

@@ -203,7 +203,7 @@ Another important missing thing was the creation of a .deb package which can be 
 
 All files in the library have been renamed according to a common scheme which consists in a Prefix "OD" followed by the first charachter of the file name uppercase.
 
-##Templates and Windows compilation##
+##Templates and Windows compilation 27/06/15##
 
 To improve compilation time of projects using the **OpenDetection** library I decided to precompile all the templates for the most common types. In this case almost all templates depend on *pcl* point types. The most commonly used point type for which I precompiled the library are:
 
@@ -218,3 +218,15 @@ I then fixed all the linking in the whole library since there where some useless
 
 After that I tested compilation of the library under Windows, but without success. There have been several issues which are ut of the Open Deteciton library. I tested compilation using **Visual Studio 2015** and **MinGW**. Pcl has been installed by using the prebuilt version while opencv has to be built manually since *opencv_contrib* is necessary while not present in the prebuilt binaries. Building opencv3 with visual studio and cuda is not possible at the moment since cuda 7.5 is not compatible with visual studio 2015, so version 8 is necessary which will be available soon. MinGW is also not usable since compilation of opencv3 with cuda is disabled as flagged as incompatible by opencv.
 
+##Face detection 27/06/15##
+
+To test the new cmake and code structure I **implemented face detection** (not recognition which is already available). Face detection is implemented in *OpenCV* both in **CPU** mode and in **GPU** mode (using **CUDA**). 
+
+I created an interface which is using the *ODDetector2D* interface to use both **CPU** and **GPU** mode based on a parameter passed in the constructor. **GPU** mode is only available if the library was built with **GPU** support (using the *WITH_GPU* flag in the cmake file). 
+
+To test the new detector I created two examples; the first one is *od_face_detecor_cam.cpp* which uses the first found webcam to detect faces; the second example is called *od_face_detector_files.cpp* which uses a path to a file folder to execute the face detection algorithm over all files present in that folder. 
+
+I noticed that it is necessary to pass to the *ODFrameGenerator* a file expression like /home/test/images/\*.jpg. I don't really like this method since it is quite restrictive and not intuitive to call. I will add also a function using **boost filesystem** to iterate over all files which are OpenCV supported images, using as input a path name.
+I added in the cmake the two new examples with a custom option and tested them successfully.
+
+The next step will be to add the functionality previously described to the frame generator; I will also add the possibility to use standard containers as input sources in roder to be able to use arrays, vectors and lists for example.

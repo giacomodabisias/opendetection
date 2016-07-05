@@ -4,7 +4,8 @@
 namespace od {
 
 	template<typename PointT>
-	void ODViewer::render(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored){
+	void ODViewer::render(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored)
+	{
 		if(status_ != POINTCLOUD){
 			std::cout << "Switching viewer to PointCloud mode" << std::endl;
 			if(status_ == CVMAT){
@@ -31,7 +32,20 @@ namespace od {
 	}
 
 	template<typename PointT>
-	void ODViewer::update(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored){
+	void ODViewer::render(shared_ptr<ODScenePointCloud<PointT> > to_display, const std::string & cloud_name, bool colored)
+	{
+		render(to_display->getPointCloud(), cloud_name, colored);
+	}
+
+	template<typename PointT>
+	void ODViewer::render(const ODScenePointCloud<PointT> & to_display, const std::string & cloud_name, bool colored)
+	{
+		render(to_display.getPointCloud(), cloud_name, colored);
+	}
+
+	template<typename PointT>
+	void ODViewer::update(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored)
+	{
 		if(status_ != POINTCLOUD){
 			std::cout << "No PointCloud to render! use render(shared_ptr<pcl::PointCloud<PointT>>) first!" << std::endl;
 			return;
@@ -51,6 +65,18 @@ namespace od {
 		}else{
 			viewer_->updatePointCloud<PointT>(to_display, cloud_name);
 		}
+	}
+
+	template<typename PointT>
+	void ODViewer::update(shared_ptr<ODScenePointCloud<PointT> > to_display, const std::string & cloud_name, bool colored)
+	{
+		update(to_display->getPointCloud(), cloud_name, colored);
+	}
+
+	template<typename PointT>
+	void ODViewer::update(const ODScenePointCloud<PointT> & to_display, const std::string & cloud_name, bool colored)
+	{
+		update(to_display.getPointCloud(), cloud_name, colored);
 	}
 
 }

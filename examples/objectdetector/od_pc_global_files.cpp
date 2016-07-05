@@ -33,10 +33,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    *
    */
 
-#include <vector>
 #include "od/common/utils/ODFrameGenerator.h"
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
+#include "od/common/utils/ODViewer.h"
 #include <boost/shared_ptr.hpp>
+#include <vector>
+
 
 int main(int argc, char *argv[])
 {
@@ -74,11 +76,6 @@ int main(int argc, char *argv[])
     {
       detections->at(i)->printSelf();
     }
-
-    //vis.removePointCloud ("frame");
-    //vis.addPointCloud<pcl::PointXYZRGBA> (frame->getPointCloud(), "frame");
-
-    //vis.spinOnce (5);
 
   }
 

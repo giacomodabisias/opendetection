@@ -74,7 +74,7 @@ namespace od
     const cv::Mat & getDescriptors() const;
     void setDescriptors(const cv::Mat & descriptors_);
 
-    cv::Mat getCVImage();
+    cv::Mat getCVImage() const;
 
     void * getData();
 

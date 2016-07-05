@@ -34,23 +34,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
 
 #include "od/common/utils/ODFrameGenerator.h"
+#include "od/common/utils/ODViewer.h"
+
 
 int main(int argc, char *argv[])
 {
   //GUI and feedback
-  pcl::visualization::PCLVisualizer vis ("kinect");
+  od::ODViewer viewer;
+  viewer.initPCLWindow(std::string("frame"));
 
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_DEVICE> frameGenerator("");
   while(frameGenerator.isValid())
   {
-    //get frame
+
     boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA>> frame = frameGenerator.getNextFrame();
 
-    vis.removePointCloud ("frame");
-    vis.addPointCloud<pcl::PointXYZRGBA> (frame->getPointCloud(), "frame");
-    vis.spinOnce ();
+    viewer.remove("frame");
+    viewer.update(frame, "frame");
+    viewer.spin();
 
-    //free frame
   }
   return 0;
 }

@@ -70,7 +70,7 @@ namespace od {
 		is_trained_ = true;
 	}
 
-	cv::Mat ODSceneImage::getCVImage()
+	cv::Mat ODSceneImage::getCVImage() const
 	{
 		return cvimage_;
 	}

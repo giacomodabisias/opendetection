@@ -9,10 +9,10 @@
 #include <iostream>
 #include <string>
 
-
 #include <vtkRenderWindow.h>
 
 #include "od/common/utils/ODShared_pointers.h"
+#include "od/common/pipeline/ODScene.h"
 
 
 namespace od {
@@ -39,12 +39,31 @@ namespace od {
 		template<typename PointT>
 		void render(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored = true);
 
+		template<typename PointT>
+		void render(shared_ptr<ODScenePointCloud<PointT> > to_display, const std::string & cloud_name, bool colored = true);
+
+		template<typename PointT>
+		void render(const ODScenePointCloud<PointT> & to_display, const std::string & cloud_name, bool colored = true);
+
 		void render(const cv::Mat & to_display, const std::string & window_name);
+		void render(shared_ptr<ODSceneImage> to_display, const std::string & window_name);
+		void render(const ODSceneImage & to_display, const std::string & window_name);
+
+		void initCVWindow(const std::string & window_name);
+		void initPCLWindow(const std::string & window_name);
 
 		template<typename PointT>
 		void update(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored = true);
 
+		template<typename PointT>
+		void update(shared_ptr<ODScenePointCloud<PointT> > to_display, const std::string & cloud_name, bool colored = true);
+
+		template<typename PointT>
+		void update(const ODScenePointCloud<PointT> & to_display, const std::string & cloud_name, bool colored = true);
+
 		void update(const cv::Mat & to_display, const std::string & window_name);
+		void update(const ODSceneImage & to_display, const std::string & window_name);
+		void update(shared_ptr<ODSceneImage> to_display, const std::string & window_name);
 
 		void setBackGround(const cv::Scalar & color);
 		void setBackGround(unsigned int r, unsigned int g, unsigned int b);
@@ -54,6 +73,10 @@ namespace od {
 
 		void spin();
 		bool toStop();
+
+		void remove(const std::string & name);
+
+		unsigned int wait(unsigned int time) const;
 
 	private:
 
@@ -68,9 +91,26 @@ namespace od {
 	extern template void ODViewer::render<pcl::PointXYZRGB>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> >, const std::string &, bool);
 	extern template void ODViewer::render<pcl::PointXYZRGBA>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGBA> >, const std::string &, bool);
 
+	extern template void ODViewer::render<pcl::PointXYZ>(shared_ptr<ODScenePointCloud<pcl::PointXYZ> >, const std::string &, bool);
+	extern template void ODViewer::render<pcl::PointXYZRGB>(shared_ptr<ODScenePointCloud<pcl::PointXYZRGB> >, const std::string &, bool);
+	extern template void ODViewer::render<pcl::PointXYZRGBA>(shared_ptr<ODScenePointCloud<pcl::PointXYZRGBA> >, const std::string &, bool);
+
+	extern template void ODViewer::render<pcl::PointXYZ>(const ODScenePointCloud<pcl::PointXYZ> &, const std::string &, bool);
+	extern template void ODViewer::render<pcl::PointXYZRGB>(const ODScenePointCloud<pcl::PointXYZRGB> &, const std::string &, bool);
+	extern template void ODViewer::render<pcl::PointXYZRGBA>(const ODScenePointCloud<pcl::PointXYZRGBA> &, const std::string &, bool);
+
 	extern template void ODViewer::update<pcl::PointXYZ>(shared_ptr<pcl::PointCloud<pcl::PointXYZ> >, const std::string &, bool);
 	extern template void ODViewer::update<pcl::PointXYZRGB>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> >, const std::string &, bool);
 	extern template void ODViewer::update<pcl::PointXYZRGBA>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGBA> >, const std::string &, bool);
+
+	extern template void ODViewer::update<pcl::PointXYZ>(shared_ptr<ODScenePointCloud<pcl::PointXYZ> >, const std::string &, bool);
+	extern template void ODViewer::update<pcl::PointXYZRGB>(shared_ptr<ODScenePointCloud<pcl::PointXYZRGB> >, const std::string &, bool);
+	extern template void ODViewer::update<pcl::PointXYZRGBA>(shared_ptr<ODScenePointCloud<pcl::PointXYZRGBA> >, const std::string &, bool);
+
+	extern template void ODViewer::update<pcl::PointXYZ>(const ODScenePointCloud<pcl::PointXYZ> &, const std::string &, bool);
+	extern template void ODViewer::update<pcl::PointXYZRGB>(const ODScenePointCloud<pcl::PointXYZRGB> &, const std::string &, bool);
+	extern template void ODViewer::update<pcl::PointXYZRGBA>(const ODScenePointCloud<pcl::PointXYZRGBA> &, const std::string &, bool);
+
 
 }
 

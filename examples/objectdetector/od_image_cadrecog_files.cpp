@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/detectors/local2D/training/ODCADRecogTrainerSnapshotBased.h"
 #include "od/detectors/local2D/detection/ODCADRecognizer2DLocal.h"
 #include "od/common/utils/ODFrameGenerator.h"
+#include "od/common/utils/ODViewer.h"
 #include <boost/shared_ptr.hpp>
 
 int main(int argc, char *argv[])
@@ -56,8 +57,10 @@ int main(int argc, char *argv[])
   //get scenes
   od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_FILE_LIST> frameGenerator(query_images);
   //GUI
-  cv::namedWindow("Overlay", cv::WINDOW_NORMAL);
-  while(frameGenerator.isValid() && cv::waitKey(10) != 27)
+  od::ODViewer viewer;
+  viewer.initCVWindow(std::string("Overlay"));
+
+  while(frameGenerator.isValid() && viewer.wait(10) != 27)
   {
     boost::shared_ptr<od::ODSceneImage> scene = frameGenerator.getNextFrame();
     cv::imshow("Overlay", scene->getCVImage());
@@ -66,9 +69,9 @@ int main(int argc, char *argv[])
     boost::shared_ptr<od::ODDetections3D> detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
-      cv::imshow("Overlay", detections->getMetainfoImage());
+      viewer.update(detections->getMetainfoImage(), "Overlay");
     else
-      cv::imshow("Overlay", scene->getCVImage());
+      viewer.update(scene, "Overlay");
 
   }
 

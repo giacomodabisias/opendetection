@@ -34,7 +34,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
 
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
-#include "od/common/utils/ODViewer.h"
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 

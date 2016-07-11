@@ -69,7 +69,7 @@ namespace od {
 		cvNamedWindow(mat_window_name_.c_str(), CV_WINDOW_AUTOSIZE);
 	}
 
-	void ODViewer::initPCLWindow(const std::string & cloud_name)
+	void ODViewer::initPCLWindow(const std::string & window_name)
 	{
 		if(status_ != POINTCLOUD){
 			std::cout << "Switching viewer to PointCloud mode" << std::endl;
@@ -80,13 +80,13 @@ namespace od {
 
 		status_ = POINTCLOUD;
 
-		if(!viewer_ || pcl_window_name_ != cloud_name)
+		if(!viewer_ || pcl_window_name_ != window_name)
 		{
-			viewer_ = make_shared<pcl::visualization::PCLVisualizer>(cloud_name);
+			viewer_ = make_shared<pcl::visualization::PCLVisualizer>(window_name);
 			viewer_->setBackgroundColor(0, 0, 0);
 		}
 
-		pcl_window_name_ = cloud_name;
+		pcl_window_name_ = window_name;
 	}
 
 	void ODViewer::update(const cv::Mat & to_display, const std::string & window_name)
@@ -176,20 +176,119 @@ namespace od {
 		return cv::waitKey(time);
 	}
 
-	void ODViewer::remove(const std::string & name)
+	void ODViewer::addText(const std::string & text, pcl::PointXYZ pos, double textScale, cv::Scalar color)
 	{
-		if(status_ != POINTCLOUD){
-			std::cout << "Viewer not in pointcloud mode! use render(shared_ptr<pcl::PointCloud<PointT>>) first!" << std::endl;
-			return;
+		if(status_ == CVMAT)
+		{
+			cv::putText(*mat_, text, cv::Point(pos.x, pos.y), cv::FONT_HERSHEY_SIMPLEX, textScale, color);
+		}
+		else if(status_ == POINTCLOUD)
+		{
+			viewer_->addText3D(text, pos, textScale, color[2], color[1], color[0]);
+		
+		}
+	}
+
+	void ODViewer::addText(const std::string & text, cv::Point3f pos, double textScale, cv::Scalar color)
+	{
+		if(status_ == CVMAT)
+		{
+			cv::putText(*mat_, text, cv::Point(pos.x, pos.y), cv::FONT_HERSHEY_SIMPLEX, textScale, color);
+		}
+		else if(status_ == POINTCLOUD)
+		{
+			viewer_->addText3D(text, pcl::PointXYZ(pos.x, pos.y, pos.z), textScale, color[2], color[1], color[0]);
+		
+		}
+	}
+
+	void ODViewer::remove(const std::string & text)
+	{
+		if(status_ == CVMAT)
+		{	
+			if(text != mat_window_name_)
+			{
+				std::cout << "no window " << text << " to remove" << std::endl;
+				return;
+			}
+			cv::destroyWindow(mat_window_name_.c_str());
+			mat_window_name_ = std::string();
+		}
+		else if(status_ == POINTCLOUD)
+		{
+			if(std::remove(clouds_.begin(), clouds_.end(), text) == clouds_.end())
+			{
+				std::cout << "no cloud " << text << " to remove" << std::endl;
+				return;
+			}
+			viewer_->removePointCloud(text);
+		}
+	}
+
+	void ODViewer::removeAll()
+	{
+		if(status_ == CVMAT)
+		{
+			remove(mat_window_name_);
+		}
+		else if(status_ == POINTCLOUD)
+		{
+			viewer_->removeAllPointClouds();
+			clouds_.clear();	
+		}
+	}
+
+	void ODViewer::removeAllShapes()
+	{
+		if(status_ == CVMAT)
+		{
+			std::cout << "Not in pcl mode!" << std::endl;
+		}
+		else if(status_ == POINTCLOUD)
+		{
+			viewer_->removeAllShapes();
 		}
 
-		viewer_->removePointCloud(name);
+	}
+
+
+	void ODViewer::removeText(const std::string & text)
+	{
+		if(status_ == CVMAT)
+		{
+			std::cout << "Not in pcl mode!" << std::endl;
+		}
+		else if(status_ == POINTCLOUD)
+		{
+			viewer_->removeText3D(text);
+		}
+
+	}
+
+	void ODViewer::removeShape(const std::string & text)
+	{
+		if(status_ == CVMAT)
+		{
+			std::cout << "Not in pcl mode!" << std::endl;
+		}
+		else if(status_ == POINTCLOUD)
+		{
+			viewer_->removeShape(text);
+		}
+
 	}
 
 	// Explicit template function instantiation 
 	template void ODViewer::render<pcl::PointXYZ>(shared_ptr<pcl::PointCloud<pcl::PointXYZ> >, const std::string &, bool);
 	template void ODViewer::render<pcl::PointXYZRGB>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> >, const std::string &, bool);
 	template void ODViewer::render<pcl::PointXYZRGBA>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGBA> >, const std::string &, bool);
+
+	template void ODViewer::render<pcl::PointXYZ>(shared_ptr<pcl::PointCloud<pcl::PointXYZ> > to_display, 
+				    pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZ> & random_handler, const std::string & cloud_name);
+	template void ODViewer::render<pcl::PointXYZRGB>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > to_display, 
+				    pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZRGB> & random_handler, const std::string & cloud_name);
+	template void ODViewer::render<pcl::PointXYZRGBA>(shared_ptr<pcl::PointCloud<pcl::PointXYZRGBA> > to_display, 
+				    pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZRGBA> & random_handler, const std::string & cloud_name);
 
 	template void ODViewer::render<pcl::PointXYZ>(shared_ptr<ODScenePointCloud<pcl::PointXYZ> >, const std::string &, bool);
 	template void ODViewer::render<pcl::PointXYZRGB>(shared_ptr<ODScenePointCloud<pcl::PointXYZRGB> >, const std::string &, bool);

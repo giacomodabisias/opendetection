@@ -218,7 +218,7 @@ I then fixed all the linking in the whole library since there where some useless
 
 After that I tested compilation of the library under Windows, but without success. There have been several issues which are ut of the Open Deteciton library. I tested compilation using **Visual Studio 2015** and **MinGW**. Pcl has been installed by using the prebuilt version while opencv has to be built manually since *opencv_contrib* is necessary while not present in the prebuilt binaries. Building opencv3 with visual studio and cuda is not possible at the moment since cuda 7.5 is not compatible with visual studio 2015, so version 8 is necessary which will be available soon. MinGW is also not usable since compilation of opencv3 with cuda is disabled as flagged as incompatible by opencv.
 
-##Face detection 27/06/15##
+##Face detection 31/06/15##
 
 To test the new cmake and code structure I **implemented face detection** (not recognition which is already available). Face detection is implemented in *OpenCV* both in **CPU** mode and in **GPU** mode (using **CUDA**). 
 
@@ -230,3 +230,54 @@ I noticed that it is necessary to pass to the *ODFrameGenerator* a file expressi
 I added in the cmake the two new examples with a custom option and tested them successfully.
 
 The next step will be to add the functionality previously described to the frame generator; I will also add the possibility to use standard containers as input sources in roder to be able to use arrays, vectors and lists for example.
+
+##Face detection 2 06/06/15##
+
+After talking with Kripa I found out that the CPU cascade detector (the detector used to detect faces) was already rpesent n the library; so only the gpu version had to be added. This implies to create in the library a new gpu folder containing all gpu modules which should be built only if support is present.
+
+To do this I created a separate gpu folder which contains for now a detector folder with the same structure as the external one. Everything defined here should be in the **od::gpu::** namespace and each class should have the same name as the cpu version class. It is also a good habit to first create a common interface for the **CPU** and **GPU** version in order to be able to dinamically allocate objects of both types.
+
+To grasp better the meaning I implemented the **cascade detector** as follows:
+
+Both detectors derive already from the same class so there is no need for an additional interface
+
+@code
+class ODCascadeDetector : public ODDetector2D
+@endcode
+
+Each class has a different detector member:
+
+GPU
+@code
+cv::Ptr<cv::cuda::CascadeClassifier> haar_cascade_;
+@endcode
+
+CPU
+@code
+shared_ptr<cv::CascadeClassifier> haar_cascade_;
+@endcode
+
+This way we can do the following when using the detectors:
+
+@code
+
+	boost::shared_ptr<od::ODDetector2D> detector;
+
+	if(gpu)
+	{
+		detector = boost::make_shared<od::gpu::g2d::ODCascadeDetector>(argv[1]);
+	}else{
+		detector = boost::make_shared<od::g2d::ODCascadeDetector>(argv[1]);
+	}
+
+@endcode
+
+There were three possible solutions to how to impement gpu in the library:
+
+- Add in the constructor a flag to decide the **CPU** / **GPU** mode. This mixes up gpu and cpu code in the same class and changing anything becomes more and more difficult
+
+- Create two separate classes with dfferent names,  one for each type. This fixes the previous issue but moving from one version to the other can be hard
+
+- Create a common interface and have the same class imlemented in different namespaces. Clean solution which has been adopted.
+
+I removed the previous facedetector classes which I had added and used the new ones in the examples which I had previoulsy created. I also used the new viewer in all examples and fixed the build of the different examples to be independent and clean in the *CMake*.

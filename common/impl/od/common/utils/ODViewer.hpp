@@ -15,12 +15,12 @@ namespace od {
 
 		status_ = POINTCLOUD;
 
-		if(!viewer_ || pcl_window_name_ != cloud_name){
+		if(!viewer_ ){
 			viewer_ = make_shared<pcl::visualization::PCLVisualizer>(cloud_name);
 			viewer_->setBackgroundColor(0, 0, 0);
 		}
 
-		pcl_window_name_ = cloud_name;
+		clouds_.push_back(cloud_name);
 
 		if(colored)
 		{
@@ -29,6 +29,30 @@ namespace od {
 		}else{
 			viewer_->addPointCloud<PointT>(to_display, cloud_name);
 		}
+	}
+
+	template<typename PointT>
+	void ODViewer::render(shared_ptr<pcl::PointCloud<PointT> > to_display, 
+		                  pcl::visualization::PointCloudColorHandlerRandom<PointT> & random_handler, const std::string & cloud_name)
+	{
+		if(status_ != POINTCLOUD){
+			std::cout << "Switching viewer to PointCloud mode" << std::endl;
+			if(status_ == CVMAT){
+				cv::destroyWindow(mat_window_name_.c_str());
+			}
+		}
+
+		status_ = POINTCLOUD;
+
+		if(!viewer_ ){
+			viewer_ = make_shared<pcl::visualization::PCLVisualizer>(cloud_name);
+			viewer_->setBackgroundColor(0, 0, 0);
+		}
+
+		clouds_.push_back(cloud_name);
+
+		viewer_->addPointCloud<PointT>(to_display, random_handler, cloud_name);
+
 	}
 
 	template<typename PointT>
@@ -51,9 +75,10 @@ namespace od {
 			return;
 		}
 
-		if(cloud_name != pcl_window_name_){
-			std::cout << "No window " << cloud_name 
-					  << " present. Please first use render(shared_ptr<pcl::PointCloud<PointT> >, const std::string & ) to create the new window" 
+
+		if(!viewer_ || std::find(clouds_.begin(), clouds_.end(), cloud_name) != clouds_.end()){
+			std::cout << "No cloud " << cloud_name 
+					  << " present. Please first use render(shared_ptr<pcl::PointCloud<PointT> >, const std::string & ) to add the cloud" 
 					  << std::endl;
 			return;
 		}

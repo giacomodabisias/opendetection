@@ -224,7 +224,7 @@ namespace od
 	     color_map[detections_[i]->getId()] = CV_RGB(rand()%255, rand()%255, rand()%255);
 	  }*/
 
-	  cv::Mat image = input.getCVImage().clone();
+	  cv::Mat image = input.getCVImage();
 	  for(size_t i = 0; i < detections_.size(); ++i)
 	  {
 	    shared_ptr<ODDetection2D> detection = dynamic_pointer_cast<ODDetection2D>(detections_[i]);

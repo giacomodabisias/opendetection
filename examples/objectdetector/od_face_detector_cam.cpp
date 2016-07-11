@@ -47,7 +47,7 @@ int main(int argc, char * argv[])
 	
 	detector->init();
 
-	while(frame_generator->isValid() && viewer.wait(50) != 27)
+	while(frame_generator->isValid() && viewer.wait(100) != 27)
 	{
 	  boost::shared_ptr<od::ODSceneImage> scene = frame_generator->getNextFrame();
 

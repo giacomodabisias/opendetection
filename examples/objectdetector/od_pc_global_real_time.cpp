@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "od/detectors/global3D/ODPointCloudGlobalMatching.h"
 #include "od/common/utils/ODFrameGenerator.h"
+#include "od/common/utils/ODViewer.h"
 #include <string>
 #include <boost/shared_ptr.hpp>
 
@@ -62,10 +63,10 @@ int main(int argc, char *argv[])
 
   //GUI and feedback
 
-  pcl::visualization::PCLVisualizer vis ("kinect");
+  od::ODViewer viewer;
+  viewer.initPCLWindow(std::string("kinect"));
   od::ODFrameGenerator<od::ODScenePointCloud<pcl::PointXYZRGBA>, od::GENERATOR_TYPE_DEVICE> frameGenerator;
   pcl::PointXYZ pos;
-  std::stringstream ss;
 
   while(frameGenerator.isValid())
   {
@@ -73,9 +74,9 @@ int main(int argc, char *argv[])
     boost::shared_ptr<od::ODScenePointCloud<pcl::PointXYZRGBA>> frame = frameGenerator.getNextFrame();
 
     //remove previous point clouds and text and add new ones in the visualizer
-    vis.removeAllPointClouds();
-    vis.removeAllShapes();
-    vis.addPointCloud<pcl::PointXYZRGBA> (frame->getPointCloud(), "frame");
+    viewer.removeAll();
+    viewer.removeAllShapes();
+    viewer.render(frame->getPointCloud(), std::string("frame"));
 
     //Detect
     boost::shared_ptr<od::ODDetections3D> detections = detector.detectOmni(frame);
@@ -84,17 +85,15 @@ int main(int argc, char *argv[])
     for(size_t i = 0; i < detections->size(); ++i)
     {
       pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZ> random_handler (detections->at(i)->getMetainfoCluster());
-      vis.addPointCloud<pcl::PointXYZ> (detections->at(i)->getMetainfoCluster(), random_handler, "cluster_" + i);
+      viewer.render(detections->at(i)->getMetainfoCluster(), random_handler, std::string("cluster_") + std::to_string(i));
        
       pos.x = detections->at(i)->getLocation()[0]; 
       pos.y = detections->at(i)->getLocation()[1]; 
       pos.z = detections->at(i)->getLocation()[2];
-      ss << "cluster_" << i << "_txt";
-      vis.addText3D(detections->at(i)->getId(), pos, 0.015f, 1, 0, 1, ss.str(), 0);
-      ss.str(std::string());
+      viewer.addText(detections->at(i)->getId(), pos, 0.015f, cv::Scalar(1, 0, 1));
     }
 
-    vis.spinOnce();
+    viewer.spin();
   }
 
   return 0;

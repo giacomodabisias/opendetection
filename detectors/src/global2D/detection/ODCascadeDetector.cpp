@@ -53,7 +53,7 @@ namespace od
 
     void ODCascadeDetector::init()
     {
-      haar_cascade_ = make_shared<cv::CascadeClassifier>(fileutils::getFirstFile(getSpecificTrainingDataLocation(), trained_data_id_));
+      haar_cascade_ = make_shared<cv::CascadeClassifier>(trained_data_id_);
     }
 
     shared_ptr<ODDetections2D> ODCascadeDetector::detectOmni(shared_ptr<ODSceneImage> scene)

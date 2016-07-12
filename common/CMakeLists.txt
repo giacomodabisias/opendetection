@@ -1,7 +1,7 @@
 set(SUBSYS_NAME common)
 set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "The core module of OpenDetection having the pipeline logic")
-set(SUBSYS_DEPS ${OpenCV_LIBS} ${PCL_LIBRARIES})
+set(SUBSYS_DEPS ${OpenCV_LIBS} ${PCL_LIBRARIES} GLEW)
 
 set(COMMON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(COMMON_IMPL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/impl)
@@ -14,7 +14,7 @@ if(WITH_GPU)
   set(SUBSYS_DEPS ${SUBSYS_DEPS} siftgpu)
 endif()
 
-set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
+set(SUBSYS_DEPS ${SUBSYS_DEPS} svm)
 
 set(build TRUE)
 

@@ -148,7 +148,7 @@ namespace od
       cv_recognizer_->predict(face_edited, label, confidence);
 
       //fill in the detection
-      shared_ptr<ODDetection2D> detection = make_shared<ODDetection2D>(ODDetection::OD_CLASSIFICATION, std::to_string(label), confidence);
+      shared_ptr<ODDetection2D> detection(new ODDetection2D(ODDetection::OD_CLASSIFICATION, std::to_string(label), confidence));
       shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
       detections->push_back(detection);
       

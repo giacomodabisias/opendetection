@@ -16,7 +16,11 @@ namespace od {
 		status_ = POINTCLOUD;
 
 		if(!viewer_ ){
+#ifdef WITH_BOOST_SHARED_PTR
+			viewer_ = shared_ptr<pcl::visualization::PCLVisualizer>(new pcl::visualization::PCLVisualizer(cloud_name));
+#else
 			viewer_ = make_shared<pcl::visualization::PCLVisualizer>(cloud_name);
+#endif
 			viewer_->setBackgroundColor(0, 0, 0);
 		}
 
@@ -45,7 +49,11 @@ namespace od {
 		status_ = POINTCLOUD;
 
 		if(!viewer_ ){
+#ifdef WITH_BOOST_SHARED_PTR
+			viewer_ = shared_ptr<pcl::visualization::PCLVisualizer>(new pcl::visualization::PCLVisualizer(cloud_name));
+#else
 			viewer_ = make_shared<pcl::visualization::PCLVisualizer>(cloud_name);
+#endif
 			viewer_->setBackgroundColor(0, 0, 0);
 		}
 

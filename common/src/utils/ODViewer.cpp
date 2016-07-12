@@ -82,7 +82,11 @@ namespace od {
 
 		if(!viewer_ || pcl_window_name_ != window_name)
 		{
+#ifdef WITH_BOOST_SHARED_PTR
+			viewer_ = shared_ptr<pcl::visualization::PCLVisualizer>(new pcl::visualization::PCLVisualizer(window_name));
+#else
 			viewer_ = make_shared<pcl::visualization::PCLVisualizer>(window_name);
+#endif
 			viewer_->setBackgroundColor(0, 0, 0);
 		}
 

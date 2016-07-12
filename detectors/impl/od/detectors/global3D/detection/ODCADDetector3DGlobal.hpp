@@ -240,7 +240,8 @@ namespace od
       //detection done!
 
       //now fill up the detection:
-      shared_ptr<ODDetection> detection = make_shared<ODDetection3D>(ODDetection::OD_CLASSIFICATION, categories[0], conf[0]);
+      shared_ptr<ODDetection> detection(new ODDetection(ODDetection::OD_CLASSIFICATION, categories[0], conf[0]));
+
       detections->push_back(detection);
 
       return detections;

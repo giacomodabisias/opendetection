@@ -61,7 +61,13 @@ namespace od
 
       pnp_method_ = cv::SOLVEPNP_EPNP;
       f_type_default_ = std::string("SIFT");
+      
+#ifdef WITH_BOOST_SHARED_PTR
+      feature_detector_ = shared_ptr<ODFeatureDetector2D>(new ODFeatureDetector2D(f_type_default_, use_gpu_));
+#else
       feature_detector_ = make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
+#endif
+
     }
 
     const std::string & ODCADRecognizer2DLocal::getCameraIntrinsicFile() const
@@ -252,7 +258,11 @@ namespace od
       if(models_.size() > 0)
         f_type_default_ = models_[0].f_type_;
 
+#ifdef WITH_BOOST_SHARED_PTR
+      feature_detector_ = shared_ptr<ODFeatureDetector2D>(new ODFeatureDetector2D(f_type_default_, use_gpu_));
+#else
       feature_detector_ = make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
+#endif
 
     }
 

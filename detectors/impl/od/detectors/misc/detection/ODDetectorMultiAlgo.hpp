@@ -102,8 +102,15 @@ namespace od
   {
     //make a list of different algorithms
     //vector<ODDetector *> detectors = {new ODCascadeDetector(trained_data_location_), new ODHOGDetector(trained_data_location_), new ODCADRecognizer2DLocal(trained_data_location_)};
-    detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(trained_data_location_));
-    detectors_2d_.push_back(make_shared<g2d::ODHOGDetector>(trained_data_location_));
+    
+#ifdef WITH_BOOST_SHARED_PTR
+      detectors_2d_.push_back(shared_ptr<g2d::ODCascadeDetector>(new g2d::ODCascadeDetector(trained_data_location_)));
+      detectors_2d_.push_back(shared_ptr<g2d::ODHOGDetector>(new g2d::ODHOGDetector(trained_data_location_)));
+#else
+      detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(trained_data_location_));
+      detectors_2d_.push_back(make_shared<g2d::ODHOGDetector>(trained_data_location_));
+#endif
+
     //  detectors.push_back(new ODCADRecognizer2DLocal(trained_data_location_));
 
     for(auto & d : detectors_2d_)
@@ -212,7 +219,11 @@ namespace od
   void ODDetectorMultiAlgo<PointT>::init()
   {
       //3D
-    detectors_3d_.push_back( make_shared<g3d::ODCADDetector3DGlobal<PointT> >(trained_data_location_, training_input_location_));
+#ifdef WITH_BOOST_SHARED_PTR
+    detectors_3d_.push_back(shared_ptr<g3d::ODCADDetector3DGlobal<PointT> >(new g3d::ODCADDetector3DGlobal<PointT>(trained_data_location_, training_input_location_)));
+#else
+    detectors_3d_.push_back(make_shared<g3d::ODCADDetector3DGlobal<PointT> >(trained_data_location_, training_input_location_));
+#endif
     for(auto & d : detectors_3d_)
     {
       d->init();

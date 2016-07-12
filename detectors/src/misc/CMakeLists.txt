@@ -3,19 +3,22 @@ set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "Multi algorithm detector")
 set(SUBSYS_DEPS od_common od_global_image_detector od_pointcloud_global_detector)
 
-set(build TRUE)
+if(BUILD_MISC_DETECTION)
+    if(TARGET od_global_image_detector AND TARGET od_pointcloud_global_detector)
+	    set(SOURCES
+	        "detection/ODDetectorMultiAlgo.cpp"
+	        )
 
-if(build)
-    
-    set(SOURCES
-        "detection/ODDetectorMultiAlgo.cpp"
-        )
+	    include_directories(${DETECTORS_IMPL_DIR})
+	    include_directories(${DETECTORS_INCLUDE_DIR})
+	    include_directories(${COMMON_INCLUDE_DIR})
+	    include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+	    include_directories(${PCL_INCLUDE_DIRS})
 
-    include_directories(${DETECTORS_IMPL_DIR})
-    include_directories(${DETECTORS_INCLUDE_DIR})
-    include_directories(${COMMON_INCLUDE_DIR})
-    include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+	    OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
 
-    OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
+	else()
+		message("!!! BUILD_MISC_DETECTION is set to on but BUILD_GLOBAL_2D_DETECTION and BUILD_GLOBAL_3D_DETECTION is necessary to build BUILD_MISC_DETECTION")
+	endif(TARGET od_global_image_detector AND TARGET od_pointcloud_global_detector)
 
-endif(build)
+endif(BUILD_MISC_DETECTION)

@@ -14,6 +14,7 @@ if(build)
     
     include_directories(${GPU_DETECTORS_INCLUDE_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
+    include_directories(${PCL_INCLUDE_DIRS})
 
     OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
 

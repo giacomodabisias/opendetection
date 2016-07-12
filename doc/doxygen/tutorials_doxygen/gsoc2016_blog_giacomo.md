@@ -281,3 +281,11 @@ There were three possible solutions to how to impement gpu in the library:
 - Create a common interface and have the same class imlemented in different namespaces. Clean solution which has been adopted.
 
 I removed the previous facedetector classes which I had added and used the new ones in the examples which I had previoulsy created. I also used the new viewer in all examples and fixed the build of the different examples to be independent and clean in the *CMake*.
+
+
+##Visualizer update 11/06/15##
+
+To cover all examples and to have a more versatile viewer I added today an interface so add and remove text, clouds and added some improvments to be able to have multiple clouds in the same viewer at the same time. There is still some testing needed. I also added as usual all the template precompilation for the common PCL types.
+
+The next step consists in adding as stated before the std::containers to the frame generator class and then have a look if there are some modules to move to the gpu folder or maybe add some new methods there.
+

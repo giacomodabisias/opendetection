@@ -1,3 +1,5 @@
+include_directories(${CMAKE_3RDPARTY_DIR}/SiftGPU/src/SiftGPU/)
+
 
 option(camera_recognition_example "Build the camera recognition example" ON)
 if(od_image_camera_example)

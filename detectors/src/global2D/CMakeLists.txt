@@ -2,7 +2,7 @@ set(SUBSYS_NAME global_image_detector)
 set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "global feature based detection in 2D images")
 
-set(SUBSYS_DEPS od_common svm)
+set(SUBSYS_DEPS od_common svmlight)
 
 if(BUILD_GLOBAL_2D_DETECTION)
 

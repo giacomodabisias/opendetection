@@ -4,6 +4,8 @@ if(WITH_GPU)
 
 	set(GPU_DETECTORS_INCLUDE_DIR ${GPU_DETECTORS_DIR}/include PARENT_SCOPE)
 
+	include_directories(${CMAKE_3RDPARTY_DIR}/SiftGPU/src/SiftGPU/)
+
 	add_subdirectory("src/global2D")
 
 	install(DIRECTORY ${GPU_DETECTORS_INCLUDE_DIR}/od DESTINATION ${OD_INSTALL_INCLUDE_DIR})

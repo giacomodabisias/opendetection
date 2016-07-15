@@ -28,6 +28,7 @@ set(SOURCES
 include_directories(${COMMON_INCLUDE_DIR})
 include_directories(${COMMON_IMPL_DIR})
 include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+include_directories(${CMAKE_3RDPARTY_DIR}/SiftGPU/src/SiftGPU/)
 include_directories(${PCL_INCLUDE_DIRS})
 
 OD_ADD_LIBRARY(${SUBSYS_NAME} SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})

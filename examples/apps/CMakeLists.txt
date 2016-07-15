@@ -6,6 +6,7 @@ if(cad_recog_test_single_model)
 		include_directories(${DETECTORS_INCLUDE_DIR})
 		include_directories(${COMMON_INCLUDE_DIR})
 		include_directories(${CMAKE_3RDPARTY_DIR}/pugixml/src/)
+		include_directories(${CMAKE_3RDPARTY_DIR}/SiftGPU/src/SiftGPU/)
 		include_directories(${PCL_INCLUDE_DIRS})
 
 		OD_ADD_EXAMPLE(odcadrecog_test_single_model 

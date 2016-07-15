@@ -6,6 +6,8 @@ set(DETECTORS_IMPL_DIR ${DETECTORS_DIR}/impl)
 set(DETECTORS_INCLUDE_DIR ${DETECTORS_DIR}/include PARENT_SCOPE)
 set(DETECTORS_IMPL_DIR ${DETECTORS_DIR}/impl PARENT_SCOPE)
 
+include_directories(${CMAKE_3RDPARTY_DIR}/SiftGPU/src/SiftGPU/)
+
 add_subdirectory("src/local2D")
 add_subdirectory("src/global2D")
 add_subdirectory("src/global3D")

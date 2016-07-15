@@ -231,7 +231,7 @@ I added in the cmake the two new examples with a custom option and tested them s
 
 The next step will be to add the functionality previously described to the frame generator; I will also add the possibility to use standard containers as input sources in roder to be able to use arrays, vectors and lists for example.
 
-##Face detection 2 06/06/15##
+##Face detection 2 06/07/15##
 
 After talking with Kripa I found out that the CPU cascade detector (the detector used to detect faces) was already rpesent n the library; so only the gpu version had to be added. This implies to create in the library a new gpu folder containing all gpu modules which should be built only if support is present.
 
@@ -283,9 +283,46 @@ There were three possible solutions to how to impement gpu in the library:
 I removed the previous facedetector classes which I had added and used the new ones in the examples which I had previoulsy created. I also used the new viewer in all examples and fixed the build of the different examples to be independent and clean in the *CMake*.
 
 
-##Visualizer update 11/06/15##
+##Visualizer update 11/07/15##
 
 To cover all examples and to have a more versatile viewer I added today an interface so add and remove text, clouds and added some improvments to be able to have multiple clouds in the same viewer at the same time. There is still some testing needed. I also added as usual all the template precompilation for the common PCL types.
 
 The next step consists in adding as stated before the std::containers to the frame generator class and then have a look if there are some modules to move to the gpu folder or maybe add some new methods there.
+
+##Modular build 15/07/15## 
+
+Looking at the *PCL* and *OpenCV* libraries I noticed how the libraries are subdivided into modules. I understood then the importance of having this structure also in the OD library and so started to change a bit the structure, expecially the *Cmake* structure, to support such a feature. 
+With the new changes now each detector is a separate module which can be built or not as also gpu. One issue was that some modules might have dependencies on other modules and can be built only if a specific module was built. For example the misc detector can be only built if other detectors where built. 
+
+To overcome this issue I found that you can specify targets in **IF** statments in *CMake*. This allowas to check if a specific module was built and in case continue with the build process. It the specific module was not built, an error message is displayed explaining which module is missing. The if statment needs the **TARGET** statment in fron of the moduel in order to search in the built targets. An example is the following:
+
+@code
+
+if(BUILD_MISC_DETECTION)
+    if(TARGET od_global_image_detector AND TARGET od_pointcloud_global_detector)
+	    set(SOURCES
+	        "detection/ODDetectorMultiAlgo.cpp"
+	        )
+
+	    include_directories(${DETECTORS_IMPL_DIR})
+	    include_directories(${DETECTORS_INCLUDE_DIR})
+	    include_directories(${COMMON_INCLUDE_DIR})
+	    include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+	    include_directories(${PCL_INCLUDE_DIRS})
+
+	    OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
+
+	else()
+		message("!!! BUILD_MISC_DETECTION is set to on but BUILD_GLOBAL_2D_DETECTION and BUILD_GLOBAL_3D_DETECTION is necessary to build BUILD_MISC_DETECTION")
+	endif(TARGET od_global_image_detector AND TARGET od_pointcloud_global_detector)
+
+@endcode
+
+As you can see we need to have the global_image_detector and the pointcloud_global_detector in order to build the misc module, along with the option to build the misc module. If the **IF** statment fails an error message is displayed asking to build those missing modules.
+The same structure has been adde to all examples so that the correct examples are automatically built depending on the built modules. it is important to notice the repeated **include_directories** for each example. Its true that one is enough for all the built targets in that file, but with this modular built its not possible to know in advance which examples will be built. Also it is not nice to include everything at the beginning since this will only slow down compilation and make the code less readable since it covers up dependencies of example->includes.
+
+I also built the system on lniux 16.04 with gcc 5.3; I had some initial issues but also those were fixed. I will make a blogpost about them next week since some errors where quite interesting.
+
+
+
 

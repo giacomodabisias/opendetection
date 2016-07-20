@@ -35,130 +35,88 @@ namespace od
   namespace g2d
   {
 
-    ODCascadeDetector::ODCascadeDetector(const std::string & trainer, const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
-                                         const cv::Size & min_size, const cv::Size & max_size): 
-                                         ODDetector2D(trained_data_location), scale_factor_(scale_factor), min_neighbors_(min_neighbors), 
-                                            min_size_(min_size), max_size_(max_size)
+    ODCascadeDetector::ODCascadeDetector(bool gpu, const std::string & trainer, const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
+                                         const cv::Size & min_size, const cv::Size & max_size)
     {
-      trained_location_identifier_ = std::string("CASCADE");
-      trained_data_id_ = trainer;
-      meta_info_ = true;
+      if(gpu){
+#if WITH_GPU
+  #ifdef WITH_BOOST_SHARED_PTR
+      cascade_detector_ = shared_ptr<ODCascadeDetectorImpl>(new ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
+  #else
+      cascade_detector_ = make_shared<ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
+  #endif
+#else
+        std::cout << "Error !! GPU CascadeDetector has not been compiled. Recompile with WITH_GPU." << std::endl;
+        exit(-1);
+#endif
+      }
+      else {
+#ifdef WITH_BOOST_SHARED_PTR
+       cascade_detector_ = shared_ptr<od::gpu::g2d::ODCascadeDetectorImpl>(new od::gpu::g2d::ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
+#else
+       cascade_detector_ = make_shared<od::gpu::g2d::ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
+#endif    
+      }
     }
 
     shared_ptr<ODDetections> ODCascadeDetector::detectOmni(shared_ptr<ODScene> scene)
     {
-      std::cout << "not implemented, use detect()" <<std::endl; 
-      return nullptr;
+      return cascade_detector_->detectOmni(scene);
     };
 
     void ODCascadeDetector::init()
     {
-#ifdef WITH_BOOST_SHARED_PTR
-      haar_cascade_ = shared_ptr<cv::CascadeClassifier>(new cv::CascadeClassifier(trained_data_id_));
-#else
-      haar_cascade_ = make_shared<cv::CascadeClassifier>(trained_data_id_);
-#endif
+      cascade_detector_->init();
     }
 
     shared_ptr<ODDetections2D> ODCascadeDetector::detectOmni(shared_ptr<ODSceneImage> scene)
     {
-
-      if(!haar_cascade_){
-        std::cout << "Call init() first!" << std::endl;
-        return nullptr;
-      }
-
-      cv::Mat gray;
-      cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
-
-      std::vector<cv::Rect_<int> > objects;
-      haar_cascade_->detectMultiScale(gray, objects, scale_factor_, min_neighbors_, 0, min_size_, max_size_);
-
-      //always create detections
-      shared_ptr<ODDetections2D> detections = make_shared<ODDetections2D>();
-      cv::Mat viz = scene->getCVImage();
-      for(auto & o : objects)
-      {
-        // Process object by object:
-        shared_ptr<ODDetection2D> detection2D = make_shared<ODDetection2D>(ODDetection::OD_CLASSIFICATION, "OBJ", 1);
-        detection2D->setBoundingBox(o);
-        detections->push_back(detection2D);
-
-        if(meta_info_)
-        {
-          cv::rectangle(viz, o, CV_RGB(0, 255, 0), 1);
-        }
-      }
-      detections->setMetainfoImage(viz);
-
-      return detections;
+      return cascade_detector_->detectOmni(scene);
     }
 
     shared_ptr<ODDetections> ODCascadeDetector::detect(shared_ptr<ODSceneImage> scene)
     {
-
-      if(!haar_cascade_){
-        std::cout << "Call init() first!" << std::endl;
-        return nullptr;
-      }
-
-      //always create detections
-      shared_ptr<ODDetections> detections = make_shared<ODDetections>();
-
-      cv::Mat gray;
-      cv::cvtColor(scene->getCVImage(), gray, CV_BGR2GRAY);
-      // Find the objects in the frame:
-      std::vector<cv::Rect_<int> > objects;
-
-      //hack for single detection,
-      //note: maxsize = minsize = size of input image for single window detection
-      //todo: implement in some other way of fast single detection; currently this will work, but maynot be fast
-      haar_cascade_->detectMultiScale(gray, objects, 5, min_neighbors_, 0, gray.size(), gray.size());
-      if(objects.size() > 0)
-      {
-        detections->push_back(make_shared<ODDetection>(ODDetection::OD_CLASSIFICATION, "OBJ", 1));
-      }
-      return detections;
+      return cascade_detector_->detect(scene);
     }
 
     void ODCascadeDetector::setScale(const float scale)
     {
-      scale_factor_ = scale;
+      cascade_detector_->setScale(scale);
     }
 
     float ODCascadeDetector::getScale() const
     {
-      return scale_factor_;
+      return cascade_detector_->getScale();
     }
 
     void ODCascadeDetector::setMinNeighbors(const unsigned int min_neighbors)
     {
-      min_neighbors_ = min_neighbors;
+      cascade_detector_->setMinNeighbors(min_neighbors);
     }
 
     unsigned int ODCascadeDetector::getMinNeighbors() const
     {
-      return min_neighbors_;
+      return cascade_detector_->getMinNeighbors();
     }
 
     void ODCascadeDetector::setMinSize(const cv::Size & size)
     {
-      min_size_ = size;
+      cascade_detector_->setMinSize(size);
     }
 
     cv::Size ODCascadeDetector::getMinSize() const
     {
-      return min_size_;
+      return cascade_detector_->getMinSize();
     }
 
     void ODCascadeDetector::setMaxSize(const cv::Size & size)
     {
-      max_size_ = size;
+      cascade_detector_->setMaxSize(size);
     }
 
     cv::Size ODCascadeDetector::getMaxSize() const
     {
-      return max_size_;
+      return cascade_detector_->getMaxSize();
     }
 
   }

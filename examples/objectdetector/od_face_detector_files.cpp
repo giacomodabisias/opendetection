@@ -1,7 +1,5 @@
 #include "od/detectors/global2D/detection/ODCascadeDetector.h"
-#ifdef WITH_GPU
-	#include "od/gpu/detectors/global2D/detection/ODCascadeDetector.h"
-#endif
+
 #include "od/common/utils/ODFrameGenerator.h"
 #include "od/common/utils/ODViewer.h"
 
@@ -27,18 +25,8 @@ int main(int argc, char * argv[])
 	boost::shared_ptr<od::ODDetector2D> detector;
 
 
+	detector = boost::make_shared<od::g2d::ODCascadeDetector>(gpu, argv[1]);
 
-	if(gpu)
-	{
-#ifdef WITH_GPU
-		detector = boost::make_shared<od::gpu::g2d::ODCascadeDetector>(argv[1]);
-#else
-		std::cout << "Compiled without gpu support. Recompile to use gpu support" << std::endl;
-		return -1;
-#endif
-	}else{
-		detector = boost::make_shared<od::g2d::ODCascadeDetector>(argv[1]);
-	}
 	
 	detector->init();
 

@@ -64,7 +64,7 @@ if(image_hog_files_example)
 
     OD_ADD_EXAMPLE(od_image_hog_files 
                    FILES od_image_hog_files.cpp
-                   LINK_WITH od_global_image_detector)
+                   LINK_WITH od_global_image_detector od_gpu_global_image_detector)
   else()
     message("!!! image_hog_files_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build image_hog_files_example")
   endif(TARGET od_global_image_detector)

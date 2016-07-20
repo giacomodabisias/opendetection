@@ -104,10 +104,18 @@ namespace od
     //vector<ODDetector *> detectors = {new ODCascadeDetector(trained_data_location_), new ODHOGDetector(trained_data_location_), new ODCADRecognizer2DLocal(trained_data_location_)};
     
 #ifdef WITH_BOOST_SHARED_PTR
-      detectors_2d_.push_back(shared_ptr<g2d::ODCascadeDetector>(new g2d::ODCascadeDetector(trained_data_location_)));
+    #if WITH_GPU
+      detectors_2d_.push_back(shared_ptr<g2d::ODCascadeDetector>(new g2d::ODCascadeDetector(true, trained_data_location_)));
+    #else
+      detectors_2d_.push_back(shared_ptr<g2d::ODCascadeDetector>(new g2d::ODCascadeDetector(false, trained_data_location_)));
+    #endif
       detectors_2d_.push_back(shared_ptr<g2d::ODHOGDetector>(new g2d::ODHOGDetector(trained_data_location_)));
 #else
-      detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(trained_data_location_));
+    #if WITH_GPU
+      detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(true, trained_data_location_));
+    #else
+      detectors_2d_.push_back(make_shared<g2d::ODCascadeDetector>(false, trained_data_location_));
+    #endif
       detectors_2d_.push_back(make_shared<g2d::ODHOGDetector>(trained_data_location_));
 #endif
 

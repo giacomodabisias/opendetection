@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Created by sarkar on 17.07.15.
 //
 
-#include "od/gpu/detectors/global2D/detection/ODCascadeDetector.h"
+#include "od/gpu/detectors/global2D/detection/ODCascadeDetectorImpl.h"
 
 namespace od
 {
@@ -38,24 +38,24 @@ namespace od
     namespace g2d
     {
 
-      ODCascadeDetector::ODCascadeDetector(const std::string & trainer, const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
+      ODCascadeDetectorImpl::ODCascadeDetectorImpl(const std::string & trainer, const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
                                            const cv::Size & min_size, const cv::Size & max_size): 
-                                           ODDetector2D(trained_data_location), scale_factor_(scale_factor), min_neighbors_(min_neighbors), 
+                                           trained_data_location_(trained_data_location), scale_factor_(scale_factor), min_neighbors_(min_neighbors), 
                                            min_size_(min_size), max_size_(max_size), trained_data_id_(trainer), meta_info_(true), largest_(true)
       {}
 
-      shared_ptr<ODDetections> ODCascadeDetector::detectOmni(shared_ptr<ODScene> scene)
+      shared_ptr<ODDetections> ODCascadeDetectorImpl::detectOmni(shared_ptr<ODScene> scene)
       {
         std::cout << "not implemented, use detect()" <<std::endl; 
         return nullptr;
       }
 
-      void ODCascadeDetector::init()
+      void ODCascadeDetectorImpl::init()
       {
         haar_cascade_ = cv::cuda::CascadeClassifier::create(trained_data_id_);
       }
 
-      shared_ptr<ODDetections2D> ODCascadeDetector::detectOmni(shared_ptr<ODSceneImage> scene)
+      shared_ptr<ODDetections2D> ODCascadeDetectorImpl::detectOmni(shared_ptr<ODSceneImage> scene)
       {
         if(!haar_cascade_){
           std::cout << "Call init() first!" << std::endl;
@@ -99,7 +99,7 @@ namespace od
         return detections;
       }
 
-      shared_ptr<ODDetections> ODCascadeDetector::detect(shared_ptr<ODSceneImage> scene)
+      shared_ptr<ODDetections> ODCascadeDetectorImpl::detect(shared_ptr<ODSceneImage> scene)
       {
 
         if(!haar_cascade_){
@@ -137,42 +137,42 @@ namespace od
         return detections;
       }
 
-      void ODCascadeDetector::setScale(const float scale)
+      void ODCascadeDetectorImpl::setScale(const float scale)
       {
         scale_factor_ = scale;
       }
 
-      float ODCascadeDetector::getScale() const
+      float ODCascadeDetectorImpl::getScale() const
       {
         return scale_factor_;
       }
 
-      void ODCascadeDetector::setMinNeighbors(const unsigned int min_neighbors)
+      void ODCascadeDetectorImpl::setMinNeighbors(const unsigned int min_neighbors)
       {
         min_neighbors_ = min_neighbors;
       }
 
-      unsigned int ODCascadeDetector::getMinNeighbors() const
+      unsigned int ODCascadeDetectorImpl::getMinNeighbors() const
       {
         return min_neighbors_;
       }
 
-      void ODCascadeDetector::setMinSize(const cv::Size & size)
+      void ODCascadeDetectorImpl::setMinSize(const cv::Size & size)
       {
         min_size_ = size;
       }
 
-      cv::Size ODCascadeDetector::getMinSize() const
+      cv::Size ODCascadeDetectorImpl::getMinSize() const
       {
         return min_size_;
       }
 
-      void ODCascadeDetector::setMaxSize(const cv::Size & size)
+      void ODCascadeDetectorImpl::setMaxSize(const cv::Size & size)
       {
         max_size_ = size;
       }
 
-      cv::Size ODCascadeDetector::getMaxSize() const
+      cv::Size ODCascadeDetectorImpl::getMaxSize() const
       {
         return max_size_;
       }

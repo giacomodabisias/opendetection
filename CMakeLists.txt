@@ -51,7 +51,9 @@ endif()
 
 if(WITH_GPU)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_GPU")
+  # Needed by od_common. There is a circular dependency between od_common and od_gpu_common include dirs.
   include_directories(GPU_COMMON_INCLUDE_DIRS ${OD_SOURCE_DIR}/gpu/common/include)
+  include_directories(GPU_DETECTORS_INCLUDE_DIRS ${OD_SOURCE_DIR}/gpu/detectors/include)
 endif()
 
 # Set modules

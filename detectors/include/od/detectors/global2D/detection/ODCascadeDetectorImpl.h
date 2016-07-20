@@ -32,9 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/utils/ODUtils.h"
 #include "od/common/utils/ODFeatureDetector2D.h"
 #include "od/detectors/global2D/detection/ODCascadeDetectorInterface.h"
-#include "od/gpu/detectors/global2D/detection/ODCascadeDetectorImpl.h"
-#include "od/detectors/global2D/detection/ODCascadeDetectorImpl.h"
-
 #include <opencv2/opencv.hpp>
 
 namespace od
@@ -49,13 +46,11 @@ namespace od
      * \author Kripasindhu Sarkar
      *
      */
-
-    class ODCascadeDetector : public ODDetector2D
+    class ODCascadeDetectorImpl : public ODCascadeDetectorInterface
     {
-
     public:
 
-      ODCascadeDetector(bool gpu = false, const std::string & trainer = std::string("cascade.xml"), const std::string & trained_data_location = std::string(""), double scale_factor = 1.1, int min_neighbors = 3, 
+      ODCascadeDetectorImpl(const std::string & trainer = std::string("cascade.xml"), const std::string & trained_data_location = std::string(""), double scale_factor = 1.1, int min_neighbors = 3, 
                         int flags = 0, const cv::Size & min_size = cv::Size(), const cv::Size & max_size = cv::Size());
 
       void init();
@@ -79,13 +74,25 @@ namespace od
 
     private:
 
-      shared_ptr<ODCascadeDetectorInterface> cascade_detector_;
+      shared_ptr<cv::CascadeClassifier> haar_cascade_;
+
+      bool meta_info_;
+
+      std::string trained_data_location_, trained_data_id_, trained_location_identifier_;
+      double scale_factor_;
+      int min_neighbors_;
+      cv::Size min_size_;
+      cv::Size max_size_;
+
 
     };
-
     /** \examples objectdetector/od_image_cascade.cpp
      *  \examples objectdetector/od_image_cascade_files.cpp
      */
   }
 
 }
+
+
+
+

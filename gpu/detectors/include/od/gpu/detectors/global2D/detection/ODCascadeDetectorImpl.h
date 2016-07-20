@@ -31,6 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/utils/ODUtils.h"
 #include "od/common/utils/ODFeatureDetector2D.h"
+#include "od/detectors/global2D/detection/ODCascadeDetectorInterface.h"
 
 #include <opencv2/cudaobjdetect.hpp>
 #include <opencv2/cudaimgproc.hpp>
@@ -54,11 +55,11 @@ namespace od
        *
        */
 
-      class ODCascadeDetector : public ODDetector2D
+      class ODCascadeDetectorImpl : public ODCascadeDetectorInterface
       {
       public:
 
-        ODCascadeDetector(const std::string & trainer = std::string("cascade.xml"), const std::string & trained_data_location = std::string(""), double scale_factor = 1.1, int min_neighbors = 3, 
+        ODCascadeDetectorImpl(const std::string & trainer = std::string("cascade.xml"), const std::string & trained_data_location = std::string(""), double scale_factor = 1.1, int min_neighbors = 3, 
                           int flags = 0, const cv::Size & min_size = cv::Size(), const cv::Size & max_size = cv::Size());
 
         void init();
@@ -85,16 +86,20 @@ namespace od
 
       private:
 
+        double scale_factor_;
+        int min_neighbors_;
+        cv::Size min_size_;
+        cv::Size max_size_;
+
         cv::Ptr<cv::cuda::CascadeClassifier> haar_cascade_;
         cv::cuda::GpuMat gray_, buf_, color_;
 
         std::vector<cv::Rect_<int> > objects_;
 
-        double scale_factor_;
-        int min_neighbors_;
-        cv::Size min_size_, max_size_;
         std::string trained_data_id_;
         bool meta_info_, largest_;
+
+        std::string trained_data_location_;
 
       };
       /** \examples objectdetector/od_image_cascade.cpp

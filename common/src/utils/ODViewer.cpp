@@ -29,7 +29,7 @@ namespace od {
 		status_ = CVMAT;
 		mat_window_name_ = window_name;
 		mat_ = make_shared<cv::Mat>(to_display);
-		cvStartWindowThread();
+		//cvStartWindowThread();
 		cvNamedWindow(mat_window_name_.c_str(), CV_WINDOW_AUTOSIZE);
 	}
 
@@ -65,7 +65,7 @@ namespace od {
 		status_ = CVMAT;
 		mat_window_name_ = window_name;
 		mat_ = make_shared<cv::Mat>();
-		cvStartWindowThread();
+		//cvStartWindowThread();
 		cvNamedWindow(mat_window_name_.c_str(), CV_WINDOW_AUTOSIZE);
 	}
 

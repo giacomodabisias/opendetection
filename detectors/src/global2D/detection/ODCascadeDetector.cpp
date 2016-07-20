@@ -39,11 +39,12 @@ namespace od
                                          const cv::Size & min_size, const cv::Size & max_size)
     {
       if(gpu){
+        std::cout << "creating gpu cascade detector" << std::endl;
 #if WITH_GPU
   #ifdef WITH_BOOST_SHARED_PTR
-      cascade_detector_ = shared_ptr<ODCascadeDetectorImpl>(new ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
+      cascade_detector_ = shared_ptr<od::gpu::g2d::ODCascadeDetectorImpl>(new od::gpu::g2d::ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
   #else
-      cascade_detector_ = make_shared<ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
+      cascade_detector_ = make_shared<od::gpu::g2d::ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
   #endif
 #else
         std::cout << "Error !! GPU CascadeDetector has not been compiled. Recompile with WITH_GPU." << std::endl;
@@ -51,10 +52,11 @@ namespace od
 #endif
       }
       else {
+        std::cout << "creating cpu cascade detector" << std::endl;
 #ifdef WITH_BOOST_SHARED_PTR
-       cascade_detector_ = shared_ptr<od::gpu::g2d::ODCascadeDetectorImpl>(new od::gpu::g2d::ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
+       cascade_detector_ = shared_ptr<ODCascadeDetectorImpl>(new ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
 #else
-       cascade_detector_ = make_shared<od::gpu::g2d::ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
+       cascade_detector_ = make_shared<ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
 #endif    
       }
     }

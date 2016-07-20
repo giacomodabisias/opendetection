@@ -60,12 +60,12 @@ namespace od
       min_inliers_ = 30;    // Kalman threshold updating
 
       pnp_method_ = cv::SOLVEPNP_EPNP;
-      f_type_default_ = std::string("SIFT");
+      f_type_default_ = SIFT;
       
 #ifdef WITH_BOOST_SHARED_PTR
-      feature_detector_ = shared_ptr<ODFeatureDetector2D>(new ODFeatureDetector2D(f_type_default_, use_gpu_));
+      feature_detector_ = shared_ptr<ODFeatureDetector>(new ODFeatureDetector(f_type_default_));
 #else
-      feature_detector_ = make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
+      feature_detector_ = make_shared<ODFeatureDetector>(f_type_default_);
 #endif
 
     }
@@ -256,12 +256,12 @@ namespace od
         models_.push_back(model);
       }
       if(models_.size() > 0)
-        f_type_default_ = models_[0].f_type_;
+        f_type_default_ = string2FeatureType(models_[0].f_type_);
 
 #ifdef WITH_BOOST_SHARED_PTR
-      feature_detector_ = shared_ptr<ODFeatureDetector2D>(new ODFeatureDetector2D(f_type_default_, use_gpu_));
+      feature_detector_ = shared_ptr<ODFeatureDetector>(new ODFeatureDetector(f_type_default_));
 #else
-      feature_detector_ = make_shared<ODFeatureDetector2D>(f_type_default_, use_gpu_);
+      feature_detector_ = make_shared<ODFeatureDetector>(f_type_default_);
 #endif
 
     }

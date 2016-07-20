@@ -114,7 +114,6 @@ namespace od {
 	{
 		update(to_display.getCVImage(), window_name);
 	}
-
 	void ODViewer::update(shared_ptr<ODSceneImage> to_display, const std::string & window_name)
 	{
 		update(to_display->getCVImage(), window_name);
@@ -281,6 +280,13 @@ namespace od {
 		}
 
 	}
+
+	shared_ptr<pcl::visualization::PCLVisualizer> ODViewer::getViewer()
+	{
+		return viewer_;
+	}
+
+
 
 	// Explicit template function instantiation 
 	template void ODViewer::render<pcl::PointXYZ>(shared_ptr<pcl::PointCloud<pcl::PointXYZ> >, const std::string &, bool);

@@ -51,10 +51,11 @@ endif()
 
 if(WITH_GPU)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_GPU")
+  include_directories(GPU_COMMON_INCLUDE_DIRS ${OD_SOURCE_DIR}/gpu/common/include)
 endif()
 
 # Set modules
-set(OD_MODULES_NAMES 3rdparty common detectors "gpu/detectors" doc examples )
+set(OD_MODULES_NAMES 3rdparty common "gpu/common" detectors "gpu/detectors" doc examples)
 set(OD_MODULES_DIRS ${OD_MODULES_NAMES})
 
 # Add modules

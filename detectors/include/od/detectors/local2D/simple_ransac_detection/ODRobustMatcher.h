@@ -10,6 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/features2d.hpp>
+#include <opencv2/cudafeatures2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/ml.hpp>
 #include "od/common/utils/ODFeatureDetector2D.h"

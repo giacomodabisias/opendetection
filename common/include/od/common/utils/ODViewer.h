@@ -92,6 +92,8 @@ namespace od {
 
 		unsigned int wait(unsigned int time) const;
 
+		shared_ptr<pcl::visualization::PCLVisualizer> getViewer();
+
 	private:
 
 		odViewType status_;

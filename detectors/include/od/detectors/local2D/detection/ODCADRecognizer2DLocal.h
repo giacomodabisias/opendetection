@@ -30,6 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "od/detectors/local2D/ODImageLocalMatching.h"
 #include "od/common/pipeline/ODScene.h"
+#include "od/common/utils/ODFeatureDetector.h"
 #include "od/detectors/local2D/simple_ransac_detection/ODMesh.h"
 #include "od/detectors/local2D/simple_ransac_detection/ODRobustMatcher.h"
 
@@ -137,8 +138,8 @@ namespace od
       std::vector<std::string> model_names_;
       std::vector<Model> models_;
       PnPProblem pnp_detection_;
-      std::string f_type_default_;
-      shared_ptr<ODFeatureDetector2D> feature_detector_;
+      FeatureType f_type_default_;
+      shared_ptr<ODFeatureDetector> feature_detector_;
 
     };
 

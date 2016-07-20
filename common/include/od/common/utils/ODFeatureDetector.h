@@ -14,6 +14,7 @@ namespace od
 	public:
 
 	  ODFeatureDetector(FeatureType type);
+	  ODFeatureDetector(const std::string & type);
 
 	  void computeKeypointsAndDescriptors(const cv::Mat & image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints);
 

@@ -33,6 +33,11 @@ namespace od
     }
   }
 
+    ODFeatureDetector::ODFeatureDetector(const std::string & type)
+    {
+    	ODFeatureDetector(string2FeatureType(type));
+    }
+
   void ODFeatureDetector::computeKeypointsAndDescriptors(const cv::Mat & image, cv::Mat & descriptors, std::vector<cv::KeyPoint> & keypoints)
   {
       feature_detector_->computeKeypointsAndDescriptors(image, descriptors,keypoints);

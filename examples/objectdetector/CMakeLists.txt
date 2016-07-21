@@ -39,14 +39,18 @@ endif(image_recognition_example)
 option(hog_train_example "Build the hog train example" ON)
 if(hog_train_example)
   if(TARGET od_global_image_detector)
+    if(WITH_SVMLIGHT)
 
-    include_directories(${DETECTORS_INCLUDE_DIR})
-    include_directories(${COMMON_INCLUDE_DIR})
-    include_directories(${COMMON_IMPL_DIR})
+      include_directories(${DETECTORS_INCLUDE_DIR})
+      include_directories(${COMMON_INCLUDE_DIR})
+      include_directories(${COMMON_IMPL_DIR})
 
-    OD_ADD_EXAMPLE(od_hog_train 
-                   FILES od_hog_train.cpp
-                   LINK_WITH od_global_image_detector)
+      OD_ADD_EXAMPLE(od_hog_train 
+                     FILES od_hog_train.cpp
+                     LINK_WITH od_global_image_detector)
+    else()
+      message("!!! built WITH_SVMLIGHT to enable hog_train_example")
+    endif()
   else()
     message("!!! hog_train_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build hog_train_example")
   endif(TARGET od_global_image_detector)
@@ -56,15 +60,19 @@ endif(hog_train_example)
 option(image_hog_files_example "Build the hog image example" ON)
 if(image_hog_files_example)
   if(TARGET od_global_image_detector)
+    if(WITH_SVMLIGHT)
 
-    include_directories(${DETECTORS_INCLUDE_DIR})
-    include_directories(${COMMON_INCLUDE_DIR})
-    include_directories(${COMMON_IMPL_DIR})
-    include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+      include_directories(${DETECTORS_INCLUDE_DIR})
+      include_directories(${COMMON_INCLUDE_DIR})
+      include_directories(${COMMON_IMPL_DIR})
+      include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
 
-    OD_ADD_EXAMPLE(od_image_hog_files 
-                   FILES od_image_hog_files.cpp
-                   LINK_WITH od_global_image_detector od_gpu_global_image_detector)
+      OD_ADD_EXAMPLE(od_image_hog_files 
+                     FILES od_image_hog_files.cpp
+                     LINK_WITH od_global_image_detector od_gpu_global_image_detector)
+    else()
+      message("!!! built WITH_SVMLIGHT to enable image_hog_files_example")
+    endif()
   else()
     message("!!! image_hog_files_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build image_hog_files_example")
   endif(TARGET od_global_image_detector)
@@ -122,33 +130,41 @@ endif(face_detection_cam_example)
 option(image_customhog_example "Build the custom hog example" ON)
 if(image_customhog_example)
   if(TARGET od_global_image_detector)
+    if(WITH_SVMLIGHT)
 
-    include_directories(${DETECTORS_INCLUDE_DIR})
-    include_directories(${COMMON_INCLUDE_DIR})
-    include_directories(${COMMON_IMPL_DIR})
+      include_directories(${DETECTORS_INCLUDE_DIR})
+      include_directories(${COMMON_INCLUDE_DIR})
+      include_directories(${COMMON_IMPL_DIR})
 
-    OD_ADD_EXAMPLE(od_image_customhog 
-                   FILES od_image_customhog.cpp
-                   LINK_WITH od_global_image_detector)
+      OD_ADD_EXAMPLE(od_image_customhog 
+                     FILES od_image_customhog.cpp
+                     LINK_WITH od_global_image_detector)
     else()
-      message("!!! image_customhog_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build image_customhog_example")
-    endif(TARGET od_global_image_detector)
+      message("!!! built WITH_SVMLIGHT to enable image_customhog_example")
+    endif()
+  else()
+    message("!!! image_customhog_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build image_customhog_example")
+  endif(TARGET od_global_image_detector)
 endif(image_customhog_example)
 
 ##################################################################################
 option(multialgo_files_example "Build the multialgo_files example" ON)
 if(multialgo_files_example)
   if(TARGET od_misc_detector)
+    if(WITH_SVMLIGHT)
 
-    include_directories(${DETECTORS_INCLUDE_DIR})
-    include_directories(${DETECTORS_IMPL_DIR})
-    include_directories(${COMMON_INCLUDE_DIR})
-    include_directories(${COMMON_IMPL_DIR})
-    include_directories(${OpenCV_INCLUDE_DIRS})
+      include_directories(${DETECTORS_INCLUDE_DIR})
+      include_directories(${DETECTORS_IMPL_DIR})
+      include_directories(${COMMON_INCLUDE_DIR})
+      include_directories(${COMMON_IMPL_DIR})
+      include_directories(${OpenCV_INCLUDE_DIRS})
 
-    OD_ADD_EXAMPLE(od_multialgo_files 
-                   FILES od_multialgo_files.cpp
-                   LINK_WITH od_misc_detector)
+      OD_ADD_EXAMPLE(od_multialgo_files 
+                     FILES od_multialgo_files.cpp
+                     LINK_WITH od_misc_detector)
+    else()
+      message("!!! built WITH_SVMLIGHT to enable multialgo_files_example")
+    endif()
   else()
     message("!!! multialgo_files_example is set to on but BUILD_MISC_DETECTION is necessary to build multialgo_files_example")
   endif(TARGET od_misc_detector)
@@ -158,14 +174,18 @@ endif(multialgo_files_example)
 option(multialgo_pc_example "Build the multialgo_pc example" ON)
 if(multialgo_pc_example)
   if(TARGET od_misc_detector)
+    if(WITH_SVMLIGHT)
 
-    include_directories(${DETECTORS_INCLUDE_DIR})
-    include_directories(${COMMON_INCLUDE_DIR})
-    include_directories(${COMMON_IMPL_DIR})
+      include_directories(${DETECTORS_INCLUDE_DIR})
+      include_directories(${COMMON_INCLUDE_DIR})
+      include_directories(${COMMON_IMPL_DIR})
 
-    OD_ADD_EXAMPLE(od_multialgo_pc 
-                   FILES od_multialgo_pc.cpp
-                   LINK_WITH od_misc_detector)
+      OD_ADD_EXAMPLE(od_multialgo_pc 
+                     FILES od_multialgo_pc.cpp
+                     LINK_WITH od_misc_detector)
+    else()
+      message("!!! built WITH_SVMLIGHT to enable multialgo_pc_example")
+    endif()
   else()
     message("!!! multialgo_pc_example is set to on but BUILD_MISC_DETECTION is necessary to build multialgo_pc_example")
   endif(TARGET od_misc_detector)

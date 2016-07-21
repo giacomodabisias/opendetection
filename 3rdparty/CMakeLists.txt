@@ -1,7 +1,9 @@
 #add mandatory 3rdparty libraries
 add_subdirectory(pugixml_build)
 
-add_subdirectory(svmlightlib)
+if(WITH_SVMLIGHT)
+	add_subdirectory(svmlightlib)
+endif()
 
 if(WITH_GPU)
   add_subdirectory(SiftGPU)

@@ -1,9 +1,13 @@
 set(SUBSYS_NAME pointcloud_global_detector)
 set(LIB_NAME od_${SUBSYS_NAME})
 set(SUBSYS_DESC "The global detector for point clouds")
-set(SUBSYS_DEPS od_common siftgpu)
+set(SUBSYS_DEPS od_common)
 
 if(BUILD_GLOBAL_3D_DETECTION)
+
+    if(WITH_GPU)
+        set(SUBSYS_DEPS ${SUBSYS_DEPS} siftgpu)
+    endif()
 
     set(SOURCES
         "ODPointCloudGlobalMatching.cpp"

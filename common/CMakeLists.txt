@@ -14,23 +14,26 @@ if(WITH_GPU)
   include_directories(${GPU_COMMON_INCLUDE_DIR})
 endif()
 
-set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
-
 set(SOURCES
         "src/pipeline/ODObjectDetector.cpp"
         "src/pipeline/ODScene.cpp"
         "src/pipeline/ODDetection.cpp"
         "src/utils/ODUtils.cpp"
         "src/utils/ODFeatureDetector2D.cpp"
-        "src/bindings/ODSvmlight.cpp"
         "src/utils/ODViewer.cpp"
         "src/utils/ODFeatureDetector.cpp"
         "src/utils/ODFeatureDetectorInterface.cpp"
     )
 
+if(WITH_SVMLIGHT)
+    set(SOURCES ${SOURCES} "src/bindings/ODSvmlight.cpp")
+    include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+    set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
+endif()
+
+
 include_directories(${COMMON_INCLUDE_DIR})
 include_directories(${COMMON_IMPL_DIR})
-include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
 include_directories(${PCL_INCLUDE_DIRS})
 
 OD_ADD_LIBRARY(${SUBSYS_NAME} SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})

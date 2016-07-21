@@ -30,7 +30,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/pipeline/ODDetector.h"
 #include "od/common/pipeline/ODScene.h"
 #include "od/common/utils/ODUtils.h"
-#include "od/common/utils/ODFeatureDetector2D.h"
 #include "od/detectors/global2D/detection/ODCascadeDetectorInterface.h"
 #include <opencv2/opencv.hpp>
 

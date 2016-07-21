@@ -2,7 +2,7 @@ OpenDetection
 =============
 
 OpenDetection is a standalone open source project for object detection and recognition in images and 3D point clouds.
-To clone the dependencies (SiftGPU and pugixml) clone with --recursive flag or pull submodules with ``git submodule init && git submodule update`` .
+To clone the dependencies (SiftGPU and pugixml) clone with --recursive flag or pull submodules with ``git submodule init && git submodule update && git submodule foreach git pull origin master`` .
 
 Website - http://opendetection.com or http://krips89.github.io/opendetection_docs
 

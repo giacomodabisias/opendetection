@@ -40,3 +40,4 @@ endif()
 if(WITH_GPU)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_GPU")
 endif()
+

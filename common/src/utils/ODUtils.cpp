@@ -9,7 +9,7 @@ namespace od
 
 #ifdef WIN32
 
-std::vector<std::string> myglob(const std::string & pat)
+std::vector<std::string> od_glob(const std::string & pat)
   {
     HANDLE hFind;
     WIN32_FIND_DATA data;
@@ -26,7 +26,7 @@ std::vector<std::string> myglob(const std::string & pat)
     return ret;
   }
 #else
-  std::vector<std::string> myglob(const std::string & pat)
+  std::vector<std::string> od_glob(const std::string & pat)
   {
     glob_t glob_result;
     glob(pat.c_str(), GLOB_TILDE, nullptr, &glob_result);

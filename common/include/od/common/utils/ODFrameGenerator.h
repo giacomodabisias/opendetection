@@ -53,7 +53,7 @@ namespace od
   public:
     ODFrameGenerator(const std::string & input = std::string(""))
     {
-      file_list_ = myglob(input);
+      file_list_ = od_glob(input);
       curr_image_ = -1;
       exhausted_ = false;
     }

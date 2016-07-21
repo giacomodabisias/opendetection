@@ -40,7 +40,7 @@ namespace od
 {
 
   //TODO REMOVE AND SUBSTITUTE USING BOOST FILESYSTEM
-  std::vector<std::string> myglob(const std::string & pat);
+  std::vector<std::string> od_glob(const std::string & pat);
 
   void normL2(cv::Mat &descriptors);
 

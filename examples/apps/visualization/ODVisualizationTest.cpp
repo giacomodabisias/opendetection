@@ -37,7 +37,6 @@ int main(int argc, char * argv[]){
     	viewer.spin();
     }
 
-    //This will fail since test_cloud has been overwritten by test_cloud2
     viewer.update(cloud, std::string("test_cloud"));
 
     while(!viewer.toStop()){

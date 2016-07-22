@@ -23,7 +23,6 @@ include(${OD_CMAKE_DIR}/ODDeb.cmake)
 # Prepare configuration files
 configure_file(${OD_CMAKE_DIR}/ODVersion.h.in ${OD_BINARY_DIR}/generated/od_version.h)
 install(FILES ${OD_BINARY_DIR}/generated/od_version.h DESTINATION ${OD_INSTALL_INCLUDE_DIR})
-configure_file(${OD_CMAKE_DIR}/ODConfig.cmake.in ${OD_BINARY_DIR}/FindOD.cmake)
 
 # Set modules
 set(OD_MODULES_NAMES 3rdparty common "gpu/common" detectors "gpu/detectors" doc examples)
@@ -36,6 +35,7 @@ endforeach(subdir)
 
 # Install the FindPackage configuration file
 get_property(OD_INSTALLED_LIBRARIES GLOBAL PROPERTY OD_INSTALLED_LIBRARIES)
+configure_file(${OD_CMAKE_DIR}/ODConfig.cmake.in ${OD_BINARY_DIR}/FindOD.cmake)
 install(FILES ${OD_BINARY_DIR}/FindOD.cmake DESTINATION ${OD_CMAKE_INSTALL_DIR})
 
 # uninstall target

@@ -9,6 +9,8 @@ elseif(UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+set(CMAKE_BUILD_TYPE Release)
+
 # Optional parameters
 option(WITH_WARNINGS "Add build warnings" OFF)
 option(WITH_DOCUMENTATION "Build the OD documentation" ON)

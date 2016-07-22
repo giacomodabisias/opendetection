@@ -324,5 +324,47 @@ The same structure has been adde to all examples so that the correct examples ar
 I also built the system on lniux 16.04 with gcc 5.3; I had some initial issues but also those were fixed. I will make a blogpost about them next week since some errors where quite interesting.
 
 
+##Modular build 2 and new interface for GPU 22/07/15## 
 
+After discussing with my mentor, I did some changes to the code. 
 
+The first new feature is that svmlight is optional, even if it comes as subdependency with the library for free. I added an **WITH_SVMLIGHT** option in the CMake to make it optional. Automatically all the dependand source files will be excluded (they should be the one using hog, the miscdetector and the depending examples).
+
+The second change is that I created a separate option Cmake file to set and create all options and I added a new option to show or remove compilation warnings.
+
+The third change is a major change composed by two parts. The first one involves changing the interface of the **ODCascadeDetector** to have a simple interface for the users. I changed it by creating an interface called **ODCascadeDetector** which derives from **ODDetector2D** so that we can use it in all the containers. This class contains a shared pointer of a common interface, called **ODCascadeDetectorInterface**. Both the GPU and the CPU version of the **ODCascadeDetector** are called the same, **ODCascadeDetectorImpl**, but are in different namespaces and modules. This way I maintained the code separated and easy to maintain. In the **ODCascadeDetector** class, the constructor checks the first parameter and builds accordingly the correct object. Also there is a **Pragma** to check that the lirbary was compiled with GPU support.
+
+@code
+
+    ODCascadeDetector::ODCascadeDetector(bool gpu, const std::string & trainer, const std::string & trained_data_location, double scale_factor, int min_neighbors, int flags, 
+                                         const cv::Size & min_size, const cv::Size & max_size)
+    {
+      if(gpu){
+        std::cout << "creating gpu cascade detector" << std::endl;
+#if WITH_GPU
+  #ifdef WITH_BOOST_SHARED_PTR
+      cascade_detector_ = shared_ptr<od::gpu::g2d::ODCascadeDetectorImpl>(new od::gpu::g2d::ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
+  #else
+      cascade_detector_ = make_shared<od::gpu::g2d::ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
+  #endif
+#else
+        std::cout << "Error !! GPU CascadeDetector has not been compiled. Recompile with WITH_GPU." << std::endl;
+        exit(-1);
+#endif
+      }
+      else {
+        std::cout << "creating cpu cascade detector" << std::endl;
+#ifdef WITH_BOOST_SHARED_PTR
+       cascade_detector_ = shared_ptr<ODCascadeDetectorImpl>(new ODCascadeDetectorImpl(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size));
+#else
+       cascade_detector_ = make_shared<ODCascadeDetectorImpl>(trainer, trained_data_location, scale_factor, min_neighbors, flags, min_size, max_size);
+#endif    
+      }
+    }
+
+@endcode
+
+The second main change was to create the same interface for the **ODFeatureDetector2D** which could create gpu detectors or cpu ones. I did the same interface as before creating **ODFeatureDetector**, **ODFeatureDetector2D**, **ODFeatureDetectorInterface**. The constructor switches the passed parameter and based on the type allocates the correct feature detector, cpu or gpu. Also the gpu part is in the gpu module to maintain the advantages described before. 
+The only small drawback of this structure is that the common module and the gpu_common module have a circular dependency on the include files, so we have to set the **include_directories** statment outside of the two modules. I do this in the **ODDependency.cmake** file.
+
+Obviously I had to change all the examples to adapt to this new structure, but that was not so hard, while the new interface was quite tricky to be created in a clean way.

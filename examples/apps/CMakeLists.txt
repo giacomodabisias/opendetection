@@ -1,4 +1,3 @@
-
 option(cad_recog_test_single_model "Build the cad recognition test" ON)
 if(cad_recog_test_single_model)
 	if(TARGET od_local_image_detector)
@@ -36,20 +35,6 @@ if(od_multihog_app)
 	  message("!!! od_multihog_app is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build od_multihog_app")
 	endif(TARGET od_global_image_detector)
 endif(od_multihog_app)
-
-##################################################################################
-option(viewer_test "Build the viewer test" ON)
-if(viewer_test)
-	
-	include_directories(${COMMON_IMPL_DIR})
-	include_directories(${COMMON_INCLUDE_DIR})
-	include_directories(${PCL_INCLUDE_DIRS})
-
-	OD_ADD_EXAMPLE(viewer_test 
-	               FILES visualization/ODVisualizationTest.cpp
-	               LINK_WITH od_common
-	)
-endif(viewer_test)
 
 ##################################################################################
 set(SOURCE_FILES version/opendetection.cpp)

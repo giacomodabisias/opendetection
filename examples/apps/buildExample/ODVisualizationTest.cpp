@@ -1,7 +1,6 @@
 #include "od/common/utils/ODViewer.h"
 #include <iostream>
 #include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 
 int main(int argc, char * argv[]){
 	
@@ -24,7 +23,7 @@ int main(int argc, char * argv[]){
     	viewer.spin();
     }
 
-    cv::Mat image = cv::imread(argv[2], CV_LOAD_IMAGE_COLOR);   
+    cv::Mat image = cv::imread(argv[2], cv::IMREAD_COLOR);   
 	viewer.render(image, std::string("test_image"));
 
     while(!viewer.toStop()){

@@ -35,8 +35,8 @@ endforeach(subdir)
 
 # Install the FindPackage configuration file
 get_property(OD_INSTALLED_LIBRARIES GLOBAL PROPERTY OD_INSTALLED_LIBRARIES)
-configure_file(${OD_CMAKE_DIR}/ODConfig.cmake.in ${OD_BINARY_DIR}/FindOD.cmake)
-install(FILES ${OD_BINARY_DIR}/FindOD.cmake DESTINATION ${OD_CMAKE_INSTALL_DIR})
+configure_file(${OD_CMAKE_DIR}/ODConfig.cmake.in ${OD_BINARY_DIR}/ODConfig.cmake)
+install(FILES ${OD_BINARY_DIR}/ODConfig.cmake DESTINATION ${OD_CMAKE_INSTALL_DIR})
 
 # uninstall target
 configure_file(

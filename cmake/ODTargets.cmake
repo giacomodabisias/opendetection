@@ -24,7 +24,7 @@ if(NOT OD_INSTALL_DOC_DIR)
 endif()
 
 if(NOT OD_CMAKE_INSTALL_DIR)
-  set(OD_CMAKE_INSTALL_DIR lib/cmake)
+  set(OD_CMAKE_INSTALL_DIR lib/cmake/OD)
 endif()
 
 if(NOT OD_INSTALL_PACKAGE_DIR)

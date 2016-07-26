@@ -15,6 +15,7 @@ if(BUILD_GLOBAL_3D_DETECTION)
         "detection/ODCADDetector3DGlobal.cpp"
     )
 
+    include_directories(${OpenCV_INCLUDE_DIRS})
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${COMMON_INCLUDE_DIR})

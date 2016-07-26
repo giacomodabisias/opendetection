@@ -14,6 +14,7 @@ if(WITH_GPU)
 
 	include_directories(${GPU_COMMON_INCLUDE_DIR})
 	include_directories(${COMMON_INCLUDE_DIR})
+	include_directories(${OpenCV_INCLUDE_DIRS})
 	include_directories(${CMAKE_3RDPARTY_DIR}/SiftGPU/src/SiftGPU/)
 
 	OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})

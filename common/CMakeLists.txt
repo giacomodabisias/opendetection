@@ -31,10 +31,10 @@ if(WITH_SVMLIGHT)
     set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
 endif()
 
-
+include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${COMMON_INCLUDE_DIR})
 include_directories(${COMMON_IMPL_DIR})
-include_directories(${PCL_INCLUDE_DIRS})
+include_directories(${PCL_INCLUDE_DIRS}s)
 
 OD_ADD_LIBRARY(${SUBSYS_NAME} SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})
 install(DIRECTORY ${COMMON_INCLUDE_DIR}/od DESTINATION ${OD_INSTALL_INCLUDE_DIR} COMPONENT ${LIB_NAME})

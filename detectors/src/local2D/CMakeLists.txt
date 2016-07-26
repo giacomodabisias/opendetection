@@ -21,6 +21,7 @@ if(BUILD_LOCAL_2D_DETECTION)
 
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${CMAKE_3RDPARTY_DIR}/pugixml/src/)
+    include_directories(${OpenCV_INCLUDE_DIRS})
     include_directories(${COMMON_INCLUDE_DIR})
     include_directories(${PCL_INCLUDE_DIRS})
 

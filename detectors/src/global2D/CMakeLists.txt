@@ -23,6 +23,7 @@ if(BUILD_GLOBAL_2D_DETECTION)
         set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
     endif()
     
+    include_directories(${OpenCV_INCLUDE_DIRS})
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
     include_directories(${PCL_INCLUDE_DIRS})

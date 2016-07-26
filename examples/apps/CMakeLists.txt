@@ -3,6 +3,7 @@ option(cad_recog_test_single_model "Build the cad recognition test" ON)
 if(cad_recog_test_single_model)
 	if(TARGET od_local_image_detector)
 
+		include_directories(${OpenCV_INCLUDE_DIRS})
 		include_directories(${DETECTORS_INCLUDE_DIR})
 		include_directories(${COMMON_INCLUDE_DIR})
 		include_directories(${CMAKE_3RDPARTY_DIR}/pugixml/src/)
@@ -23,6 +24,7 @@ option(multihog_app "Build the multihog app" ON)
 if(od_multihog_app)
 	if(TARGET od_global_image_detector)	
 
+		include_directories(${OpenCV_INCLUDE_DIRS})
 		include_directories(${DETECTORS_INCLUDE_DIR})
 		include_directories(${COMMON_INCLUDE_DIR})
 
@@ -38,7 +40,7 @@ endif(od_multihog_app)
 ##################################################################################
 option(viewer_test "Build the viewer test" ON)
 if(viewer_test)
-
+	
 	include_directories(${COMMON_IMPL_DIR})
 	include_directories(${COMMON_INCLUDE_DIR})
 	include_directories(${PCL_INCLUDE_DIRS})

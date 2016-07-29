@@ -2,7 +2,7 @@
 #include "od/common/utils/ODViewer.h"
 
 namespace od {
-
+	
 	template<typename PointT>
 	void ODViewer::render(shared_ptr<pcl::PointCloud<PointT> > to_display, const std::string & cloud_name, bool colored)
 	{

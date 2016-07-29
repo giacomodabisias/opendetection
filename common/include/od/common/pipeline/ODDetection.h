@@ -47,30 +47,52 @@ namespace od
    * \author Kripasindhu Sarkar
    *
    */
-  class ODDetection
+  class Detection
   {
   public:
 
-
     OD_DEFINE_ENUM_WITH_STRING_CONVERSIONS(DetectionType, (OD_RECOGNITION)(OD_CLASSIFICATION)(OD_DETECTION)(OD_DETECTION_NULL))
 
-    virtual ~ODDetection() {}
+    virtual ~Detection(){}
 
-    ODDetection(const DetectionType & type = OD_DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
+    /** \brief Constructor of the Detection class.
+        \param type The detection type.
+        \param id The detection identifier.
+        \param confidence The detection confidence.
+      */
+    Detection(const DetectionType & type = DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
+    /** \brief Prints type and id of the detection. 
+      */
     void printSelf();
 
+    /** \brief Get the type of the detection. This can be OD_RECOGNITION, OD_CLASSIFICATION, OD_DETECTION, OD_DETECTION_NULL.
+        \return The type of the detection.
+      */
     const DetectionType & getType() const;
+
+    /** \brief Set the type of the detection. This can be OD_RECOGNITION, OD_CLASSIFICATION, OD_DETECTION, OD_DETECTION_NULL.
+        \param id The type of the detection.
+      */
     void setType(const DetectionType & type);
 
+    /** \brief Get the id of the detection.
+        \return The id of the detection.
+      */
     const std::string & getId() const;
+
+    /** \brief Set the id of the detection.
+        \param id The id of the detection.
+      */
     void setId(const std::string & id);
 
-    /** \brief Get/Set the confidence of the detection. ODDetector can use this to provide confidence amnong several detections.
+    /** \brief Get the confidence of the detection. ODDetector can use this to provide confidence amnong several detections.
+        \return The confidence level of the detection.
       */
     double getConfidence() const;
 
-    /** \brief Get/Set the confidence of the detection. ODDetector can use this to provide confidence amnong several detections.
+    /** \brief Set the confidence of the detection. ODDetector can use this to provide confidence amnong several detections.
+        \param confidence The confidence level of the detection.
       */
     void setConfidence(double confidence);
 
@@ -93,16 +115,41 @@ namespace od
 
     virtual ~ODDetection2D(){}
 
+    /** \brief Constructor of the ODDetection2D class.
+        \param type The detection type.
+        \param id The detection identifier.
+        \param confidence The detection confidence.
+      */
     ODDetection2D(const DetectionType & type = OD_DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
+    /** \brief Get the 2D location of the detection.
+        \return The 2D vector of the detection position.
+      */
     const Eigen::Vector3d & getLocation() const;
 
+    /** \brief Set the 2D location of the detection.
+        \param location The 2D location of the detection.
+      */
     void setLocation(const Eigen::Vector3d & location);
 
+    /** \brief Get the bounding box of the detection.
+        \return The bounding box if the detection in the frame.
+      */
     const cv::Rect & getBoundingBox() const;
+
+    /** \brief Set the bounding box of the detection.
+        \param bounding_box The bounding box of the detection.
+      */
     void setBoundingBox(const cv::Rect & bounding_box);
 
+    /** \brief Get the image template concerning the detection.
+        \return Image template concerning the detection.
+      */
     const cv::Mat & getMetainfoImage() const;
+
+    /** \brief Set the image template concerning the detection.
+        \param metainfo_image The image template concerning the detection.
+      */
     void setMetainfoImage(const cv::Mat & metainfo_image);
 
     Eigen::Vector3d location_2d_;
@@ -122,19 +169,52 @@ namespace od
 
     virtual ~ODDetection3D(){}
 
+    /** \brief Constructor of the ODDetection3D class.
+        \param type The detection type.
+        \param id The detection identifier.
+        \param confidence The detection confidence.
+      */
     ODDetection3D(const DetectionType & type = OD_DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
+
+    /** \brief Get the 3D location of the detection.
+        \return The 3D vector of the detection position.
+      */
     const Eigen::Vector4d & getLocation() const;
 
+    /** \brief Set the 3D location of the detection.
+        \param locationThe 3D location of the detection.
+      */
     void setLocation(const Eigen::Vector4d & location);
+
+    /** \brief Set the 3D location of the detection.
+        \param location The 3D location of the detection.
+      */
     void setLocation(const cv::Mat & location);
 
+    /** \brief Returns the pose of the detection.
+        \return The detection orientation.
+      */
     const Eigen::Matrix3Xd & getPose() const;
 
+    /** \brief Set the 3D pose of the detection.
+        \param pose The 3D pose of the detection.
+      */
     void setPose(const Eigen::Matrix3Xd & pose);
+
+    /** \brief Set the 3D location of the detection.
+        \param pose_cv The 3D pose of the detection.
+      */
     void setPose(const cv::Mat & pose_cv);
 
+    /** \brief Get the scale of the detection.
+        \return Scale of the detection.
+      */
     double getScale() const;
+
+    /** \brief Set the scale of the detection.
+        \param scale scale of the detection.
+      */
     void setScale(double scale);
 
     const cv::Mat & getMetainfoImage() const;

@@ -32,7 +32,6 @@ namespace od
 	  id_ = id_;
 	}
 
-
 	double ODDetection::getConfidence() const
 	{
 	  return confidence_;

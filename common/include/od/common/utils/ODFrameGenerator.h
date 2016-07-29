@@ -10,7 +10,7 @@ namespace od
 {
   enum GeneratorType
   {
-    GENERATOR_TYPE_FILE_LIST, GENERATOR_TYPE_DEVICE
+    GENERATOR_TYPE_FILE_LIST, GENERATOR_TYPE_DEVICE, GENERATOR_TYPE_CONTAINER
   };
 
 
@@ -96,6 +96,47 @@ namespace od
 
   };
 
+/*
+  template<typename SceneT, template<class, class> class TContainer, class TObject>
+  class ODFrameGenerator<SceneT, GENERATOR_TYPE_CONTAINER>
+  {
+  public:
+
+    explicit ODFrameGenerator(TContainer<TObject*, std::allocator<TObject*>> & container) :container_(container)
+    {
+      curr_image_ = -1;
+      exhausted_ = false;
+    }
+
+    shared_ptr<SceneT> getNextFrame()
+    {
+      if(exhausted_)
+      {
+        cout << "Files Exhausted!";
+        return nullptr;
+      }
+
+      curr_image_++;
+      if(curr_image_ == file_list_.size() - 1)
+        exhausted_ = true;
+
+    }
+
+    bool isValid() 
+    {
+      return !exhausted_;
+    }
+
+  private:
+
+    TContainer<TObject*, std::allocator<TObject*>> & container_;
+    bool exhausted_;
+    int curr_image_;
+
+  };
+*/
+
+  
   template<>
   class ODFrameGenerator<ODSceneImage, GENERATOR_TYPE_DEVICE>
   {

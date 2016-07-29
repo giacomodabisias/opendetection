@@ -90,7 +90,7 @@ We will be presenting our library at FOSSASIA 2016, Singapore - an annual confer
            
       <div class="item"> 
         \endhtmlonly
-        \link od::l2d::ODCADRecognizer2DLocal
+        \link od::l2d::CADRecognizer2DLocal
         \htmlonly
         <img src="cadrecog2d.png">        
         <div class="carousel-caption">
@@ -118,7 +118,7 @@ We will be presenting our library at FOSSASIA 2016, Singapore - an annual confer
             
       <div class="item">
         \endhtmlonly
-        \link od::g2d::ODCascadeDetector
+        \link od::g2d::CascadeDetector
         \htmlonly
         <img src="face_business.jpg">
         <div class="carousel-caption">

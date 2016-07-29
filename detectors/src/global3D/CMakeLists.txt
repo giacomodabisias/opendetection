@@ -10,15 +10,16 @@ if(BUILD_GLOBAL_3D_DETECTION)
     endif()
 
     set(SOURCES
-        "ODPointCloudGlobalMatching.cpp"
-        "training/ODCADDetectTrainer3DGlobal.cpp"
-        "detection/ODCADDetector3DGlobal.cpp"
+        "PointCloudGlobalMatching.cpp"
+        "training/CADDetectTrainer3DGlobal.cpp"
+        "detection/CADDetector3DGlobal.cpp"
     )
 
     include_directories(${OpenCV_INCLUDE_DIRS})
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
+    include_directories(${COMMON_IMPL_DIR})
     include_directories(${PCL_INCLUDE_DIRS})
 
     OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})

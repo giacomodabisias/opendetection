@@ -13,6 +13,6 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 link_directories(${OD_LIBRARY_PATH})
 
-add_executable(viewer ODVisualizationTest.cpp)
+add_executable(viewer VisualizationTest.cpp)
 target_link_libraries(viewer ${OD_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES})
 

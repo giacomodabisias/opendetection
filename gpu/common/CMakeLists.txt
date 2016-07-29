@@ -9,7 +9,7 @@ if(WITH_GPU)
 	set(SUBSYS_DEPS siftgpu)
 
 	set(SOURCES
-	    "src/utils/ODFeatureDetector2D.cpp"
+	    "src/utils/FeatureDetector2D.cpp"
 	)
 
 	include_directories(${GPU_COMMON_INCLUDE_DIR})

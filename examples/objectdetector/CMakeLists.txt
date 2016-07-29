@@ -10,7 +10,7 @@ if(od_image_camera_example)
     include_directories(${COMMON_IMPL_DIR})
 
     OD_ADD_EXAMPLE(od_image_camera 
-                   FILES od_image_cadrecog_camera.cpp
+                   FILES image_cadrecog_camera.cpp
                    LINK_WITH od_local_image_detector)
   else()
     message("!!! od_image_camera_example is set to on but BUILD_LOCAL_2D_DETECTION is necessary to build od_image_camera_example")
@@ -28,7 +28,7 @@ if(image_recognition_example)
     include_directories(${CMAKE_3RDPARTY_DIR}/pugixml/src/)
 
     OD_ADD_EXAMPLE(od_example_files 
-                   FILES od_image_cadrecog_files.cpp
+                   FILES image_cadrecog_files.cpp
                    LINK_WITH od_local_image_detector)
   else()
     message("!!! image_recognition_example is set to on but BUILD_LOCAL_2D_DETECTION is necessary to build image_recognition_example")
@@ -47,7 +47,7 @@ if(hog_train_example)
 
       OD_ADD_EXAMPLE(od_hog_train 
                      FILES od_hog_train.cpp
-                     LINK_WITH od_global_image_detector)
+                     LINK_WITH global_image_detector)
     else()
       message("!!! built WITH_SVMLIGHT to enable hog_train_example")
     endif()
@@ -68,7 +68,7 @@ if(image_hog_files_example)
       include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
 
       OD_ADD_EXAMPLE(od_image_hog_files 
-                     FILES od_image_hog_files.cpp
+                     FILES image_hog_files.cpp
                      LINK_WITH od_global_image_detector od_gpu_global_image_detector)
     else()
       message("!!! built WITH_SVMLIGHT to enable image_hog_files_example")
@@ -95,7 +95,7 @@ if(face_detection_files_example)
     endif()
 
     OD_ADD_EXAMPLE(od_face_detection_files 
-                   FILES od_face_detector_files.cpp
+                   FILES face_detector_files.cpp
                    LINK_WITH ${SYS_DEP})
   else()
     message("!!! face_detection_files_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build face_detection_files_example")
@@ -119,7 +119,7 @@ if(face_detection_cam_example)
     endif()
 
     OD_ADD_EXAMPLE(od_face_detection_cam 
-                   FILES od_face_detector_cam.cpp
+                   FILES face_detector_cam.cpp
                    LINK_WITH ${SYS_DEP})
   else()
     message("!!! face_detection_cam_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build face_detection_cam_example")
@@ -137,7 +137,7 @@ if(image_customhog_example)
       include_directories(${COMMON_IMPL_DIR})
 
       OD_ADD_EXAMPLE(od_image_customhog 
-                     FILES od_image_customhog.cpp
+                     FILES image_customhog.cpp
                      LINK_WITH od_global_image_detector)
     else()
       message("!!! built WITH_SVMLIGHT to enable image_customhog_example")
@@ -160,7 +160,7 @@ if(multialgo_files_example)
       include_directories(${OpenCV_INCLUDE_DIRS})
 
       OD_ADD_EXAMPLE(od_multialgo_files 
-                     FILES od_multialgo_files.cpp
+                     FILES multialgo_files.cpp
                      LINK_WITH od_misc_detector)
     else()
       message("!!! built WITH_SVMLIGHT to enable multialgo_files_example")
@@ -181,7 +181,7 @@ if(multialgo_pc_example)
       include_directories(${COMMON_IMPL_DIR})
 
       OD_ADD_EXAMPLE(od_multialgo_pc 
-                     FILES od_multialgo_pc.cpp
+                     FILES multialgo_pc.cpp
                      LINK_WITH od_misc_detector)
     else()
       message("!!! built WITH_SVMLIGHT to enable multialgo_pc_example")
@@ -202,7 +202,7 @@ if(cascade_cam_example)
     include_directories(${PCL_INCLUDE_DIRS})
 
     OD_ADD_EXAMPLE(od_cascade_cam 
-                   FILES od_cascade_cam.cpp
+                   FILES cascade_cam.cpp
                    LINK_WITH od_global_image_detector)
   else()
     message("!!! cascade_cam_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build cascade_cam_example")
@@ -218,8 +218,8 @@ if(cascade_files_example)
     include_directories(${COMMON_INCLUDE_DIR})
     include_directories(${COMMON_IMPL_DIR})
 
-    OD_ADD_EXAMPLE(od_cascade_files 
-                   FILES od_cascade_files.cpp
+    V_ADD_EXAMPLE(od_cascade_files 
+                   FILES cascade_files.cpp
                    LINK_WITH od_global_image_detector)
   else()
     message("!!! cascade_files_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build cascade_files_example")
@@ -236,7 +236,7 @@ if(image_facerecog_example)
     include_directories(${COMMON_IMPL_DIR})
 
     OD_ADD_EXAMPLE(od_image_facerecog 
-                   FILES od_image_facerecog.cpp
+                   FILES image_facerecog.cpp
                    LINK_WITH od_global_image_detector)
   else()
     message("!!! image_facerecog_example is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build image_facerecog_example")
@@ -253,7 +253,7 @@ if(pc_global_example)
     include_directories(${COMMON_INCLUDE_DIR})
 
     OD_ADD_EXAMPLE(od_example_pc_global 
-                   FILES od_pc_global.cpp
+                   FILES pc_global.cpp
                    LINK_WITH od_pointcloud_global_detector)
   else()
     message("!!! pc_global_example is set to on but BUILD_GLOBAL_3D_DETECTION is necessary to build pc_global_example")
@@ -270,7 +270,7 @@ if(pc_global_files_example)
     include_directories(${COMMON_INCLUDE_DIR})
 
     OD_ADD_EXAMPLE(od_example_pc_global_files 
-                   FILES od_pc_global_files.cpp
+                   FILES pc_global_files.cpp
                    LINK_WITH od_pointcloud_global_detector)
   else()
     message("!!! pc_global_files_example is set to on but BUILD_GLOBAL_3D_DETECTION is necessary to build pc_global_files_example")
@@ -287,7 +287,7 @@ if(pc_global_real_time_example)
     include_directories(${COMMON_INCLUDE_DIR})
 
     OD_ADD_EXAMPLE(od_example_pc_global_real_time 
-                   FILES od_pc_global_real_time.cpp
+                   FILES pc_global_real_time.cpp
                    LINK_WITH od_pointcloud_global_detector)
   else()
     message("!!! pc_global_real_time_example is set to on but BUILD_GLOBAL_3D_DETECTION is necessary to build pc_global_real_time_example")
@@ -303,7 +303,7 @@ if(framegenerator_example)
   include_directories(${PCL_INCLUDE_DIRS})
 
   OD_ADD_EXAMPLE(od_framegenerator 
-                 FILES od_framegenerator.cpp
+                 FILES framegenerator.cpp
                  LINK_WITH od_common)
 endif()
 

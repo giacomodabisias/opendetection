@@ -28,15 +28,15 @@ if(od_multihog_app)
 		include_directories(${COMMON_INCLUDE_DIR})
 
 		OD_ADD_EXAMPLE(od_multihog_app 
-		               FILES global2D/od_multihog_app.cpp
+		               FILES global2D/multihog_app.cpp
 		               LINK_WITH od_global_image_detector
 		)
 	else()
-	  message("!!! od_multihog_app is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build od_multihog_app")
+	  message("!!! multihog_app is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build od_multihog_app")
 	endif(TARGET od_global_image_detector)
 endif(od_multihog_app)
 
 ##################################################################################
 set(SOURCE_FILES version/opendetection.cpp)
-include_directories(${OD_BINARY_DIR}/generated)
+include_directories(${_BINARY_DIR}/generated)
 add_executable(opendetection ${SOURCE_FILES})

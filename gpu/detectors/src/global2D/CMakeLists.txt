@@ -5,12 +5,13 @@ set(SUBSYS_DESC "global gpu feature based detection in 2D images")
 set(SUBSYS_DEPS od_common)
 
 set(SOURCES
-    "detection/ODCascadeDetectorImpl.cpp"
+    "detection/CascadeDetectorImpl.cpp"
 )
 
 include_directories(${GPU_DETECTORS_INCLUDE_DIR})
 include_directories(${DETECTORS_INCLUDE_DIR})
 include_directories(${COMMON_INCLUDE_DIR})
+include_directories(${COMMON_IMPL_DIR})
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${PCL_INCLUDE_DIRS})
 

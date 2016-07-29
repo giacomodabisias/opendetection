@@ -6,12 +6,13 @@ set(SUBSYS_DEPS od_common od_global_image_detector od_pointcloud_global_detector
 if(BUILD_MISC_DETECTION)
     if(TARGET od_global_image_detector AND TARGET od_pointcloud_global_detector)
 	    set(SOURCES
-	        "detection/ODDetectorMultiAlgo.cpp"
+	        "detection/DetectorMultiAlgo.cpp"
 	        )
 
 	    include_directories(${DETECTORS_IMPL_DIR})
 	    include_directories(${DETECTORS_INCLUDE_DIR})
 	    include_directories(${COMMON_INCLUDE_DIR})
+	    include_directories(${COMMON_IMPL_DIR})
 	    include_directories(${OpenCV_INCLUDE_DIRS})
 	    include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
 	    include_directories(${PCL_INCLUDE_DIRS})

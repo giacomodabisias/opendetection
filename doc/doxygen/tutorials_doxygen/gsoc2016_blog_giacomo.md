@@ -368,3 +368,38 @@ The second main change was to create the same interface for the **ODFeatureDetec
 The only small drawback of this structure is that the common module and the gpu_common module have a circular dependency on the include files, so we have to set the **include_directories** statment outside of the two modules. I do this in the **ODDependency.cmake** file.
 
 Obviously I had to change all the examples to adapt to this new structure, but that was not so hard, while the new interface was quite tricky to be created in a clean way.
+
+##Naming convention and build example 29/07/15## 
+
+I changed the nameing convention in the library to adapt it to a more C++ style. Before all file names started with **OD**, along with all classes and types. This is useful in C code since you are laking namespaces, but in C++ it makes no sense. I changed everything to the new style and fixed some compilation errors which arose.
+
+I also changed the **WITH_BOOST_SHARED_PTR** to **WITH_STD_SHARED_PTR** since when you include the file in your own project the default will be boost.
+
+I created an example in apps/buildExample which shows how to create your own project using the opendetection lirbary.
+
+@code
+
+# Example on how to build a project using the OpenDetection Library
+
+cmake_minimum_required(VERSION 2.8)
+project(viewer)
+
+find_package(OD REQUIRED)
+find_package(PCL REQUIRED)
+find_package(OpenCV REQUIRED)
+
+include_directories(${OD_INCLUDE_DIRS})
+include_directories(${PCL_INCLUDE_DIRS})
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+link_directories(${OD_LIBRARY_PATH})
+
+add_executable(viewer VisualizationTest.cpp)
+target_link_libraries(viewer ${OD_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES})
+
+@endcode
+
+This shows that you can use the provided config file, which is created during instllation time, to find and include the lirbary.
+I am finishing now the Doxygen documentation which is missing in some parts of the lbirary and then i will finish to do also some template percompilation which I saw was missing.
+After that there is the need to integrate the other google summer of code Project.
+

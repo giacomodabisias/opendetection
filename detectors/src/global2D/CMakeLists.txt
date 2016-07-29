@@ -11,14 +11,14 @@ if(BUILD_GLOBAL_2D_DETECTION)
     endif()
 
     set(SOURCES
-            "ODFaceRecognizer.cpp"
-            "detection/ODCascadeDetector.cpp"
-            "detection/ODCascadeDetectorImpl.cpp"
+            "FaceRecognizer.cpp"
+            "detection/CascadeDetector.cpp"
+            "detection/CascadeDetectorImpl.cpp"
             
     )
 
     if(WITH_SVMLIGHT)
-        set(SOURCES ${SOURCES} "training/ODHOGTrainer.cpp" "detection/ODHOGDetector.cpp")
+        set(SOURCES ${SOURCES} "training/HOGTrainer.cpp" "detection/HOGDetector.cpp")
         include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
         set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
     endif()
@@ -26,6 +26,7 @@ if(BUILD_GLOBAL_2D_DETECTION)
     include_directories(${OpenCV_INCLUDE_DIRS})
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
+    include_directories(${COMMON_IMPL_DIR})   
     include_directories(${PCL_INCLUDE_DIRS})
 
     OD_ADD_LIBRARY("${SUBSYS_NAME}" SRCS ${SOURCES} LINK_WITH ${SUBSYS_DEPS})

@@ -15,18 +15,18 @@ if(WITH_GPU)
 endif()
 
 set(SOURCES
-        "src/pipeline/ODObjectDetector.cpp"
-        "src/pipeline/ODScene.cpp"
-        "src/pipeline/ODDetection.cpp"
-        "src/utils/ODUtils.cpp"
-        "src/utils/ODFeatureDetector2D.cpp"
-        "src/utils/ODViewer.cpp"
-        "src/utils/ODFeatureDetector.cpp"
-        "src/utils/ODFeatureDetectorInterface.cpp"
+        "src/pipeline/ObjectDetector.cpp"
+        "src/pipeline/Scene.cpp"
+        "src/pipeline/Detection.cpp"
+        "src/utils/Utils.cpp"
+        "src/utils/FeatureDetector2D.cpp"
+        "src/utils/Viewer.cpp"
+        "src/utils/FeatureDetector.cpp"
+        "src/utils/FeatureDetectorInterface.cpp"
     )
 
 if(WITH_SVMLIGHT)
-    set(SOURCES ${SOURCES} "src/bindings/ODSvmlight.cpp")
+    set(SOURCES ${SOURCES} "src/bindings/Svmlight.cpp")
     include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
     set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
 endif()

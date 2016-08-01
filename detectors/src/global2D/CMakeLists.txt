@@ -11,11 +11,32 @@ if(BUILD_GLOBAL_2D_DETECTION)
     endif()
 
     set(SOURCES
-            "FaceRecognizer.cpp"
-            "detection/CascadeDetector.cpp"
-            "detection/CascadeDetectorImpl.cpp"
-            
+        "FaceRecognizer.cpp"
+        "detection/CascadeDetector.cpp"
+        "detection/CascadeDetectorImpl.cpp"           
     )
+
+    if(WITH_CAFFE AND Caffe_FOUND)
+        set(SOURCES ${SOURCES} 
+            "detection/ConvClassification.cpp"
+            "localization/SelectiveSearchBase.cpp"
+            "localization/SelectiveSearchModel.cpp"
+            "training/HOGTrainer.cpp"
+        )
+        set(SUBSYS_DEPS ${SUBSYS_DEPS} ${Caffe_LIBRARIES})
+        include_directories(${CAFFE_INCLUDE_DIR})
+        if(WITH_GPU)
+            include_directories(${CUDA_INCLUDE_DIRS})
+        endif()
+
+        if(WITH_GTKMM AND GTKMM_FOUND)
+            set(SOURCES ${SOURCES}  "training/Solver.cpp" "training/ConvTrainer.cpp" "training/Network.cpp")
+            include_directories(${GTKMM_INCLUDE_DIRS})
+            link_directories(${GTKMM_LIBRARY_DIRS})
+            set(SUBSYS_DEPS ${SUBSYS_DEPS} ${GTKMM_LIBRARIES})
+        endif()
+
+    endif()
 
     if(WITH_SVMLIGHT)
         set(SOURCES ${SOURCES} "training/HOGTrainer.cpp" "detection/HOGDetector.cpp")

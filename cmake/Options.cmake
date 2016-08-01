@@ -23,6 +23,9 @@ option(WITH_GPU "Build GPU modules" ON)
 option(WITH_EXAMPLES "Build examples" OFF)
 option(WITH_SVMLIGHT "Build with svmlight support" ON)
 option(WITH_STD_SHARED_PTR "use std::shared_ptr instead of boost::shared_ptr" OFF)
+option(WITH_CAFFE "build caffe support" OFF)
+option(WITH_GTKMM "build gtkmm support" OFF)
+
 option(BUILD_GLOBAL_2D_DETECTION "build global 2D detection" ON)
 option(BUILD_GLOBAL_3D_DETECTION "build global 3D detection" ON)
 option(BUILD_LOCAL_2D_DETECTION "build local 2D detection" ON)
@@ -46,5 +49,9 @@ endif()
 
 if(WITH_GPU)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_GPU")
+endif()
+
+if(WITH_CAFFE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_CAFFE")
 endif()
 

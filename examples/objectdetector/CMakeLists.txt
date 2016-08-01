@@ -46,8 +46,8 @@ if(hog_train_example)
       include_directories(${COMMON_IMPL_DIR})
 
       OD_ADD_EXAMPLE(od_hog_train 
-                     FILES od_hog_train.cpp
-                     LINK_WITH global_image_detector)
+                     FILES hog_train.cpp
+                     LINK_WITH od_global_image_detector)
     else()
       message("!!! built WITH_SVMLIGHT to enable hog_train_example")
     endif()
@@ -218,7 +218,7 @@ if(cascade_files_example)
     include_directories(${COMMON_INCLUDE_DIR})
     include_directories(${COMMON_IMPL_DIR})
 
-    V_ADD_EXAMPLE(od_cascade_files 
+    OD_ADD_EXAMPLE(od_cascade_files 
                    FILES cascade_files.cpp
                    LINK_WITH od_global_image_detector)
   else()

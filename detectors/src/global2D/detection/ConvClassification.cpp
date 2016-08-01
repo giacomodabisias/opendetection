@@ -115,6 +115,12 @@ namespace od
 		{
 			return make_shared<Detections>();		
 		}
+
+		shared_ptr<Detections> ConvClassification::detectOmni(shared_ptr<Scene> scene)
+		{
+			std::cout << "not implemented, use with shared_ptr<SceneImage>" <<std::endl; 
+			return nullptr;
+		}
 		
 	
 						

@@ -307,5 +307,66 @@ if(framegenerator_example)
                  LINK_WITH od_common)
 endif()
 
+##################################################################################
+option(cnn_classification "Build the cnn classification example" ON)
+if(Caffe_FOUND)
+  if(cnn_classification)
+    if(TARGET od_global_image_detector)
+
+      include_directories(${DETECTORS_INCLUDE_DIR})
+      if(WITH_GPU)
+          include_directories(${CUDA_INCLUDE_DIRS})
+      endif()
+
+      OD_ADD_EXAMPLE(cnn_classification 
+                     FILES cnn_mnist_classification.cpp
+                     LINK_WITH od_global_image_detector)
+    else()
+      message("!!! cnn_classification is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build cnn_classification")
+    endif(TARGET od_global_image_detector)
+  endif(cnn_classification)
+else()
+  message("!!! cnn_classification is set to on but CAFFE was not found")
+endif(Caffe_FOUND)
+
+##################################################################################
+option(cnn_train_custom "Build the cnn training custom example" ON)
+if(Caffe_FOUND AND GTKMM_FOUND)
+  if(cnn_train_custom)
+    if(TARGET od_global_image_detector)
+
+      include_directories(${DETECTORS_INCLUDE_DIR})
+      include_directories(${GTKMM_INCLUDE_DIRS})
+
+      OD_ADD_EXAMPLE(cnn_train_custom 
+                     FILES cnn_mnist_train_customSolver.cpp
+                     LINK_WITH od_global_image_detector)
+    else()
+      message("!!! cnn_train_custom is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build cnn_train_custom")
+    endif(TARGET od_global_image_detector)
+  endif(cnn_train_custom)
+else()
+  message("!!! cnn_train_custom is set to on but CAFFE or GTKMM were not found")
+endif(Caffe_FOUND AND GTKMM_FOUND)
+
+##################################################################################
+option(cnn_training "Build the cnn training example" ON)
+if(Caffe_FOUND)
+  if(cnn_training)
+    if(TARGET od_global_image_detector)
+
+      include_directories(${DETECTORS_INCLUDE_DIR})
+
+      OD_ADD_EXAMPLE(cnn_training 
+                     FILES cnn_mnist_train_simple.cpp
+                     LINK_WITH od_global_image_detector)
+    else()
+      message("!!! cnn_training is set to on but BUILD_GLOBAL_2D_DETECTION is necessary to build cnn_training")
+    endif(TARGET od_global_image_detector)
+  endif(cnn_training)
+else()
+  message("!!! cnn_training is set to on but CAFFE was not found")
+endif(Caffe_FOUND)
+
 
 

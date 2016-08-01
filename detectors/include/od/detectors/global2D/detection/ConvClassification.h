@@ -46,6 +46,7 @@ namespace od
 			void init();
 			shared_ptr<Detections2D> detectOmni(shared_ptr<SceneImage> scene);
   			shared_ptr<Detections> detect(shared_ptr<SceneImage> scene);
+  			shared_ptr<Detections> detectOmni(shared_ptr<Scene> scene);
     			
 		private:
 			std::string weightModelFileLoaction;

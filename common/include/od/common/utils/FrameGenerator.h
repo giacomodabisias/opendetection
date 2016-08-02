@@ -71,7 +71,7 @@ namespace od
         exhausted_ = true;
 
       cout << "Frame: " << file_list_[curr_image_] << endl;
-#ifdef WITH_BOOST_SHARED_PTR
+#ifndef WITH_BOOST_SHARED_PTR
       return shared_ptr<SceneT>(new SceneT(file_list_[curr_image_]));
 #else
       return make_shared<SceneT>(file_list_[curr_image_]);

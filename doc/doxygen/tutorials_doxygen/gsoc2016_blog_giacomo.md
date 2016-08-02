@@ -40,7 +40,7 @@ Depending on OpenCV/PCL version activate/deactivate modules of the library.
 - **Task 9** - small task - merge other gsoc16 contributions : Merge changes from other contribution of GSOC. Other projects will be using existing APIs. There might me need to make small changes to fit to the changes made in this project 
 - **Task 10** -  moderate task - deb packaging : Create an automated way to generate a deb file for the library so it can be installed through debian packaging system.
 
-##Fix 3rd party dependencies 12/05/15##
+##Fix 3rd party dependencies 12/05/16##
 
 The library has some dependencies inserted as source code into the 3rdparty folder; these are pugixml and SiftGPU (and maybe others which will come later). There is also the dependency of svmlight, but this is not mandatory so it will be added as external dependency; if the library is present on the system all the depending libraries will be built.
 
@@ -50,7 +50,7 @@ In general its a bad idea to integrate external source code into a library since
 - **Pugixml** is a bit more tricky since it has no cmake file; it contains a Make file which produces a test executable but no library. The library can be easily built since we have just two include files and one .cpp file. To fix the issue I created a separate pugixml_build folder with a simple custom cmake which builds the library. This way we can just add that folder as add_subdirectory and directly export the newly compile **libpugixml.so** library.
 - **Svmlight** will be inserted in the system with a find_package or something similar and a custom **WITH_SVMLIGHT** cmake flag. These steps will come shortly; we will just leave the svmlight binding.
 
-##Refactoring file structure 13/05/15##
+##Refactoring file structure 13/05/16##
 
 I started to move files in appropriate folders and to fix the "Main" *CmakeLists.txt* file. I renamed the ODconfig.h.in file to od_config.h and moved it into the cmake folder for now. Then I moved the opendetection.cpp source file away from the root (not nice to have source files in the root of a library) and added it as separate app in a new version folder which builds the od_version executable.
 
@@ -116,7 +116,7 @@ and include the upper level folder. To use the first solution we would need to i
 The new structure compiles fines except for three examples which have a linker bug (undefined reference to `vtable for od::g3d::ODCADDetectTrainer3DGlobal'
 ) which I am trying to resolve. I fixed a bit the source code of all the examples removing unnecessary includes, fixing namespaces, maintaining a common interface and avoiding dynamic memory allocation where possible. The next step after fixing the linker bug will be to fix the install paths for includes and libs. 
 
-##Include structure and install target 23/05/15##
+##Include structure and install target 23/05/16##
 
 I fixed the linking error; it came from a wrong variable name in a cmake file which specified some source files which were not compiled and so the linking error. I split simple_ransac_detection in src and include and reinserted it in local2D detectors since it is used only there. The source files are just added to the local2D library and compiled together.
 
@@ -149,7 +149,7 @@ Before modifying and digging into the code I wanted to have a common coding styl
 After this I started to fix the detectors which I am still working on. The first class which has bee updated is the *ODHOGDetector* which had also a lot of naming issues since it used a different naming style. 
 There are stll some function which I dislike, for example the parsing methods. They are mainly based on creating a fake argc,argv couple of variables and the parsing them. This has to be removed in favor of a better and newer parsing library as the one included in boost. This will be one of the first steps which I will do as soon as I finished the basic refactoring step.
 
-##Code refactoring 2 07/06/15##
+##Code refactoring 2 07/06/16##
 
 The first code refactoring phase terminated today, since I finished to review a bit all files; the main steps have been:
 
@@ -166,7 +166,7 @@ Missing parts and next steps:
 - Use shared pointer where normal pointer are used. We have to decide if we want to use boost or stds shared pointers since pcl is using the first version. The second would be better so we would have everything which is possible using std and then when pcl moves toward std shared pointer we move also the rest of the code to that.
 - Remove where possible the argc,argv parsing methods using standard ones.
 
-##Shared Pointers 10/06/15##
+##Shared Pointers 10/06/16##
 
 The following step took quite a bit in order to have everything work well. Until now the library was using normal C++ pointer created with new and then deleted when not used anymore. This can lead to bad habits of forgetting to delete pointers, causing memory leaks. To avoid this its always good to use safe pointers which get deallocated as soon as they are not referenced my anyone anymore. Safe pointers are called **shared_ptr** in C++ and were intially implemented in the *Boost* library; then, after C++11, they where also inserted in the standard in the *std::* namespace. Substituting all pointers n the library was quite a complex task for different reasons:
 
@@ -178,7 +178,7 @@ The following step took quite a bit in order to have everything work well. Until
 
 While restructuring the code I also fixed again some coding style issues, but I still have to go through the code a few more times in order to finish fixing everything. The next step is as previously mentioned, to check the compilation with the svmlight option.
 
-##Cmake improvments 20/06/15##
+##Cmake improvments 20/06/16##
 
 I created a **FindOD.cmake** which can be used by other libraries to find the include directories path, the library path and the library names. The variables which get set are:
 
@@ -203,7 +203,7 @@ Another important missing thing was the creation of a .deb package which can be 
 
 All files in the library have been renamed according to a common scheme which consists in a Prefix "OD" followed by the first charachter of the file name uppercase.
 
-##Templates and Windows compilation 27/06/15##
+##Templates and Windows compilation 27/06/16##
 
 To improve compilation time of projects using the **OpenDetection** library I decided to precompile all the templates for the most common types. In this case almost all templates depend on *pcl* point types. The most commonly used point type for which I precompiled the library are:
 
@@ -218,7 +218,7 @@ I then fixed all the linking in the whole library since there where some useless
 
 After that I tested compilation of the library under Windows, but without success. There have been several issues which are ut of the Open Deteciton library. I tested compilation using **Visual Studio 2015** and **MinGW**. Pcl has been installed by using the prebuilt version while opencv has to be built manually since *opencv_contrib* is necessary while not present in the prebuilt binaries. Building opencv3 with visual studio and cuda is not possible at the moment since cuda 7.5 is not compatible with visual studio 2015, so version 8 is necessary which will be available soon. MinGW is also not usable since compilation of opencv3 with cuda is disabled as flagged as incompatible by opencv.
 
-##Face detection 31/06/15##
+##Face detection 31/06/16##
 
 To test the new cmake and code structure I **implemented face detection** (not recognition which is already available). Face detection is implemented in *OpenCV* both in **CPU** mode and in **GPU** mode (using **CUDA**). 
 
@@ -231,7 +231,7 @@ I added in the cmake the two new examples with a custom option and tested them s
 
 The next step will be to add the functionality previously described to the frame generator; I will also add the possibility to use standard containers as input sources in roder to be able to use arrays, vectors and lists for example.
 
-##Face detection 2 06/07/15##
+##Face detection 2 06/07/16##
 
 After talking with Kripa I found out that the CPU cascade detector (the detector used to detect faces) was already rpesent n the library; so only the gpu version had to be added. This implies to create in the library a new gpu folder containing all gpu modules which should be built only if support is present.
 
@@ -283,13 +283,13 @@ There were three possible solutions to how to impement gpu in the library:
 I removed the previous facedetector classes which I had added and used the new ones in the examples which I had previoulsy created. I also used the new viewer in all examples and fixed the build of the different examples to be independent and clean in the *CMake*.
 
 
-##Visualizer update 11/07/15##
+##Visualizer update 11/07/16##
 
 To cover all examples and to have a more versatile viewer I added today an interface so add and remove text, clouds and added some improvments to be able to have multiple clouds in the same viewer at the same time. There is still some testing needed. I also added as usual all the template precompilation for the common PCL types.
 
 The next step consists in adding as stated before the std::containers to the frame generator class and then have a look if there are some modules to move to the gpu folder or maybe add some new methods there.
 
-##Modular build 15/07/15## 
+##Modular build 15/07/16## 
 
 Looking at the *PCL* and *OpenCV* libraries I noticed how the libraries are subdivided into modules. I understood then the importance of having this structure also in the OD library and so started to change a bit the structure, expecially the *Cmake* structure, to support such a feature. 
 With the new changes now each detector is a separate module which can be built or not as also gpu. One issue was that some modules might have dependencies on other modules and can be built only if a specific module was built. For example the misc detector can be only built if other detectors where built. 
@@ -324,7 +324,7 @@ The same structure has been adde to all examples so that the correct examples ar
 I also built the system on lniux 16.04 with gcc 5.3; I had some initial issues but also those were fixed. I will make a blogpost about them next week since some errors where quite interesting.
 
 
-##Modular build 2 and new interface for GPU 22/07/15## 
+##Modular build 2 and new interface for GPU 22/07/16## 
 
 After discussing with my mentor, I did some changes to the code. 
 
@@ -369,7 +369,7 @@ The only small drawback of this structure is that the common module and the gpu_
 
 Obviously I had to change all the examples to adapt to this new structure, but that was not so hard, while the new interface was quite tricky to be created in a clean way.
 
-##Naming convention and build example 29/07/15## 
+##Naming convention and build example 29/07/16## 
 
 I changed the nameing convention in the library to adapt it to a more C++ style. Before all file names started with **OD**, along with all classes and types. This is useful in C code since you are laking namespaces, but in C++ it makes no sense. I changed everything to the new style and fixed some compilation errors which arose.
 
@@ -403,3 +403,9 @@ This shows that you can use the provided config file, which is created during in
 I am finishing now the Doxygen documentation which is missing in some parts of the lbirary and then i will finish to do also some template percompilation which I saw was missing.
 After that there is the need to integrate the other google summer of code Project.
 
+
+##Integrating the caffe gsoc project 02/08/16## 
+
+I integrated the work from Abhishek, who did the other gsoc project in opendetection. I had to adapt the fiel structure and naming convention to the new struture and change some code to use shared pointers; there is still some work to do to adapt and clean the code which has many flaws, but thats something which should be done as part of the other gsoc project. Anyway I added two new options in the cmake: **WITH_CAFFE** and **WITH_GTKMM**; the first one enables to build the OD library with Caffe support, while the second one adds to caffe also the visualization part. If the flag **WITH_GPU** is added then the Caffe gpu part will be used.
+I also restructured a bit the cmake structure adding some more searated cmake files and fixed the naming on the cmake files as for the other files.
+THe only thing missing now is a bit of documentation and then everything should be done :)

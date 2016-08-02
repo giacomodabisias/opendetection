@@ -4,7 +4,7 @@
 void help()
 {
 	std::cout << "Usage: ./examples/objectdetector/od_cnn_mnist_classification <path to weight caffemodel file> <path to network file> <path to image file>" << std::endl;
-	std::cout << "Example: ./examples/objectdetector/od_cnn_mnist_classification ../examples/objectdetector/Mnist_Classify/mnist.caffemodel ../examples/objectdetector/Mnist_Classify/lenet.prototxt ../examples/objectdetector/Mnist_Classify/3.png" << std::endl << std::endl;
+	std::cout << "Example: ./examples/objectdetector/od_cnn_mnist_classification ../../../data/Mnist_Classify/mnist.caffemodel ../../../data/Mnist_Classify/lenet.prototxt ../../../data/Mnist_Classify/3.png" << std::endl << std::endl;
 	exit(-1);
 }
 

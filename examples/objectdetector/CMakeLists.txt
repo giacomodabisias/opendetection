@@ -159,6 +159,8 @@ if(multialgo_files_example)
       include_directories(${COMMON_IMPL_DIR})
       include_directories(${OpenCV_INCLUDE_DIRS})
 
+      link_directories(${PCL_LIBRARY_DIRS})
+
       OD_ADD_EXAMPLE(od_multialgo_files 
                      FILES multialgo_files.cpp
                      LINK_WITH od_misc_detector)
@@ -179,6 +181,8 @@ if(multialgo_pc_example)
       include_directories(${DETECTORS_INCLUDE_DIR})
       include_directories(${COMMON_INCLUDE_DIR})
       include_directories(${COMMON_IMPL_DIR})
+
+      link_directories(${PCL_LIBRARY_DIRS})
 
       OD_ADD_EXAMPLE(od_multialgo_pc 
                      FILES multialgo_pc.cpp
@@ -252,6 +256,8 @@ if(pc_global_example)
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
 
+    link_directories(${PCL_LIBRARY_DIRS})
+
     OD_ADD_EXAMPLE(od_example_pc_global 
                    FILES pc_global.cpp
                    LINK_WITH od_pointcloud_global_detector)
@@ -268,6 +274,9 @@ if(pc_global_files_example)
     include_directories(${DETECTORS_INCLUDE_DIR})
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
+
+    link_directories(${PCL_LIBRARY_DIRS})
+    link_directories(${OPENCV_LIBRARY_DIRS})
 
     OD_ADD_EXAMPLE(od_example_pc_global_files 
                    FILES pc_global_files.cpp
@@ -286,6 +295,8 @@ if(pc_global_real_time_example)
     include_directories(${DETECTORS_IMPL_DIR})
     include_directories(${COMMON_INCLUDE_DIR})
 
+    link_directories(${PCL_LIBRARY_DIRS})
+
     OD_ADD_EXAMPLE(od_example_pc_global_real_time 
                    FILES pc_global_real_time.cpp
                    LINK_WITH od_pointcloud_global_detector)
@@ -301,6 +312,8 @@ if(framegenerator_example)
   include_directories(${COMMON_INCLUDE_DIR})
   include_directories(${COMMON_IMPL_DIR})
   include_directories(${PCL_INCLUDE_DIRS})
+
+  link_directories(${PCL_LIBRARY_DIRS})
 
   OD_ADD_EXAMPLE(od_framegenerator 
                  FILES framegenerator.cpp
@@ -331,7 +344,7 @@ endif(Caffe_FOUND)
 
 ##################################################################################
 option(cnn_train_custom "Build the cnn training custom example" ON)
-if(Caffe_FOUND AND GTKMM_FOUND)
+if(Caffe_FOUND AND WITH_GTKMM AND GTKMM_FOUND)
   if(cnn_train_custom)
     if(TARGET od_global_image_detector)
 
@@ -347,7 +360,7 @@ if(Caffe_FOUND AND GTKMM_FOUND)
   endif(cnn_train_custom)
 else()
   message("!!! cnn_train_custom is set to on but CAFFE or GTKMM were not found")
-endif(Caffe_FOUND AND GTKMM_FOUND)
+endif(Caffe_FOUND AND WITH_GTKMM AND GTKMM_FOUND)
 
 ##################################################################################
 option(cnn_training "Build the cnn training example" ON)

@@ -7,3 +7,4 @@
 [submodule "3rdparty/svmlightlib"]
 	path = 3rdparty/svmlightlib
 	url = https://github.com/giacomodabisias/svmlightlib.git
+        branch = master

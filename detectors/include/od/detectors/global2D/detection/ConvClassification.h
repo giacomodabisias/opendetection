@@ -2,25 +2,17 @@
 
 #include "od/common/pipeline/Detector.h"
 #include "od/common/pipeline/Scene.h"
-#include "od/common/utils/Utils.h"
-#include "od/common/utils/FeatureDetector2D.h"
-
+#include "od/common/utils/Shared_pointers.h"
 
 #include <opencv2/opencv.hpp>
-
-#include <cstring>
-#include <cstdlib>
 #include <vector>
-
 #include <string>
 #include <iostream>
-#include <stdio.h>
 
 #include <caffe/caffe.hpp>
 #include <caffe/util/io.hpp>
 #include <caffe/blob.hpp>
 
-#include "od/common/utils/Shared_pointers.h"
 
 namespace od
 {

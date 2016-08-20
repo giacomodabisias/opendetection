@@ -27,13 +27,27 @@ namespace od
 			void setWeightModelFileLocation(const std::string & location);
 			void setNetworkModelFileLocation(const std::string & location);
 			void setImageFileLocation(const std::string & location);
+			void setOutputFileLocation(const std::string & location);
 
 			std::string getWeightModelFileLocation();
 			std::string getNetworkModelFileLocation();
 			std::string getImageFileLocation();
 
+			std::vector<float> classifyMultiLabel();
 			void setTestBlob(int num_channels, int img_height, int img_width);				
 			void classify();
+
+			//Multiclass classification . Note: Code Partially taken from caffe library
+			std::vector<float> runMultiClassClassifier();
+			int runMultiClassClassifierPythonMode();
+			std::vector<float> Predict(const cv::Mat & img);
+			void WrapInputLayer(std::vector<cv::Mat> & input_channels); 
+
+			//Segnet classification
+			void setSegnetLocation(const std::string & location);
+			void setImageGroundTruthFileLocation(const std::string & location);
+			void setColorLocation(const std::string & location);
+			int runSegnetBasedClassifierPythonMode();
 
 			void init();
 			shared_ptr<Detections2D> detectOmni(shared_ptr<SceneImage> scene);
@@ -41,12 +55,14 @@ namespace od
   			shared_ptr<Detections> detectOmni(shared_ptr<Scene> scene);
     			
 		private:
-			std::string weightModelFileLoaction;
-			std::string networkFileLocation;
-			std::string imageFileLocation; 
+			std::string imageFileLocation, outputFileLocation, networkFileLocation, weightModelFileLoaction, segnetLocation, colorLocation, imageGroundTruthFileLocation; 
 			caffe::Datum strucBlob;
 			caffe::BlobProto protoBlob;
 			std::vector<caffe::Blob<float>*> inputBlob;
+
+			cv::Size input_geometry_;
+			int num_channels_;
+
 
 		};	
 	}

@@ -16,6 +16,7 @@ if(BUILD_GLOBAL_2D_DETECTION)
         "detection/CascadeDetectorImpl.cpp"           
     )
 
+if(0)
     if(WITH_CAFFE AND Caffe_FOUND)
         set(SOURCES ${SOURCES} 
             "detection/ConvClassification.cpp"
@@ -37,6 +38,7 @@ if(BUILD_GLOBAL_2D_DETECTION)
         endif()
 
     endif()
+endif(0)
 
     if(WITH_SVMLIGHT)
         set(SOURCES ${SOURCES} "training/HOGTrainer.cpp" "detection/HOGDetector.cpp")

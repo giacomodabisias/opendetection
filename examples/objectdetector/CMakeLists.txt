@@ -320,6 +320,8 @@ if(framegenerator_example)
                  LINK_WITH od_common)
 endif()
 
+if(0)
+
 ##################################################################################
 option(cnn_classification "Build the cnn classification example" ON)
 if(Caffe_FOUND)
@@ -381,5 +383,5 @@ else()
   message("!!! cnn_training is set to on but CAFFE was not found")
 endif(Caffe_FOUND)
 
-
+endif(0)
 

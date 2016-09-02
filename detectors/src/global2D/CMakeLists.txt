@@ -50,7 +50,7 @@ endif(0)
 
     if(WITH_SVMLIGHT)
         set(SOURCES ${SOURCES} "training/HOGTrainer.cpp" "detection/HOGDetector.cpp")
-        include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+        include_directories(${CMAKE_3RDPARTY_DIR}/svmlight/)
         set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
     endif()
     

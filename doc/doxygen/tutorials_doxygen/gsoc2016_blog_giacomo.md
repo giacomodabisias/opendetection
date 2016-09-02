@@ -7,6 +7,8 @@ GSoC 2016 Blog - Giacomo {#gsoc2016_blog_giacomo}
 ====
 
   - [Link to Proposal](https://docs.google.com/document/d/16Wyd0h5b9-7DaG7ZYJT30a2i096krviFUCcDYwg-jZc/edit?usp=sharing) - [Link to GSoC2016 Project Page](https://summerofcode.withgoogle.com/organizations/6007728078061568/#5675882488266752)
+
+  - [Link to commit list](https://github.com/giacomodabisias/opendetection/commits/master)
  
 ##About Me##
 
@@ -409,3 +411,7 @@ After that there is the need to integrate the other google summer of code Projec
 I integrated the work from Abhishek, who did the other gsoc project in opendetection. I had to adapt the fiel structure and naming convention to the new struture and change some code to use shared pointers; there is still some work to do to adapt and clean the code which has many flaws, but thats something which should be done as part of the other gsoc project. Anyway I added two new options in the cmake: **WITH_CAFFE** and **WITH_GTKMM**; the first one enables to build the OD library with Caffe support, while the second one adds to caffe also the visualization part. If the flag **WITH_GPU** is added then the Caffe gpu part will be used.
 I also restructured a bit the cmake structure adding some more searated cmake files and fixed the naming on the cmake files as for the other files.
 THe only thing missing now is a bit of documentation and then everything should be done :)
+
+##Integrating the caffe gsoc project 2 20/08/16## 
+
+I finished integrating the other gsoc project except the examples which are havy in content, as they contain a lot of images etc which should be outside of the git repository.

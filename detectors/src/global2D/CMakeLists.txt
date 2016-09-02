@@ -31,7 +31,10 @@ if(0)
         endif()
 
         if(WITH_GTKMM AND GTKMM_FOUND)
-            set(SOURCES ${SOURCES}  "training/Solver.cpp" "training/ConvTrainer.cpp" "training/Network.cpp")
+            set(SOURCES ${SOURCES}  "training/Solver.cpp" 
+                                    "training/ConvTrainer.cpp"
+                                    "training/Network.cpp"  
+                                    )
             include_directories(${GTKMM_INCLUDE_DIRS})
             link_directories(${GTKMM_LIBRARY_DIRS})
             set(SUBSYS_DEPS ${SUBSYS_DEPS} ${GTKMM_LIBRARIES})
@@ -39,6 +42,11 @@ if(0)
 
     endif()
 endif(0)
+
+    if(WITH_GTKMM AND GTKMM_FOUND)
+         set(SOURCES ${SOURCES}    "annotation/Annotation.cpp"
+                                   "annotation/Annotator.cpp")
+    endif()
 
     if(WITH_SVMLIGHT)
         set(SOURCES ${SOURCES} "training/HOGTrainer.cpp" "detection/HOGDetector.cpp")

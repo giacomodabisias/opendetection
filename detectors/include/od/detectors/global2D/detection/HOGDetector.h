@@ -32,7 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "od/common/utils/Utils.h"
 #include "od/common/utils/FeatureDetector2D.h"
 #include "od/common/utils/Shared_pointers.h"
-#include "od/common/bindings/Svmlight.h"
 
 #include <iostream>
 #include <opencv2/objdetect.hpp>
@@ -103,7 +102,7 @@ namespace od
       shared_ptr<Detections> detectOmni(shared_ptr<Scene> scene);
 
     protected:
-      //properteis
+      //properties
       cv::Size win_size_;
       cv::Size block_size_;
       cv::Size block_stride_;

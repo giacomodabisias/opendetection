@@ -104,7 +104,7 @@ namespace od
         shared_ptr<Detection2D> detection2D = make_shared<Detection2D>();
         detection2D->setBoundingBox(found[i]);
         detection2D->setId("PEOPLE");
-        detection2D->setType(od::Detection::CLASSIFICATION);
+        detection2D->setType(od::detection::CLASSIFICATION);
         detections->push_back(detection2D);
 
         if(meta_info_)
@@ -137,7 +137,7 @@ namespace od
       {
         shared_ptr<Detection2D> detection2D = make_shared<Detection2D>();
         detection2D->setId("PEOPLE");
-        detection2D->setType(od::Detection::CLASSIFICATION);
+        detection2D->setType(od::detection::CLASSIFICATION);
         detections->push_back(detection2D);
       }
 

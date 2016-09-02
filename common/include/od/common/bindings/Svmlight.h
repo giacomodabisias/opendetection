@@ -61,10 +61,6 @@ namespace svmlight {
 }
 #endif 
 
-enum type {
-  CLASSIFICATION, REGRESSION, RANKING, OPTIMIZATION
-};
-
 class SVMlight {
 private:
 

@@ -80,7 +80,7 @@ namespace od
       for(auto & o : objects)
       {
         // Process object by object:
-        shared_ptr<Detection2D> detection2D = make_shared<Detection2D>(Detection::CLASSIFICATION, "OBJ", 1);
+        shared_ptr<Detection2D> detection2D = make_shared<Detection2D>(detection::CLASSIFICATION, "OBJ", 1);
         detection2D->setBoundingBox(o);
         detections->push_back(detection2D);
 
@@ -116,7 +116,7 @@ namespace od
       haar_cascade_->detectMultiScale(gray, objects, 5, min_neighbors_, 0, gray.size(), gray.size());
       if(objects.size() > 0)
       {
-        detections->push_back(make_shared<Detection>(Detection::CLASSIFICATION, "OBJ", 1));
+        detections->push_back(make_shared<Detection>(detection::CLASSIFICATION, "OBJ", 1));
       }
       return detections;
     }

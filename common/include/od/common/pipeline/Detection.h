@@ -47,11 +47,16 @@ namespace od
    * \author Kripasindhu Sarkar
    *
    */
+  namespace detection {
+    _DEFINE_ENUM_WITH_STRING_CONVERSIONS(DetectionType, (RECOGNITION)(CLASSIFICATION)(DETECTION)(DETECTION_NULL))
+  }
+
+
   class Detection
   {
   public:
 
-    _DEFINE_ENUM_WITH_STRING_CONVERSIONS(DetectionType, (RECOGNITION)(CLASSIFICATION)(DETECTION)(DETECTION_NULL))
+    
 
     virtual ~Detection(){}
 
@@ -60,7 +65,7 @@ namespace od
         \param id The detection identifier.
         \param confidence The detection confidence.
       */
-    Detection(const DetectionType & type = DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
+    Detection(const detection::DetectionType & type = detection::DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
     /** \brief Prints type and id of the detection. 
       */
@@ -69,12 +74,12 @@ namespace od
     /** \brief Get the type of the detection. This can be _RECOGNITION, _CLASSIFICATION, _DETECTION, _DETECTION_NULL.
         \return The type of the detection.
       */
-    const DetectionType & getType() const;
+    const detection::DetectionType & getType() const;
 
     /** \brief Set the type of the detection. This can be _RECOGNITION, _CLASSIFICATION, _DETECTION, _DETECTION_NULL.
         \param type The type of the detection.
       */
-    void setType(const DetectionType & type);
+    void setType(const detection::DetectionType & type);
 
     /** \brief Get the id of the detection.
         \return The id of the detection.
@@ -98,7 +103,7 @@ namespace od
 
   private:
 
-    DetectionType type_;
+    detection::DetectionType type_;
     std::string id_;
     double confidence_;
 
@@ -120,7 +125,7 @@ namespace od
         \param id The detection identifier.
         \param confidence The detection confidence.
       */
-    Detection2D(const DetectionType & type = DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
+    Detection2D(const detection::DetectionType & type = detection::DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
     /** \brief Get the 2D location of the detection.
         \return The 2D vector of the detection position.
@@ -174,7 +179,7 @@ namespace od
         \param id The detection identifier.
         \param confidence The detection confidence.
       */
-    Detection3D(const DetectionType & type = DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
+    Detection3D(const detection::DetectionType & type = detection::DETECTION_NULL, const std::string & id = std::string(""), double confidence = 1.0);
 
 
     /** \brief Get the 3D location of the detection.

@@ -3,7 +3,7 @@
 namespace od
 {
 
-	Detection::Detection(const DetectionType & type, const std::string & id, double confidence) : 
+	Detection::Detection(const detection::DetectionType & type, const std::string & id, double confidence) : 
 	            type_(type), id_(id), confidence_(confidence) {}
 	
 	void Detection::printSelf()
@@ -12,12 +12,12 @@ namespace od
 	  std::cout << "ID: " << id_ << std::endl;
 	}
 
-	const Detection::DetectionType & Detection::getType() const
+	const detection::DetectionType & Detection::getType() const
 	{
 	  return type_;
 	}
 
-	void Detection::setType(const DetectionType & type)
+	void Detection::setType(const detection::DetectionType & type)
 	{
 	  type_ = type;
 	}
@@ -46,7 +46,7 @@ namespace od
 
 
 
-	Detection2D::Detection2D(const DetectionType & type, const std::string & id , double confidence) : Detection(type, id, confidence)
+	Detection2D::Detection2D(const detection::DetectionType & type, const std::string & id , double confidence) : Detection(type, id, confidence)
 	{
 	  location_2d_ = Eigen::Vector3d::UnitZ();
 	}
@@ -83,7 +83,7 @@ namespace od
 
 
 
-	Detection3D::Detection3D(const DetectionType & type, const std::string & id, double confidence) : Detection(type, id, confidence)
+	Detection3D::Detection3D(const detection::DetectionType & type, const std::string & id, double confidence) : Detection(type, id, confidence)
 	{
 	  location_3d_ = Eigen::Vector4d::UnitW();
 	  orientation_.setIdentity();

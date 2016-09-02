@@ -210,7 +210,7 @@ namespace od
 
         //now fill up the detection:
         shared_ptr<Detection3D> detection = make_shared<Detection3D>();
-        detection->setType(Detection::CLASSIFICATION);
+        detection->setType(detection::CLASSIFICATION);
         detection->setId(categories[0]);
         detection->setLocation(centroid);
         detection->setMetainfoCluster(clusters[i]);
@@ -240,7 +240,7 @@ namespace od
       //detection done!
 
       //now fill up the detection:
-      shared_ptr<Detection> detection(new Detection(Detection::CLASSIFICATION, categories[0], conf[0]));
+      shared_ptr<Detection> detection(new Detection(detection::CLASSIFICATION, categories[0], conf[0]));
 
       detections->push_back(detection);
 

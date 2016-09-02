@@ -85,7 +85,7 @@ namespace od
         for(auto & o : objects_)
         {
           // Process face by face:
-          shared_ptr<Detection2D> detection2D = make_shared<Detection2D>(Detection::CLASSIFICATION, "OBJ", 1);
+          shared_ptr<Detection2D> detection2D = make_shared<Detection2D>(detection::CLASSIFICATION, "OBJ", 1);
           detection2D->setBoundingBox(o);
           detections->push_back(detection2D);
 
@@ -132,7 +132,7 @@ namespace od
         //todo: implement in some other way of fast single detection; currently this will work, but maynot be fast
         if(objects_.size() > 0)
         {
-          detections->push_back(make_shared<Detection>(Detection::CLASSIFICATION, "OBJ", 1));
+          detections->push_back(make_shared<Detection>(detection::CLASSIFICATION, "OBJ", 1));
         }
         return detections;
       }

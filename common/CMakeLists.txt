@@ -27,7 +27,7 @@ set(SOURCES
 
 if(WITH_SVMLIGHT)
     set(SOURCES ${SOURCES} "src/bindings/Svmlight.cpp")
-    include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+    include_directories(${CMAKE_3RDPARTY_DIR}/svmlight/)
     set(SUBSYS_DEPS ${SUBSYS_DEPS} svmlight)
 endif()
 

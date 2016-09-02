@@ -2,7 +2,7 @@
 add_subdirectory(pugixml_build)
 
 if(WITH_SVMLIGHT)
-	add_subdirectory(svmlightlib)
+	add_subdirectory(svmlight)
 endif()
 
 if(WITH_GPU)

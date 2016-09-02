@@ -4,3 +4,6 @@
 [submodule "3rdparty/SiftGPU"]
 	path = 3rdparty/SiftGPU
 	url = https://github.com/pitzer/SiftGPU.git
+[submodule "3rdparty/svmlight"]
+	path = 3rdparty/svmlight
+	url = https://github.com/giacomodabisias/svmlightlib.git

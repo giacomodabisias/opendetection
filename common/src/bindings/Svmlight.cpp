@@ -80,7 +80,7 @@ SVMlight::SVMlight(){
     learn_parm_.xa_depth = 0;
     // The HOG paper uses a soft classifier (C = 0.01), set to 0.0 to get the default calculation
     learn_parm_.svm_c = 0.01; // -c 0.01
-    learn_parm_.type = REGRESSION;
+    learn_parm_.type = svmlight::REGRESSION;
     learn_parm_.remove_inconsistent = 0; // -i 0 - Important
     kernel_parm_.rbf_gamma = 1.0;
     kernel_parm_.coef_lin = 1;

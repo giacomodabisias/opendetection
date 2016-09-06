@@ -13,7 +13,7 @@ Dependencies {#installation_instruction1}
 
 ##OpenCV 3.0## {#installation_instruction2}
 
-OpenCV 3.0 is to be compiled with the modules xfeatures2d (for features like SIFT) and CUDA.
+OpenCV 3.0 is to be compiled with the modules xfeatures2d (for features like SIFT) and CUDA for GPU features if needed.
     
 - **Source:** http://opencv.org/downloads.html or https://github.com/Itseez/opencv              
     
@@ -30,13 +30,7 @@ OpenCV 3.0 is to be compiled with the modules xfeatures2d (for features like SIF
         *CMAKE options*: WITH_CUDA=ON       
 
 
- 
-##VTK 6.0 or above {#installation_instruction3}
-    
-Download and compile latest VTK with its default settings.
-    
-   
-##PCL 1.8 or above {#installation_instruction4}   
+##PCL 1.8 or above {#installation_instruction3}   
     
 - **Source:** https://github.com/PointCloudLibrary/pcl or https://github.com/PointCloudLibrary/pcl/releases
 
@@ -45,38 +39,47 @@ Download and compile latest VTK with its default settings.
   * *3d_rec_framework* - for ESF, ESF etc recognition pipeline. To build with this setting you need to install OpenNI as well, which is the mandatory dependency for this app. Please refer to the PCL website for the version information. 
   
       *Additional CMAKE options:* BUILD_apps=ON, BUILD_apps_3d_rec_framework=ON
-    
-##Eigen {#installation_instruction5}
-Get the latest version of Eigen (source) using your package manager.
+  
 
-##SVMLight{#installation_instruction51}
-We use SVMLight for training. To user the feature of training using SVMLight, you need to download the source and put in a specific folder (we could not include the source in 3rdparty because of its restrictive licence). Please see http://svmlight.joachims.org/ for the details and terms of use.
+##SiftGPU {#installation_instruction4}
+SiftGPU comes as a submodule in the 3rdparty folder. It can be enabled or disabled using the WITH_GPU option.
 
-Download the source code from http://svmlight.joachims.org/ and extract it to `opendetection/3rdparty/svmlight`. You should have files like `svm_common.c`, `svm_learn.c`, etc. under the directory `opendetection/3rdparty/svmlight`.
+##PugiXML {#installation_instruction5}
+PugiXML comes as a folder in the 3rdparty folder and is mandatory. 
+
+##SVMLight{#installation_instruction6}
+SVMlight comes as a submodule in the 3rdparty folder. It can be enabled or disabled using the WITH_SVMLIGHT option.
 
 
-Installing Open Detection {#installation_instruction6}
+Installing Open Detection {#installation_instruction7}
 ====
 
 With the above dependencies installed, OD should compile without any problem. Download the source from https://github.com/krips89/opendetection and compile it with default cmake options. The code while platform independent, is only tested and run in Linux machine. Instructions for the usage for linux are provided below: 
 
-##Instructions: {#installation_instruction7}
+##Instructions: {#installation_instruction8}
 Compile out of source using cmake+your favorite compiler. For example:
 
 Download the code: 
 @code{.bash}
 cd <path_to_desired_download_location>
-git clone https://github.com/krips89/opendetection.git
+git clone --recursive https://github.com/krips89/opendetection.git
 @endcode
 
-configure with CMake and compile 
+configure with CMake and compile
+There are several options in the cmake file which can be set to build examples, change installation path and add gpu support.
 @code{.bash}
 cd <path_to_source>
-mkdir build; cd build
+mkdir build; 
+cd build
 cmake ..
-make -j8
+make -j
 make install
 @endcode
+
+There are also other targets:
+* uninstall to remove the library 
+* package to build a .deb packge
+
 
 
 

@@ -93,7 +93,7 @@ While continuing to restructure the library I came across a decision which can b
 and the compiler would need the include folder where the file is located to compile. This means that the file should be localted directly in the upper include folder, but this is not our case since the structure is like *detectors/global3D/detection/* so it would be better to have
 
 @code
-#include <detectors/global3D/detection/ODCADDetector3DGlobal.h> 
+#include <detectors/global3D/detection/CADDetector3DGlobal.h> 
 @endcode
 
 and include the upper level folder. To use the first solution we would need to include *detectors/global3D/detection/* but this is not really appealing since it would mess with the whole include structure. For now I opted for the second solution, but the include structure could be changed at any time. This way the include file structure resables exactly the source file structure:

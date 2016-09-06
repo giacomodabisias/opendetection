@@ -30,23 +30,18 @@ The main philosophy is that all the APIs of detection we provide, irrespective o
 
 To detect face using the default cascade detector, the usage looks like: 
 \code{.cpp}
-od::g2d::ODCascadeDetector *detector = new od::g2d::ODCascadeDetector;  //chose a detector type
-detector->setTrainingDataLocation(trained_cascade);
-detector->init();                                   //init with the required options, default values are provided
-ODDetections2D *detections =  detector->detectOmni(scene); //Use the detect* methods for detection.  sene is a scene object from frameGenerator
-
-showimage(detections->renderMetainfo(*scene).getCVImage())  //do something with the detections, 
+boost::shared_ptr<od::Detector2D> detector = boost::make_shared<od::g2d::CascadeDetector>(gpu, cam); 
+boost::shared_ptr<od::Detections2D> detections = detector->detectOmni(scene); //Use the detect* methods for detection.  sene is a scene object from frameGenerator
 \endcode
 
 
 For detecting people with a default pretrained HOG based detector, the usage looks like:
  
 \code{.cpp}
-ODDetector *detector = new od::g2d::ODHOGDetector;  //chose a detector type
-detector->init();                                   //init with the required options, default values are provided
-ODDetections2D *detections =  detector->detectOmni(scene); //Use the detect* methods for detection.  sene is a scene object from frameGenerator
-
-showimage(detections->renderMetainfo(*scene).getCVImage())  //do something with the detections, 
+od::g2d::HOGDetector detector;
+detector.setTrainedDataLocation(trained_data_dir);
+detector.init();                                 //init with the required options, default values are provided
+boost::shared_ptr<od::Detections2D> detections = detector.detectOmni(scene); //Use the detect* methods for detection.  sene is a scene object from frameGenerator
 \endcode
 
 To train your own HOG based detector and then use the trained detector for detection, the usage looks like:
@@ -61,16 +56,14 @@ trainer->setTrainHardNegetive(true);
 trainer->train();                                                                 //train!
 
 //detect: do as many detection using the trained value
-ODDetector *detector = new od::g2d::ODHOGDetector;  //chose a detector type
+boost::shared_ptr<od::g2d::HOGDetector> detector= boost::make_shared<od::g2d::ODHOGDetector>();  //chose a detector type
 detector->setTrainingDataLocation(trained_data_dir);
 detector->init();                                   //init with the required options
-ODDetections2D *detections =  detector->detectOmni(scene); //Use the detect* methods for detection. sene is a scene object from frameGenerator
+boost::shared_ptr<od::Detections2D> detections = detector->detectOmni(scene); //Use the detect* methods for detection. sene is a scene object from frameGenerator
 
-//infer
-showimage(detections->renderMetainfo(*scene).getCVImage())  //do something with the detections, 
 \endcode
 
-And so on... Our APIs are highly structured and follow deep polymorphism for the detector hierarchy. The library is in C++ for the fast implementation. The details are provided in the next sections. 
+And so on... Our APIs are highly structured and follow deep polymorphism for the detector hierarchy. The library is in C++11 for the fast implementation. The details are provided in the next sections. 
 
 Usage and target audience {#introduction_general4}
 ----

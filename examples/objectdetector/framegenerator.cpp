@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
 
     boost::shared_ptr<od::ScenePointCloud<pcl::PointXYZRGBA>> frame = frameGenerator.getNextFrame();
 
-    viewer.remove("frame");
     viewer.update(frame, "frame");
     viewer.spin();
 

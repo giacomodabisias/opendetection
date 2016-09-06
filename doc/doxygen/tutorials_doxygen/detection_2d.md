@@ -5,9 +5,9 @@ Detection 2D {#detection_2d}
 Detection 2D {#detection_2d1}
 ===
 
-This article goes through the 2D detection methods covered in OD. Specifically, it covers the classes - od::g2d::ODHOGDetector through a tutorial.
+This article goes through the 2D detection methods covered in OD. Specifically, it covers the classes - od::g2d::HOGDetector through a tutorial.
 
-2D detection methods are performed by the classes Detector2D. They accept a `SceneImage` and performs detection/recognition on them. Currently Detector2Ds are classified into g2d and l2d namespaces. g2d covers detection methods which uses global 2D features (like HOG/Cascade) while l2d covers detection methods which uses local 2D features (like SIFT/SURF/ORB) for detection/recognition. Different 2D detectors that are available currently: od::g2d::ODHOGDetector, od::g2d::ODCascadeDetector, od::g2d::ODFaceRecognizer, od::l2d::ODCADRecognizer2DLocal.
+2D detection methods are performed by the classes Detector2D. They accept a `SceneImage` and performs detection/recognition on them. Currently Detector2Ds are classified into g2d and l2d namespaces. g2d covers detection methods which uses global 2D features (like HOG/Cascade) while l2d covers detection methods which uses local 2D features (like SIFT/SURF/ORB) for detection/recognition. Different 2D detectors that are available currently: od::g2d::HOGDetector, od::g2d::CascadeDetector, od::g2d::FaceRecognizer, od::l2d::CADRecognizer2DLocal.
 The gpu module contains the gpu implementation of the algorithms where present. The ::gpu:: namespace has to be added after od in order to use that interface which has usually exactly the same API as the cpu version.
 
 ##HOG feature based detection {#detection_2d2}
@@ -16,7 +16,7 @@ HOGDetector is a HOG feature based linear classifier. It accepts an image (od::O
 
 A complete example including training is provided in `examples/objectdetector/hog_train.cpp`. For positive and negetive example get the data from the INRIA human dataset: http://pascal.inrialpes.fr/data/human/.
  
-In this tutorial we will go through a more complete application in present in `examples/apps/global2D/od_multihog_app.cpp`. The code is provided here verbatime: 
+In this tutorial we will go through a more complete application in present in `examples/apps/global2D/multihog_app.cpp`. The code is provided here verbatime: 
 
 \code{.cpp}
 
@@ -104,7 +104,7 @@ Depending on the input video, you will see something like the following:
 ###Code explanation {#detection_2d4}
 We first init 3 different instances of HOGDetector of different settings.  
 
-      std::vector<od::g2d::HOGDetector> detectors;
+  std::vector<od::g2d::HOGDetector> detectors;
   od::g2d::HOGDetector detector1; //
   messages.push_back("OpenCV Default People"); 
   detectors.push_back(detector1);
@@ -118,7 +118,7 @@ We first init 3 different instances of HOGDetector of different settings.
   messages.push_back("Custom HOG from trained data"); 
   detectors.push_back(detector3);      
       
-You can set different types of linear SVMs for HOG detector using `setSvmtype` function. For adding a custom SVM use the type OD_CUSTOM and set the linear SVM weight vector using `setSVMDetector()`. You have to then update the other HOG detector parameters accordingly (like winSize etc) with which the your SVM was trained.  If you give a trained data directory, it will use the xml file from the directory. Here, we set three different available HOG detectors.
+You can set different types of linear SVMs for HOG detector using `setSvmtype` function. For adding a custom SVM use the type CUSTOM and set the linear SVM weight vector using `setSVMDetector()`. You have to then update the other HOG detector parameters accordingly (like winSize etc) with which the your SVM was trained.  If you give a trained data directory, it will use the xml file from the directory. Here, we set three different available HOG detectors.
   
 After setting all the parameters you need to call `init()` which is done in the following line.
   
@@ -129,7 +129,7 @@ After setting all the parameters you need to call `init()` which is done in the 
 Then we create a FrameGenerator object, which is a templated class for grabbing both Images and Point Clouds (from kinect). Use od::GENERATOR_TYPE_DEVICE for grabbing frames from camera (kinekt for Point Cloud) or video which is done in the following line.      
       
       //get scenes
-      od::ODFrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_DEVICE> frameGenerator(input_video); 
+      od::FrameGenerator<od::ODSceneImage, od::GENERATOR_TYPE_DEVICE> frameGenerator(input_video); 
       
 The next valid frame can be accessed now by `frameGenerator.getNextFrame();` which is being done in loop until exhaustion.   
 

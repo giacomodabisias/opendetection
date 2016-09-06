@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     boost::shared_ptr<od::SceneImage> scene = frameGenerator.getNextFrame();
 
     //Detect
-    boost::shared_ptr<Detections3D> detections =  detector.detectOmni(scene);
+    boost::shared_ptr<od::Detections3D> detections =  detector.detectOmni(scene);
 
     if(detections->size() > 0)
       viewer.update(detections->getMetainfoImage(), "Overlay");

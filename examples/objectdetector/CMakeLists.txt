@@ -2,7 +2,7 @@ include_directories(${CMAKE_3RDPARTY_DIR}/SiftGPU/src/SiftGPU/)
 
 
 option(camera_recognition_example "Build the camera recognition example" ON)
-if(od_image_camera_example)
+if(camera_recognition_example)
   if(TARGET od_local_image_detector)
   
     include_directories(${DETECTORS_INCLUDE_DIR})
@@ -13,9 +13,9 @@ if(od_image_camera_example)
                    FILES image_cadrecog_camera.cpp
                    LINK_WITH od_local_image_detector)
   else()
-    message("!!! od_image_camera_example is set to on but BUILD_LOCAL_2D_DETECTION is necessary to build od_image_camera_example")
+    message("!!! camera_recognition_example is set to on but BUILD_LOCAL_2D_DETECTION is necessary to build camera_recognition_example")
   endif(TARGET od_local_image_detector)
-endif(od_image_camera_example)
+endif(camera_recognition_example)
 
 ##################################################################################
 option(image_recognition_example "Build the image recognition example" ON)

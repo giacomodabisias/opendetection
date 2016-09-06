@@ -65,7 +65,7 @@ if(image_hog_files_example)
       include_directories(${DETECTORS_INCLUDE_DIR})
       include_directories(${COMMON_INCLUDE_DIR})
       include_directories(${COMMON_IMPL_DIR})
-      include_directories(${CMAKE_3RDPARTY_DIR}/svmlightlib/)
+      include_directories(${CMAKE_3RDPARTY_DIR}/svmlight/)
 
       OD_ADD_EXAMPLE(od_image_hog_files 
                      FILES image_hog_files.cpp
@@ -135,6 +135,7 @@ if(image_customhog_example)
       include_directories(${DETECTORS_INCLUDE_DIR})
       include_directories(${COMMON_INCLUDE_DIR})
       include_directories(${COMMON_IMPL_DIR})
+      include_directories(${CMAKE_3RDPARTY_DIR}/svmlight/)
 
       OD_ADD_EXAMPLE(od_image_customhog 
                      FILES image_customhog.cpp
@@ -158,6 +159,7 @@ if(multialgo_files_example)
       include_directories(${COMMON_INCLUDE_DIR})
       include_directories(${COMMON_IMPL_DIR})
       include_directories(${OpenCV_INCLUDE_DIRS})
+      include_directories(${CMAKE_3RDPARTY_DIR}/svmlight/)
 
       link_directories(${PCL_LIBRARY_DIRS})
 
@@ -181,6 +183,7 @@ if(multialgo_pc_example)
       include_directories(${DETECTORS_INCLUDE_DIR})
       include_directories(${COMMON_INCLUDE_DIR})
       include_directories(${COMMON_IMPL_DIR})
+      include_directories(${CMAKE_3RDPARTY_DIR}/svmlight/)
 
       link_directories(${PCL_LIBRARY_DIRS})
 
